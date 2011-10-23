@@ -1304,21 +1304,32 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	//coreWriter->optimize();
 	coreWriter->close();
 
+#ifdef CLUCENE2
 	d = FSDirectory::getDirectory(target.c_str());
+#endif
 	if (IndexReader::indexExists(target.c_str())) {
+#ifndef CLUCENE2
+		d = FSDirectory::getDirectory(target.c_str(), false);
+#endif
 		if (IndexReader::isLocked(d)) {
 			IndexReader::unlock(d);
 		}
 		fsWriter = new IndexWriter( d, an, false);
 	}
 	else {
+#ifndef CLUCENE2
+		d = FSDirectory::getDirectory(target.c_str(), true);
+#endif
 		fsWriter = new IndexWriter(d, an, true);
 	}
 
 	Directory *dirs[] = { ramDir, 0 };
-//	fsWriter->addIndexes(dirs);
+#ifdef CLUCENE2
 	lucene::util::ConstValueArray< lucene::store::Directory *>dirsa(dirs, 1);
 	fsWriter->addIndexes(dirsa);
+#else
+	fsWriter->addIndexes(dirs);
+#endif
 	fsWriter->close();
 
 	delete ramDir;
