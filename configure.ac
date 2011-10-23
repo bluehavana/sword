@@ -40,6 +40,7 @@ AC_PROG_LIBTOOL
 AC_C_BIGENDIAN
 
 ACX_CLUCENE
+PKG_CHECK_MODULES([CLUCENE], [libclucene-core >= 2.3])
 
 # ---------------------------------------------------------------------
 # With options
@@ -57,7 +58,7 @@ AC_ARG_WITH(curl,
 #AC_ARG_WITH(lucene,
 #	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
 AC_ARG_WITH([internalregex],
-	AS_HELP_STRING([--with-internalregex], [Compile using SWORD's internal copy of regex]))
+	AS_HELP_STRING([--with-internalregex], [Compile using SWORDs internal copy of regex]))
 
 
 # ---------------------------------------------------------------------
@@ -254,8 +255,8 @@ if test -z "$CLUCENE_LIBS"; then
    echo "lucene searching options not available"
 else
    echo "lucene found - lucene searching options available"
-   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS -DUSELUCENE"
-   AM_CFLAGS="$AM_CFLAGS -DUSELUCENE"
+   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS $CLUCENE_CFLAGS -DUSELUCENE"
+   AM_CFLAGS="$AM_CFLAGS $CLUCENE_CFLAGS -DUSELUCENE"
    LIBS="$LIBS $CLUCENE_LIBS"
    with_clucene="yes"
 fi

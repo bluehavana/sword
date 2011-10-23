@@ -31,6 +31,7 @@ OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--without-icu $OPTIONS"
 #OPTIONS="--with-icusword $OPTIONS"
 #OPTIONS="--without-clucene $OPTIONS"
+OPTIONS="--with-clucene=/usr/local $OPTIONS"
 #OPTIONS="--without-curl $OPTIONS"
 
 #OPTIONS="--disable-tests $OPTIONS"

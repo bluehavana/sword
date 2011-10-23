@@ -40,7 +40,6 @@
 
 #ifdef USELUCENE
 #include <CLucene.h>
-#include <CLucene/CLBackwards.h>
 
 //Lucence includes
 //#include "CLucene.h"
@@ -497,10 +496,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 #ifdef USELUCENE
 	if (searchType == -4) {	// lucene
-		//Buffers for the wchar<->utf8 char* conversion
-		const unsigned short int MAX_CONV_SIZE = 2047;
-		wchar_t wcharBuffer[MAX_CONV_SIZE + 1];
-		char utfBuffer[MAX_CONV_SIZE + 1];
 		
 		lucene::index::IndexReader    *ir = 0;
 		lucene::search::IndexSearcher *is = 0;
@@ -513,20 +508,18 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 			const TCHAR *stopWords[] = { 0 };
 			standard::StandardAnalyzer analyzer(stopWords);
-			lucene_utf8towcs(wcharBuffer, istr, MAX_CONV_SIZE); //TODO Is istr always utf8?
-			q = QueryParser::parse(wcharBuffer, _T("content"), &analyzer);
+			q = QueryParser::parse((wchar_t *)utf8ToWChar(istr).getRawData(), _T("content"), &analyzer);
 			(*percent)(20, percentUserData);
 			h = is->search(q);
 			(*percent)(80, percentUserData);
 
 			// iterate thru each good module position that meets the search
 			bool checkBounds = getKey()->isBoundSet();
-			for (long i = 0; i < h->length(); i++) {
+			for (unsigned long i = 0; i < h->length(); i++) {
 				Document &doc = h->doc(i);
 
 				// set a temporary verse key to this module position
-				lucene_wcstoutf8(utfBuffer, doc.get(_T("key")), MAX_CONV_SIZE);	
-				*resultKey = utfBuffer; //TODO Does a key always accept utf8?
+				*resultKey = wcharToUTF8(doc.get(_T("key"))); //TODO Does a key always accept utf8?
 
 				// check to see if it sets ok (within our bounds) and if not, skip
 				if (checkBounds) {
@@ -1022,7 +1015,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWBuf c;
 
 	const int MAX_CONV_SIZE = 1024 * 1024;
-	wchar_t *wcharBuffer = new wchar_t[MAX_CONV_SIZE + 1];
 
 	// turn all filters to default values
 	StringList filterSettings;
@@ -1156,9 +1148,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 				}
 			}
 
-			lucene_utf8towcs(wcharBuffer, keyText, MAX_CONV_SIZE); //keyText must be utf8
-//			doc->add( *(new Field("key", wcharBuffer, Field::STORE_YES | Field::INDEX_TOKENIZED)));
-			doc->add( *Field::Text(_T("key"), wcharBuffer ) );
+			doc->add(*_CLNEW Field(_T("key"), (wchar_t *)utf8ToWChar(keyText).getRawData(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+//			doc->add(*Field::Text(_T("key"), (wchar_t *)utf8ToWChar(keyText).getRawData()));
 
 
 			if (includeKeyInSearch) {
@@ -1168,12 +1159,12 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 				content = c.c_str();
 			}
 
-			lucene_utf8towcs(wcharBuffer, content, MAX_CONV_SIZE); //content must be utf8
-			doc->add( *Field::UnStored(_T("content"), wcharBuffer) );
+			doc->add(*_CLNEW Field(_T("content"), (wchar_t *)utf8ToWChar(content).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+//			doc->add(*Field::UnStored(_T("content"), (wchar_t *)utf8ToWChar(content).getRawData()));
 
 			if (strong.length() > 0) {
-				lucene_utf8towcs(wcharBuffer, strong, MAX_CONV_SIZE);
-				doc->add( *Field::UnStored(_T("lemma"), wcharBuffer) );
+				doc->add(*_CLNEW Field(_T("lemma"), (wchar_t *)utf8ToWChar(strong).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+//				doc->add(*Field::UnStored(_T("lemma"), (wchar_t *)utf8ToWChar(strong).getRawData()));
 //printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
 			}
 
@@ -1289,17 +1280,13 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		}
 
 		if (proxBuf.length() > 0) {
-
-			lucene_utf8towcs(wcharBuffer, proxBuf, MAX_CONV_SIZE); //keyText must be utf8
-
-//printf("proxBuf after (%s).\nprox: %s\nproxLem: %s\n", (const char *)*key, proxBuf.c_str(), proxLem.c_str());
-
-			doc->add( *Field::UnStored(_T("prox"), wcharBuffer) );
+			doc->add(*_CLNEW Field(_T("prox"), (wchar_t *)utf8ToWChar(proxBuf).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+//			doc->add(*Field::UnStored(_T("prox"), (wchar_t *)utf8ToWChar(proxBuf).getRawData()));
 			good = true;
 		}
 		if (proxLem.length() > 0) {
-			lucene_utf8towcs(wcharBuffer, proxLem, MAX_CONV_SIZE); //keyText must be utf8
-			doc->add( *Field::UnStored(_T("proxlem"), wcharBuffer) );
+			doc->add(*_CLNEW Field(_T("proxlem"), (wchar_t *)utf8ToWChar(proxLem).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
+//			doc->add(*Field::UnStored(_T("proxlem"), (wchar_t *)utf8ToWChar(proxLem).getRawData()) );
 			good = true;
 		}
 		if (good) {
@@ -1317,20 +1304,21 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	//coreWriter->optimize();
 	coreWriter->close();
 
+	d = FSDirectory::getDirectory(target.c_str());
 	if (IndexReader::indexExists(target.c_str())) {
-		d = FSDirectory::getDirectory(target.c_str(), false);
 		if (IndexReader::isLocked(d)) {
 			IndexReader::unlock(d);
 		}
-
 		fsWriter = new IndexWriter( d, an, false);
-	} else {
-		d = FSDirectory::getDirectory(target.c_str(), true);
+	}
+	else {
 		fsWriter = new IndexWriter(d, an, true);
 	}
 
 	Directory *dirs[] = { ramDir, 0 };
-	fsWriter->addIndexes(dirs);
+//	fsWriter->addIndexes(dirs);
+	lucene::util::ConstValueArray< lucene::store::Directory *>dirsa(dirs, 1);
+	fsWriter->addIndexes(dirsa);
 	fsWriter->close();
 
 	delete ramDir;
@@ -1356,8 +1344,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	for (OptionFilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
 		(*filter)->setOptionValue(*origVal++);
 	}
-
-	delete [] wcharBuffer;
 
 	return 0;
 #else
