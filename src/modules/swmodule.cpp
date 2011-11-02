@@ -1149,8 +1149,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 			}
 
 			doc->add(*_CLNEW Field(_T("key"), (wchar_t *)utf8ToWChar(keyText).getRawData(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
-//			doc->add(*Field::Text(_T("key"), (wchar_t *)utf8ToWChar(keyText).getRawData()));
-
 
 			if (includeKeyInSearch) {
 				c = keyText;
@@ -1160,11 +1158,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 			}
 
 			doc->add(*_CLNEW Field(_T("content"), (wchar_t *)utf8ToWChar(content).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-//			doc->add(*Field::UnStored(_T("content"), (wchar_t *)utf8ToWChar(content).getRawData()));
 
 			if (strong.length() > 0) {
 				doc->add(*_CLNEW Field(_T("lemma"), (wchar_t *)utf8ToWChar(strong).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-//				doc->add(*Field::UnStored(_T("lemma"), (wchar_t *)utf8ToWChar(strong).getRawData()));
 //printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
 			}
 
@@ -1280,13 +1276,12 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		}
 
 		if (proxBuf.length() > 0) {
+
 			doc->add(*_CLNEW Field(_T("prox"), (wchar_t *)utf8ToWChar(proxBuf).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-//			doc->add(*Field::UnStored(_T("prox"), (wchar_t *)utf8ToWChar(proxBuf).getRawData()));
 			good = true;
 		}
 		if (proxLem.length() > 0) {
 			doc->add(*_CLNEW Field(_T("proxlem"), (wchar_t *)utf8ToWChar(proxLem).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
-//			doc->add(*Field::UnStored(_T("proxlem"), (wchar_t *)utf8ToWChar(proxLem).getRawData()) );
 			good = true;
 		}
 		if (good) {

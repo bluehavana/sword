@@ -39,8 +39,10 @@ AC_PROG_LIBTOOL
 
 AC_C_BIGENDIAN
 
+PKG_CHECK_MODULES([CLUCENE2], [libclucene-core >= 2.3],,true)
+if test "x$CLUCENE2_LIBS" = x; then
 ACX_CLUCENE
-PKG_CHECK_MODULES([CLUCENE], [libclucene-core >= 2.3])
+fi
 
 # ---------------------------------------------------------------------
 # With options
@@ -251,14 +253,22 @@ fi
 # ---------------------------------------------------------------------
 
 with_clucene=no
-if test -z "$CLUCENE_LIBS"; then
-   echo "lucene searching options not available"
+if test "x$CLUCENE2_LIBS" != x; then
+   echo "clucene 2.x found - lucene searching options available"
+   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE2_CFLAGS -DUSELUCENE -DCLUCENE2"
+   AM_CFLAGS="$AM_CFLAGS $CLUCENE2_CFLAGS -DUSELUCENE -DCLUCENE2"
+   LIBS="$LIBS $CLUCENE2_LIBS"
+   with_clucene="yes 2.x"
 else
-   echo "lucene found - lucene searching options available"
-   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS $CLUCENE_CFLAGS -DUSELUCENE"
-   AM_CFLAGS="$AM_CFLAGS $CLUCENE_CFLAGS -DUSELUCENE"
+if test "x$CLUCENE_LIBS" != x; then
+   echo "lucene 0.x found - lucene searching options available"
+   AM_CXXFLAGS="$AM_CXXFLAGS $CLUCENE_CXXFLAGS -DUSELUCENE"
+   AM_CFLAGS="$AM_CFLAGS -DUSELUCENE"
    LIBS="$LIBS $CLUCENE_LIBS"
-   with_clucene="yes"
+   with_clucene="yes 0.x"
+else
+   echo "lucene searching options not available"
+fi
 fi
 
 AC_CHECK_FUNCS(vsnprintf, [have_vsnprintf="yes"])
@@ -299,7 +309,6 @@ AC_SUBST(target_system)
 AC_SUBST(target_mingw32)
 
 AC_SUBST(CURL_LIBS)
-AC_SUBST(CLUCENE_LIBS)
 AC_SUBST(ICU_LIBS)
 AC_SUBST(ICU_IOLIBS)
 
@@ -314,7 +323,7 @@ AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_icusword = xyes)
 AM_CONDITIONAL(HAVE_VSNPRINTF, test x$have_vsnprintf = xyes)
 
-AM_CONDITIONAL(USELUCENE, test x$with_clucene = xyes)
+AM_CONDITIONAL(USELUCENE, test "x$with_clucene" != xno)
 AM_CONDITIONAL(SHAREDLIB, test x$enable_shared = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 AM_CONDITIONAL(WITHCURL, test x$with_curl = xyes)
