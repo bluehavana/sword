@@ -171,7 +171,6 @@ const struct abbrev builtin_abbrevs[] = {
   {"3MEQ", "3Meq"},		// III Meqabyan
   {"3MEQABYAN", "3Meq"},		// III Meqabyan
   {"4 BARUCH", "4Bar"},		// IV Baruch
-  {"4 EZRA", "2Esd"},		// II Esdras
   {"4 KGDMS", "2Kgs"},		// II Kings
   {"4 KGS", "2Kgs"},		// II Kings
   {"4 KINGDOMS", "2Kgs"},		// II Kings
@@ -179,7 +178,6 @@ const struct abbrev builtin_abbrevs[] = {
   {"4 MACCABEES", "4Macc"},		// IV Maccabees
   {"4BAR", "4Bar"},		// IV Baruch
   {"4BARUCH", "4Bar"},		// IV Baruch
-  {"4EZRA", "2Esd"},		// II Esdras
   {"4KGDMS", "2Kgs"},		// II Kings
   {"4KGS", "2Kgs"},		// II Kings
   {"4KINGDOMS", "2Kgs"},		// II Kings
@@ -203,6 +201,10 @@ const struct abbrev builtin_abbrevs[] = {
   {"BARUCH", "Bar"},		// Baruch
   {"BEL", "Bel"},		// Bel and the Dragon
   {"BEL AND THE DRAGON", "Bel"},		// Bel and the Dragon
+  {"BEL AND THE DRAGON TH", "BelTh"},		// Bel and the Dragon Th
+  {"BEL AND THE DRAGONTH", "BelTh"},		// Bel and the Dragon Th
+  {"BEL TH", "BelTh"},		// Bel and the Dragon Th
+  {"BELTH", "BelTh"},		// Bel and the Dragon Th
   {"C", "Col"},		// Colossians
   {"CANTICLE OF CANTICLES", "Song"},		// Song of Solomon
   {"COL", "Col"},		// Colossians
@@ -213,6 +215,9 @@ const struct abbrev builtin_abbrevs[] = {
   {"DANIEL", "Dan"},		// Daniel
   {"DANIEL (ADDITIONS)", "AddDan"},		// Additions to Daniel
   {"DANIEL (GREEK)", "DanGr"},		// Daniel (Greek)
+  {"DANIEL TH", "DanTh"},		// Daniel Th
+  {"DANIELTH", "DanTh"},		// Daniel Th
+  {"DANTH", "DanTh"},		// Daniel Th
   {"DEUT", "Deut"},		// Deuteronomy
   {"DEUTERONOMY", "Deut"},		// Deuteronomy
   {"DT", "Deut"},		// Deuteronomy
@@ -231,9 +236,9 @@ const struct abbrev builtin_abbrevs[] = {
   {"EPLAO", "EpLao"},		// Laodiceans
   {"ES", "Esth"},		// Esther
   {"ESDRAS A", "1Esd"},		// I Esdras
-  {"ESDRAS B", "2Esd"},		// II Esdras
+  {"ESDRAS B", "Ezra"},		// II Esdras
   {"ESDRASA", "1Esd"},		// I Esdras
-  {"ESDRASB", "2Esd"},		// II Esdras
+  {"ESDRASB", "Ezra"},		// II Esdras
   {"ESG", "EsthGr"},		// Esther (Greek)
   {"ESTER", "Esth"},		// Esther
   {"ESTH", "Esth"},		// Esther
@@ -390,14 +395,12 @@ const struct abbrev builtin_abbrevs[] = {
   {"ITHESSALONIANS", "1Thess"},		// I Thessalonians
   {"ITIMOTHY", "1Tim"},		// I Timothy
   {"IV BARUCH", "4Bar"},		// IV Baruch
-  {"IV EZRA", "2Esd"},		// II Esdras
   {"IV KGDMS", "2Kgs"},		// II Kings
   {"IV KGS", "2Kgs"},		// II Kings
   {"IV KINGDOMS", "2Kgs"},		// II Kings
   {"IV KINGS", "2Kgs"},		// II Kings
   {"IV MACCABEES", "4Macc"},		// IV Maccabees
   {"IVBARUCH", "4Bar"},		// IV Baruch
-  {"IVEZRA", "2Esd"},		// II Esdras
   {"IVKGDMS", "2Kgs"},		// II Kings
   {"IVKGS", "2Kgs"},		// II Kings
   {"IVKINGDOMS", "2Kgs"},		// II Kings
@@ -421,14 +424,20 @@ const struct abbrev builtin_abbrevs[] = {
   {"JOL", "Joel"},		// Joel
   {"JONAH", "Jonah"},		// Jonah
   {"JOSH", "Josh"},		// Joshua
+  {"JOSHA", "JoshA"},		// Joshua A
   {"JOSHUA", "Josh"},		// Joshua
+  {"JOSHUA A", "JoshA"},		// Joshua A
+  {"JOSHUAA", "JoshA"},		// Joshua A
   {"JS", "Josh"},		// Joshua
   {"JU", "Jude"},		// Jude
   {"JUB", "Jub"},		// Jubilees
   {"JUBILEES", "Jub"},		// Jubilees
   {"JUDE", "Jude"},		// Jude
   {"JUDG", "Judg"},		// Judges
+  {"JUDGB", "JudgB"},		// Judges B
   {"JUDGES", "Judg"},		// Judges
+  {"JUDGES B", "JudgB"},		// Judges B
+  {"JUDGESB", "JudgB"},		// Judges B
   {"JUDITH", "Jdt"},		// Judith
   {"L", "Luke"},		// Luke
   {"LAM", "Lam"},		// Lamentations
@@ -522,6 +531,9 @@ const struct abbrev builtin_abbrevs[] = {
   {"SONG OF THE THREE CHILDREN", "PrAzar"},		// Prayer of Azariah
   {"SUS", "Sus"},		// Susanna
   {"SUSANNA", "Sus"},		// Susanna
+  {"SUSANNA TH", "SusTh"},		// Susanna Th
+  {"SUSANNATH", "SusTh"},		// Susanna Th
+  {"SUSTH", "SusTh"},		// Susanna Th
   {"SYRIAC APOCALYPSE OF BARUCH", "2Bar"},		// 2Baruch
   {"T", "Titus"},		// Titus
   {"TB", "Tob"},		// Tobit
@@ -529,10 +541,14 @@ const struct abbrev builtin_abbrevs[] = {
   {"TITUS", "Titus"},		// Titus
   {"TOB", "Tob"},		// Tobit
   {"TOBIT", "Tob"},		// Tobit
+  {"TOBIT S", "TobS"},		// Tobit S
+  {"TOBITS", "TobS"},		// Tobit S
+  {"TOBS", "TobS"},		// Tobit S
   {"WIS", "Wis"},		// Wisdom
   {"WISDOM", "Wis"},		// Wisdom
   {"WISDOM OF BEN SIRA", "Sir"},		// Sirach
   {"WISDOM OF JESUS SON OF SIRACH", "Sir"},		// Sirach
+  {"WISDOM OF SIRACH", "Sir"},		// Sirach
   {"WISDOM OF SOLOMON", "Wis"},		// Wisdom
   {"ZECH", "Zech"},		// Zechariah
   {"ZECHARIAH", "Zech"},		// Zechariah

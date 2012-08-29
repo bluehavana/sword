@@ -51,7 +51,7 @@ ELSE(NOT SWIG_FOUND)
 		# This should add the pythonswig target to be built when the "make" command is executed
 		ADD_CUSTOM_TARGET(pythonswig ALL
 				mkdir -p "${SWORD_SWIG_BINARY}/python"
-			COMMAND	${SWIG_EXECUTABLE}  "-w503,+509" -python -c++ -shadow -o "${SWORD_SWIG_BINARY}/python/Sword.cxx" "-I${SWORD_SWIG_SOURCE}" ${SWIG_INCLUDES} "${SWORD_SWIG_SOURCE}/sword.i"
+			COMMAND	${SWIG_EXECUTABLE}  "-w-451,-402" -python -c++ -shadow -o "${SWORD_SWIG_BINARY}/python/Sword.cxx" "-I${SWORD_SWIG_SOURCE}" ${SWIG_INCLUDES} "${SWORD_SWIG_SOURCE}/sword.i"
 			COMMAND	echo "#! /usr/bin/python" > ${SWORD_SWIG_BINARY}/python/setup.py
 			COMMAND echo "" >> ${SWORD_SWIG_BINARY}/python/setup.py
 			COMMAND echo "from distutils.core import setup, Extension" >> ${SWORD_SWIG_BINARY}/python/setup.py
@@ -79,13 +79,10 @@ ELSE(NOT SWIG_FOUND)
 	IF(SWORD_BINDINGS MATCHES ".*Perl.*")
 		FIND_PACKAGE(Perl REQUIRED)
 		IF(PERL_FOUND)
-			# This is a terrible hack.  Don't leave it stay here.  It's ugly
-			SET(LIB_SWORD "${CMAKE_CURRENT_BINARY_DIR}/libsword.a")
-# 			MESSAGE(STATUS "LIB_SWORD is ${LIB_SWORD}")
 			# This should add the perlswig target to be build with the "make" command is executed
 			ADD_CUSTOM_TARGET(perlswig ALL
 				mkdir -p "${SWORD_SWIG_BINARY}/perl"
-				COMMAND ${SWIG_EXECUTABLE} "-w503,+509" -perl -c++ -shadow -o "${SWORD_SWIG_BINARY}/perl/Sword.cxx" "-I${SWORD_SWIG_SOURCE}" ${SWIG_INCLUDES} "${SWORD_SWIG_SOURCE}/sword.i"
+				COMMAND ${SWIG_EXECUTABLE} "-w-451,-402" -perl -c++ -shadow -o "${SWORD_SWIG_BINARY}/perl/Sword.cxx" "-I${SWORD_SWIG_SOURCE}" ${SWIG_INCLUDES} "${SWORD_SWIG_SOURCE}/sword.i"
 				COMMAND echo "Writing ${SWORD_SWIG_BINARY}/perl/Makefile.PL"
 				COMMAND echo "#! /usr/bin/perl" > ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "" >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
@@ -98,7 +95,7 @@ ELSE(NOT SWIG_FOUND)
 				COMMAND echo "         'VERSION'       => '${SWORD_VERSION}'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "         'INC'           => '-I${CMAKE_CURRENT_SOURCE_DIR}/include -I${SWORD_SWIG_SOURCE}'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "         'DEFINE'        => '-DSWIG'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
-				COMMAND echo "         'LIBS'          => '-lsword -lz'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
+				COMMAND echo "         'LIBS'          => '-L${CMAKE_CURRENT_BINARY_DIR} -lsword -lz'," >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "         'PREREQ_PM'     => {}, # e.g., Module::Name => 1.1" >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "                 ($] >= 5.005 ?         ## Add these new keywords supported since 5.005" >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL
 				COMMAND echo "                 (ABSTRACT => 'Sword Project perl bindings', # retrieve abstract from module" >> ${SWORD_SWIG_BINARY}/perl/Makefile.PL

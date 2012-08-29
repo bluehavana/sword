@@ -37,15 +37,10 @@ typedef enum _ModuleStatusConst {
 #ifdef __cplusplus
     sword::InstallMgr *swInstallMgr;
 #endif
-    
+
     BOOL createPath;
     
     NSString *configPath;
-    NSString *configFilePath;
-    
-    /** the dictionary holding the install sources. caption is the key */
-    NSMutableDictionary *installSources;
-    NSMutableArray *installSourceList;
 }
 
 // ------------------- getter / setter -------------------
@@ -59,6 +54,7 @@ typedef enum _ModuleStatusConst {
 
 // initialization
 + (SwordInstallSourceManager *)defaultController;
++ (SwordInstallSourceManager *)defaultControllerWithPath:(NSString *)aPath;
 + (SwordInstallSourceManager *)controllerWithPath:(NSString *)aPath;
 
 /**
@@ -70,7 +66,7 @@ base path of the module installation
 /** re-init after adding or removing new modules */
 - (void)reinitialize;
 
-// installation/uninstallation
+// installation/unInstallation
 - (int)installModule:(SwordModule *)aModule fromSource:(SwordInstallSource *)is withManager:(SwordManager *)manager;
 - (int)uninstallModule:(SwordModule *)aModule fromManager:(SwordManager *)swManager;
 
