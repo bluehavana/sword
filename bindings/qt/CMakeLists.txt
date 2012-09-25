@@ -1,0 +1,81 @@
+# Builds the Qt bindings
+MESSAGE(STATUS "\n-- CONFIGURING Qt BINDINGS")
+
+SET(qsword_SOURCES
+	src/qswmgr.cpp
+        src/qswmodule.cpp
+	src/qswutils.cpp
+)
+
+SET(qsword_HEADERS
+	src/qsword.h
+	src/qswmgr.h
+        src/qswmodule.h
+	src/qswutils.h
+)
+
+SET(qsword_TESTSOURCES
+	test/qswordtest.cpp
+)
+
+IF(BUILDING_SHARED)
+	ADD_LIBRARY(qsword SHARED ${qsword_SOURCES})
+ELSE(BUILDING_SHARED)
+	ADD_LIBRARY(qsword STATIC ${qsword_SOURCES})
+ENDIF(BUILDING_SHARED)
+
+FIND_PACKAGE(Qt5Core QUIET)
+IF (Qt5Core_FOUND)
+	MESSAGE(STATUS "Qt5: Yes")
+	
+	TARGET_LINK_LIBRARIES(qsword
+		${Qt5Core_LIBRARIES}
+		${SWORD_LINK_NAME}
+	)
+	
+	QT5_AUTOMOC( ${qsword_TESTSOURCES} )
+	QT5_AUTOMOC( ${qsword_SOURCES} )
+ELSE (Qt5Core_FOUND)
+	SET(QT_MIN_VERSION 4.5.0)
+	FIND_PACKAGE(Qt4 REQUIRED)
+	INCLUDE(${QT_USE_FILE})
+	MESSAGE(STATUS "Qt4: Yes")
+	
+    INCLUDE_DIRECTORIES(${QT_QTCORE_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/src/" "${CMAKE_CURRENT_BINARY_DIR}")
+	
+	TARGET_LINK_LIBRARIES(qsword
+		${QT_LIBRARIES}
+		${SWORD_LINK_NAME}
+	)
+	
+	QT4_AUTOMOC( ${qsword_TESTSOURCES} )
+	QT4_AUTOMOC( ${qsword_SOURCES} )
+ENDIF(Qt5Core_FOUND)
+
+IF(SWORD_BUILD_TESTS STREQUAL "Yes")
+	ENABLE_TESTING()
+	
+	SET(QTCORE_TEST_LIBRARIES
+		qsword
+		${SWORD_LINK_NAME}
+		${QT_LIBRARIES}
+		${QT_QTTEST_LIBRARY}
+	)
+	SET(GCOV_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
+	
+    TARGET_LINK_LIBRARIES(qsword
+		gcov
+	)
+	
+	ADD_EXECUTABLE(qswordtest ${qsword_TESTSOURCES})
+	TARGET_LINK_LIBRARIES(qswordtest ${QTCORE_TEST_LIBRARIES} gcov)
+	SET_TARGET_PROPERTIES(qswordtest qsword
+		PROPERTIES
+			COMPILE_FLAGS "${GCOV_COMPILE_FLAGS}"
+			LINK_FLAGS "${GCOV_COMPILE_FLAGS}"
+	)
+	ADD_TEST(NAME qswordtest COMMAND qswordtest)
+ENDIF(SWORD_BUILD_TESTS STREQUAL "Yes")
+
+INSTALL(TARGETS qsword DESTINATION "${SWORD_INSTALL_DIR}/lib")
+INSTALL(FILES ${qsword_HEADERS} DESTINATION "${SWORD_INSTALL_DIR}/include/sword/bindings/qt")
