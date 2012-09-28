@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <glib.h>
+#include <glib/gstdio.h>
 
 #include <sys/stat.h>
 #ifndef _MSC_VER
@@ -270,10 +272,10 @@ void SWMgr::init() {
 SWBuf SWMgr::getHomeDir() {
 
 	// figure out 'home' directory for app data
-	SWBuf homeDir = getenv("HOME");
+	SWBuf homeDir = g_getenv("HOME");
 	if (!homeDir.length()) {
 		// silly windows
-		homeDir = getenv("APPDATA");
+		homeDir = g_getenv("APPDATA");
 	}
 	if (homeDir.length()) {
 		if ((homeDir[homeDir.length()-1] != '\\') && (homeDir[homeDir.length()-1] != '/')) {
@@ -456,7 +458,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			// check environment variable SWORD_PATH
 			SWLog::getSystemLog()->logDebug("Checking $SWORD_PATH...");
 
-			SWBuf envsworddir = getenv("SWORD_PATH");
+			SWBuf envsworddir = g_getenv("SWORD_PATH");
 			if (envsworddir.length()) {
 				
 				SWLog::getSystemLog()->logDebug("found (%s).", envsworddir.c_str());
@@ -587,14 +589,15 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 	SWLog::getSystemLog()->logDebug("Checking $ALLUSERSPROFILE/Application Data/sword/...");
 
-	SWBuf envallusersdir  = getenv("ALLUSERSPROFILE");
+	//SWBuf envallusersdir  = g_getenv("ALLUSERSPROFILE");
+	SWBuf envallusersdir = g_get_system_data_dirs()[0];
 	if (envallusersdir.length()) {
 		SWLog::getSystemLog()->logDebug("found (%s).", envallusersdir.c_str());
 		path = envallusersdir;
 		if ((!path.endsWith("\\")) && (!path.endsWith("/")))
 			path += "/";
 
-		path += "Application Data/sword/";
+		//path += "Application Data/sword/";
 		SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
 		if (FileMgr::existsDir(path.c_str(), "mods.d")) {
 			SWLog::getSystemLog()->logDebug("found.");
@@ -636,7 +639,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 	if (homeDir.length()) {
 		path = homeDir;
-		path += ".sword/";
+		path += "sword/";
 		SWLog::getSystemLog()->logDebug("  Checking for %smods.conf...", path.c_str());
 		if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
 			SWLog::getSystemLog()->logDebug("found.");
@@ -673,29 +676,29 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 void SWMgr::loadConfigDir(const char *ipath)
 {
-	DIR *dir;
-	struct dirent *ent;
+	GDir *dir;
+	const gchar *ent;
 	SWBuf newmodfile;
  
-	if ((dir = opendir(ipath))) {
-		rewinddir(dir);
-		while ((ent = readdir(dir))) {
+	if ((dir = g_dir_open(ipath, 0, NULL))) {
+	  g_dir_rewind(dir);
+		while ((ent = g_dir_read_name(dir))) {
 			//check whether it ends with .conf, if it doesn't skip it!
-			if (!ent->d_name || (strlen(ent->d_name) <= 5) || strncmp(".conf", (ent->d_name + strlen(ent->d_name) - 5), 5 )) {
+			if (ent && (strlen(ent) > 5) && strncmp(".conf", (ent + strlen(ent) - 5), 5 )) {
 				continue;
 			}
 			
 			newmodfile = ipath;
 			if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
 				newmodfile += "/";
-			newmodfile += ent->d_name;
+			newmodfile += ent;
 			if (config) {
 				SWConfig tmpConfig(newmodfile.c_str());
 				*config += tmpConfig;
 			}
 			else	config = myconfig = new SWConfig(newmodfile.c_str());
 		}
-		closedir(dir);
+		g_dir_close(dir);
 		
 		if (!config) {	// if no .conf file exist yet, create a default
 			newmodfile = ipath;
@@ -815,7 +818,7 @@ signed char SWMgr::Load() {
 			SWBuf homeDir = getHomeDir();
 			if (homeDir.length() && configType != 2) { // 2 = user only
 				SWBuf path = homeDir;
-				path += ".sword/";
+				path += "sword/";
 				augmentModules(path.c_str(), mgrModeMultiMod);
 				path = homeDir;
 				path += "sword/";
@@ -1266,21 +1269,21 @@ void SWMgr::deleteModule(const char *modName) {
 
 void SWMgr::InstallScan(const char *dirname)
 {
-   DIR *dir;
-   struct dirent *ent;
+   GDir *dir;
+   const gchar *ent;
    FileDesc *conffd = 0;
    SWBuf newmodfile;
    SWBuf targetName;
  
 	if (FileMgr::existsDir(dirname)) {
-		if ((dir = opendir(dirname))) {
-			rewinddir(dir);
-			while ((ent = readdir(dir))) {
-				if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+	  if ((dir = g_dir_open(dirname, 0, NULL))) {
+	    g_dir_rewind(dir);
+			while ((ent = g_dir_read_name(dir))) {
+				if ((strcmp(ent, ".")) && (strcmp(ent, ".."))) {
 					newmodfile = dirname;
 					if ((dirname[strlen(dirname)-1] != '\\') && (dirname[strlen(dirname)-1] != '/'))
 						newmodfile += "/";
-					newmodfile += ent->d_name;
+					newmodfile += ent;
 
 					// mods.d
 					if (configType) {
@@ -1289,7 +1292,7 @@ void SWMgr::InstallScan(const char *dirname)
 						targetName = configPath;
 						if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
 							targetName += "/";
-						targetName += ent->d_name;
+						targetName += ent;
 						conffd = FileMgr::getSystemFileMgr()->open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
 					}
 
@@ -1311,7 +1314,7 @@ void SWMgr::InstallScan(const char *dirname)
 			}
 			if (conffd)
 				FileMgr::getSystemFileMgr()->close(conffd);
-			closedir(dir);
+			g_dir_close(dir);
 		}
 	}
 }
