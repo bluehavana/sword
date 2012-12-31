@@ -160,6 +160,7 @@ void InstallMgr::readInstallConf() {
 			sourceBegin++;
 		}
 
+#ifdef CURLSFTPAVAILABLE
 		sourceBegin = confSection->second.lower_bound("SFTPSource");
 		sourceEnd   = confSection->second.upper_bound("SFTPSource");
 
@@ -171,6 +172,7 @@ void InstallMgr::readInstallConf() {
 			is->localShadow = (SWBuf)privatePath + "/" + is->uid;
 			sourceBegin++;
 		}
+#endif // CURLSFTPAVAILABLE
 		sourceBegin = confSection->second.lower_bound("HTTPSource");
 		sourceEnd = confSection->second.upper_bound("HTTPSource");
 
@@ -303,7 +305,11 @@ SWLog::getSystemLog()->logDebug("netCopy: %s, %s, %s, %c, %s", (is?is->source.c_
 
 	int retVal = 0;
 	FTPTransport *trans = 0;
-	if (is->type == "FTP" || is->type == "SFTP") {
+	if (is->type == "FTP" 
+#ifdef CURLSFTPAVAILABLE
+		|| is->type == "SFTP"
+#endif
+		) {
 		trans = createFTPTransport(is->source, statusReporter);
 		trans->setPassive(passive);
 	}
@@ -327,9 +333,11 @@ SWLog::getSystemLog()->logDebug("netCopy: %s, %s, %s, %c, %s", (is?is->source.c_
 	else if (is->type == "HTTPS") {
 		urlPrefix = (SWBuf) "https://";
 	}
+#ifdef CURLSFTPAVAILABLE
 	else if (is->type == "SFTP") {
 		urlPrefix = (SWBuf) "sftp://";
 	}
+#endif
 	else {
 		urlPrefix = (SWBuf) "ftp://";
 	}
