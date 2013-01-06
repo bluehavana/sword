@@ -173,6 +173,7 @@ void InstallMgr::readInstallConf() {
 			sourceBegin++;
 		}
 #endif // CURLSFTPAVAILABLE
+
 		sourceBegin = confSection->second.lower_bound("HTTPSource");
 		sourceEnd = confSection->second.upper_bound("HTTPSource");
 
@@ -310,6 +311,7 @@ SWLog::getSystemLog()->logDebug("netCopy: %s, %s, %s, %c, %s", (is?is->source.c_
 		|| is->type == "SFTP"
 #endif
 		) {
+
 		trans = createFTPTransport(is->source, statusReporter);
 		trans->setPassive(passive);
 	}
