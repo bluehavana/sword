@@ -37,8 +37,19 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		8C92C31DC92DF0671FCEB5B3 /* SwordFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C92CC111DC521DE0C054C60 /* SwordFilter.mm */; };
+		8C92CC7B68FDCDFFFB8B4A31 /* DefaultFilterProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C92C0124F354F4CB4F294F9 /* DefaultFilterProvider.mm */; };
+		8C92CE0B19FBB659FB8F8B71 /* FilterProviderFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C92C25F57CB01957B086256 /* FilterProviderFactory.mm */; };
+		8C92CE39E231FF9CAAB5308B /* SwordUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C92C291C40A77060C12A21B /* SwordUtil.m */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
+		A917AF2616B1BE38006367FC /* Tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A917AF2516B1BE38006367FC /* Tests-Info.plist */; };
+		A929619C16B1BA240094E5BE /* SwordBibleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */; };
+		A929619D16B1BA240094E5BE /* SwordKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A929619716B1BA240094E5BE /* SwordKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A929619E16B1BA240094E5BE /* SwordKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A929619816B1BA240094E5BE /* SwordKey.mm */; };
+		A929619F16B1BA240094E5BE /* SwordListKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A929619916B1BA240094E5BE /* SwordListKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A92961A016B1BA240094E5BE /* SwordListKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A929619A16B1BA240094E5BE /* SwordListKey.mm */; };
+		A92961A116B1BA240094E5BE /* SwordVerseKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A929619B16B1BA240094E5BE /* SwordVerseKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC0B117B28920018B06F /* SwordBible.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE3117B28910018B06F /* SwordBible.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC0C117B28920018B06F /* SwordBible.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABE4117B28910018B06F /* SwordBible.mm */; };
 		A94EAC0D117B28920018B06F /* SwordBibleBook.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE5117B28920018B06F /* SwordBibleBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -46,7 +57,6 @@
 		A94EAC0F117B28920018B06F /* SwordBibleChapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE7117B28920018B06F /* SwordBibleChapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC10117B28920018B06F /* SwordBibleChapter.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EABE8117B28920018B06F /* SwordBibleChapter.m */; };
 		A94EAC11117B28920018B06F /* SwordBibleTextEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A94EAC12117B28920018B06F /* SwordBibleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */; };
 		A94EAC13117B28920018B06F /* SwordBook.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABEB117B28920018B06F /* SwordBook.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC14117B28920018B06F /* SwordBook.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABEC117B28920018B06F /* SwordBook.mm */; };
 		A94EAC15117B28920018B06F /* SwordCommentary.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABED117B28920018B06F /* SwordCommentary.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -57,10 +67,6 @@
 		A94EAC1A117B28920018B06F /* SwordInstallSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF2117B28920018B06F /* SwordInstallSource.mm */; };
 		A94EAC1B117B28920018B06F /* SwordInstallSourceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF3117B28920018B06F /* SwordInstallSourceManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC1C117B28920018B06F /* SwordInstallSourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF4117B28920018B06F /* SwordInstallSourceManager.mm */; };
-		A94EAC1D117B28920018B06F /* SwordKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF5117B28920018B06F /* SwordKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A94EAC1E117B28920018B06F /* SwordKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF6117B28920018B06F /* SwordKey.mm */; };
-		A94EAC1F117B28920018B06F /* SwordListKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF7117B28920018B06F /* SwordListKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A94EAC20117B28920018B06F /* SwordListKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABF8117B28920018B06F /* SwordListKey.mm */; };
 		A94EAC21117B28920018B06F /* SwordManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABF9117B28920018B06F /* SwordManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC22117B28920018B06F /* SwordManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EABFA117B28920018B06F /* SwordManager.mm */; };
 		A94EAC25117B28920018B06F /* SwordModule.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EABFD117B28920018B06F /* SwordModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -69,7 +75,6 @@
 		A94EAC28117B28920018B06F /* SwordModuleTextEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */; };
 		A94EAC29117B28920018B06F /* SwordModuleTreeEntry.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC2A117B28920018B06F /* SwordModuleTreeEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */; };
-		A94EAC2D117B28920018B06F /* SwordVerseKey.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC05117B28920018B06F /* SwordVerseKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC2E117B28920018B06F /* SwordVerseKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC06117B28920018B06F /* SwordVerseKey.mm */; };
 		A94EAC2F117B28920018B06F /* SwordVerseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A94EAC07117B28920018B06F /* SwordVerseManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A94EAC30117B28920018B06F /* SwordVerseManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A94EAC08117B28920018B06F /* SwordVerseManager.mm */; };
@@ -337,6 +342,7 @@
 		A954ACDB13EEA5340094E3FE /* untgz.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F713EE98B30094E3FE /* untgz.c */; };
 		A954ACDC13EEA5340094E3FE /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = A954A8F813EE98B30094E3FE /* zutil.c */; };
 		A954ACDD13EEA6780094E3FE /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A967FB5616806B16004ED73C /* teixhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */; };
 		A975EAC511C77862007C1532 /* ObjCSword.h in Headers */ = {isa = PBXBuildFile; fileRef = A975EAC411C77862007C1532 /* ObjCSword.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A975EEE511C79308007C1532 /* mod2osis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDAC11C7925C007C1532 /* mod2osis.cpp */; };
 		A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A2C17C118D9D3D0002873D /* Notifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -351,7 +357,6 @@
 		A9BDFA7D1207FA2F0067ED5B /* SwordModuleLongRunTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */; };
 		A9BFB0A513EDF51100032679 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9BFB0A413EDF51000032679 /* SenTestingKit.framework */; };
 		A9BFB0A713EDF51100032679 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9BFB0A613EDF51100032679 /* Cocoa.framework */; };
-		A9BFB0B113EDF51100032679 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9BFB0AF13EDF51100032679 /* InfoPlist.strings */; };
 		A9BFB0BC13EDF5C900032679 /* SwordManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A964658111C663E200640FAC /* SwordManagerTest.m */; };
 		A9BFB0BD13EDF5C900032679 /* SwordModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A918B8E311C6697400024D84 /* SwordModuleTest.m */; };
 		A9BFB0BE13EDF5C900032679 /* SwordListKeyTest.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */; };
@@ -392,6 +397,7 @@
 		A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */; };
 		A9D4382311C52947007AFE83 /* locales.d in Resources */ = {isa = PBXBuildFile; fileRef = A9D437CE11C52947007AFE83 /* locales.d */; };
 		A9D9FA0B13EEE5CF00EA9DEB /* libsword.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
+		A9E9C5EE16806A2B00ECEB39 /* teixhtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */; };
 		A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A9EF1414120595650078A27C /* SwordLocaleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9EF1415120595650078A27C /* SwordLocaleManager.mm */; };
 /* End PBXBuildFile section */
@@ -670,11 +676,25 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* ObjCSword_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCSword_Prefix.pch; sourceTree = "<group>"; };
+		8C92C0124F354F4CB4F294F9 /* DefaultFilterProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DefaultFilterProvider.mm; path = src/DefaultFilterProvider.mm; sourceTree = "<group>"; };
+		8C92C02A5C86E1C75ED1CEF4 /* SwordFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordFilter.h; path = src/SwordFilter.h; sourceTree = "<group>"; };
+		8C92C25F57CB01957B086256 /* FilterProviderFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FilterProviderFactory.mm; path = src/FilterProviderFactory.mm; sourceTree = "<group>"; };
+		8C92C291C40A77060C12A21B /* SwordUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordUtil.m; path = src/SwordUtil.m; sourceTree = "<group>"; };
+		8C92C72ADACB017A434CD268 /* FilterProviderFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FilterProviderFactory.h; path = src/FilterProviderFactory.h; sourceTree = "<group>"; };
+		8C92C7B2EB245D47FEB5E3B0 /* SwordUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordUtil.h; path = src/SwordUtil.h; sourceTree = "<group>"; };
+		8C92C980D4DE32C7AB93159D /* DefaultFilterProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DefaultFilterProvider.h; path = src/DefaultFilterProvider.h; sourceTree = "<group>"; };
+		8C92CC111DC521DE0C054C60 /* SwordFilter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordFilter.mm; path = src/SwordFilter.mm; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* ObjCSword.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjCSword.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9013D3F11E316C700E1CCCA /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info copy.plist"; sourceTree = "<group>"; };
+		A917AF2516B1BE38006367FC /* Tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		A918B8E211C6697400024D84 /* SwordModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleTest.h; path = ../test/SwordModuleTest.h; sourceTree = "<group>"; };
 		A918B8E311C6697400024D84 /* SwordModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModuleTest.m; path = ../test/SwordModuleTest.m; sourceTree = "<group>"; };
+		A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordBibleTextEntry.m; path = src/SwordBibleTextEntry.m; sourceTree = "<group>"; };
+		A929619716B1BA240094E5BE /* SwordKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordKey.h; path = src/SwordKey.h; sourceTree = "<group>"; };
+		A929619816B1BA240094E5BE /* SwordKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordKey.mm; path = src/SwordKey.mm; sourceTree = "<group>"; };
+		A929619916B1BA240094E5BE /* SwordListKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKey.h; path = src/SwordListKey.h; sourceTree = "<group>"; };
+		A929619A16B1BA240094E5BE /* SwordListKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordListKey.mm; path = src/SwordListKey.mm; sourceTree = "<group>"; };
+		A929619B16B1BA240094E5BE /* SwordVerseKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordVerseKey.h; path = src/SwordVerseKey.h; sourceTree = "<group>"; };
 		A94EABE3117B28910018B06F /* SwordBible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBible.h; path = src/SwordBible.h; sourceTree = "<group>"; };
 		A94EABE4117B28910018B06F /* SwordBible.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordBible.mm; path = src/SwordBible.mm; sourceTree = "<group>"; };
 		A94EABE5117B28920018B06F /* SwordBibleBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBibleBook.h; path = src/SwordBibleBook.h; sourceTree = "<group>"; };
@@ -682,7 +702,6 @@
 		A94EABE7117B28920018B06F /* SwordBibleChapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBibleChapter.h; path = src/SwordBibleChapter.h; sourceTree = "<group>"; };
 		A94EABE8117B28920018B06F /* SwordBibleChapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordBibleChapter.m; path = src/SwordBibleChapter.m; sourceTree = "<group>"; };
 		A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBibleTextEntry.h; path = src/SwordBibleTextEntry.h; sourceTree = "<group>"; };
-		A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordBibleTextEntry.m; path = src/SwordBibleTextEntry.m; sourceTree = "<group>"; };
 		A94EABEB117B28920018B06F /* SwordBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordBook.h; path = src/SwordBook.h; sourceTree = "<group>"; };
 		A94EABEC117B28920018B06F /* SwordBook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordBook.mm; path = src/SwordBook.mm; sourceTree = "<group>"; };
 		A94EABED117B28920018B06F /* SwordCommentary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordCommentary.h; path = src/SwordCommentary.h; sourceTree = "<group>"; };
@@ -693,10 +712,6 @@
 		A94EABF2117B28920018B06F /* SwordInstallSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordInstallSource.mm; path = src/SwordInstallSource.mm; sourceTree = "<group>"; };
 		A94EABF3117B28920018B06F /* SwordInstallSourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordInstallSourceManager.h; path = src/SwordInstallSourceManager.h; sourceTree = "<group>"; };
 		A94EABF4117B28920018B06F /* SwordInstallSourceManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordInstallSourceManager.mm; path = src/SwordInstallSourceManager.mm; sourceTree = "<group>"; };
-		A94EABF5117B28920018B06F /* SwordKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordKey.h; path = src/SwordKey.h; sourceTree = "<group>"; };
-		A94EABF6117B28920018B06F /* SwordKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordKey.mm; path = src/SwordKey.mm; sourceTree = "<group>"; };
-		A94EABF7117B28920018B06F /* SwordListKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKey.h; path = src/SwordListKey.h; sourceTree = "<group>"; };
-		A94EABF8117B28920018B06F /* SwordListKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordListKey.mm; path = src/SwordListKey.mm; sourceTree = "<group>"; };
 		A94EABF9117B28920018B06F /* SwordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordManager.h; path = src/SwordManager.h; sourceTree = "<group>"; };
 		A94EABFA117B28920018B06F /* SwordManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordManager.mm; path = src/SwordManager.mm; sourceTree = "<group>"; };
 		A94EABFD117B28920018B06F /* SwordModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModule.h; path = src/SwordModule.h; sourceTree = "<group>"; };
@@ -705,14 +720,11 @@
 		A94EAC00117B28920018B06F /* SwordModuleTextEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModuleTextEntry.m; path = src/SwordModuleTextEntry.m; sourceTree = "<group>"; };
 		A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleTreeEntry.h; path = src/SwordModuleTreeEntry.h; sourceTree = "<group>"; };
 		A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordModuleTreeEntry.m; path = src/SwordModuleTreeEntry.m; sourceTree = "<group>"; };
-		A94EAC05117B28920018B06F /* SwordVerseKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordVerseKey.h; path = src/SwordVerseKey.h; sourceTree = "<group>"; };
 		A94EAC06117B28920018B06F /* SwordVerseKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordVerseKey.mm; path = src/SwordVerseKey.mm; sourceTree = "<group>"; };
 		A94EAC07117B28920018B06F /* SwordVerseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordVerseManager.h; path = src/SwordVerseManager.h; sourceTree = "<group>"; };
 		A94EAC08117B28920018B06F /* SwordVerseManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordVerseManager.mm; path = src/SwordVerseManager.mm; sourceTree = "<group>"; };
 		A94EAC09117B28920018B06F /* VerseEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerseEnumerator.h; path = src/VerseEnumerator.h; sourceTree = "<group>"; };
 		A94EAC0A117B28920018B06F /* VerseEnumerator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = VerseEnumerator.mm; path = src/VerseEnumerator.mm; sourceTree = "<group>"; };
-		A95043E315BC87F600D89B38 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A950440315BC87F600D89B38 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A954A80113EE98B30094E3FE /* swdisp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swdisp.cpp; sourceTree = "<group>"; };
 		A954A80213EE98B30094E3FE /* swlog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = swlog.cpp; sourceTree = "<group>"; };
 		A954A80913EE98B30094E3FE /* listkey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = listkey.cpp; sourceTree = "<group>"; };
@@ -1143,7 +1155,6 @@
 		A9A2C17C118D9D3D0002873D /* Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notifications.h; path = src/Notifications.h; sourceTree = "<group>"; };
 		A9A7EEB414D5D61700B76B6A /* osis2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osis2mod; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9BDFA6B1207F9870067ED5B /* Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9BDFA6E1207F9870067ED5B /* Tests-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info copy.plist"; sourceTree = "<group>"; };
 		A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordListKeyTest.h; path = ../test/SwordListKeyTest.h; sourceTree = "<group>"; };
 		A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwordListKeyTest.m; path = ../test/SwordListKeyTest.m; sourceTree = "<group>"; };
 		A9BDFA7A1207FA2F0067ED5B /* SwordModuleLongRunTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordModuleLongRunTest.h; path = ../test/SwordModuleLongRunTest.h; sourceTree = "<group>"; };
@@ -1154,11 +1165,7 @@
 		A9BFB0A913EDF51100032679 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		A9BFB0AA13EDF51100032679 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A9BFB0AB13EDF51100032679 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		A9BFB0AE13EDF51100032679 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests-Info.plist"; path = "../Tests/Tests-Info.plist"; sourceTree = "<group>"; };
-		A9BFB0B013EDF51100032679 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A9BFB0B613EDF51100032679 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Tests-Prefix.pch"; path = "../Tests/Tests-Prefix.pch"; sourceTree = "<group>"; };
 		A9C2818D11C43BD400803CB5 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		A9C2819711C43C4900803CB5 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		A9C2856D11C446B700803CB5 /* Configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Configuration.h; path = src/services/Configuration.h; sourceTree = "<group>"; };
 		A9C2857111C4471400803CB5 /* OSXConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OSXConfiguration.h; path = src/services/OSXConfiguration.h; sourceTree = "<group>"; };
 		A9C2857211C4471400803CB5 /* OSXConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OSXConfiguration.m; path = src/services/OSXConfiguration.m; sourceTree = "<group>"; };
@@ -1180,6 +1187,7 @@
 		A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SwordModule+Index.h"; path = "src/SwordModule+Index.h"; sourceTree = "<group>"; };
 		A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "SwordModule+Index.mm"; path = "src/SwordModule+Index.mm"; sourceTree = "<group>"; };
 		A9D437CE11C52947007AFE83 /* locales.d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = locales.d; path = ../../locales.d; sourceTree = SOURCE_ROOT; };
+		A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = teixhtml.cpp; sourceTree = "<group>"; };
 		A9EF1414120595650078A27C /* SwordLocaleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwordLocaleManager.h; path = src/SwordLocaleManager.h; sourceTree = "<group>"; };
 		A9EF1415120595650078A27C /* SwordLocaleManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SwordLocaleManager.mm; path = src/SwordLocaleManager.mm; sourceTree = "<group>"; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -1397,8 +1405,6 @@
 				A9BFB0AC13EDF51100032679 /* Tests */,
 				A9BFB0A313EDF51000032679 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
-				A9C2819711C43C4900803CB5 /* Tests-Info.plist */,
-				A9BDFA6E1207F9870067ED5B /* Tests-Info copy.plist */,
 			);
 			name = ObjCSword;
 			sourceTree = "<group>";
@@ -1418,7 +1424,6 @@
 				A9D437CE11C52947007AFE83 /* locales.d */,
 				8DC2EF5A0486A6940098B216 /* Info.plist */,
 				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
-				A9013D3F11E316C700E1CCCA /* Info copy.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1426,6 +1431,12 @@
 		08FB77AEFE84172EC02AAC07 /* SwordWrapper */ = {
 			isa = PBXGroup;
 			children = (
+				A929619616B1BA240094E5BE /* SwordBibleTextEntry.m */,
+				A929619716B1BA240094E5BE /* SwordKey.h */,
+				A929619816B1BA240094E5BE /* SwordKey.mm */,
+				A929619916B1BA240094E5BE /* SwordListKey.h */,
+				A929619A16B1BA240094E5BE /* SwordListKey.mm */,
+				A929619B16B1BA240094E5BE /* SwordVerseKey.h */,
 				A9EF1414120595650078A27C /* SwordLocaleManager.h */,
 				A9EF1415120595650078A27C /* SwordLocaleManager.mm */,
 				A94EABF9117B28920018B06F /* SwordManager.h */,
@@ -1451,20 +1462,9 @@
 				A94EAC01117B28920018B06F /* SwordModuleTreeEntry.h */,
 				A94EAC02117B28920018B06F /* SwordModuleTreeEntry.m */,
 				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
-				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
-				A94EABF5117B28920018B06F /* SwordKey.h */,
-				A94EABF6117B28920018B06F /* SwordKey.mm */,
-				A94EABF7117B28920018B06F /* SwordListKey.h */,
-				A94EABF8117B28920018B06F /* SwordListKey.mm */,
 				A94EABE7117B28920018B06F /* SwordBibleChapter.h */,
 				A94EABE8117B28920018B06F /* SwordBibleChapter.m */,
 				A94EABE9117B28920018B06F /* SwordBibleTextEntry.h */,
-				A94EABEA117B28920018B06F /* SwordBibleTextEntry.m */,
-				A94EABF5117B28920018B06F /* SwordKey.h */,
-				A94EABF6117B28920018B06F /* SwordKey.mm */,
-				A94EABF7117B28920018B06F /* SwordListKey.h */,
-				A94EABF8117B28920018B06F /* SwordListKey.mm */,
-				A94EAC05117B28920018B06F /* SwordVerseKey.h */,
 				A94EAC06117B28920018B06F /* SwordVerseKey.mm */,
 				A94EAC09117B28920018B06F /* VerseEnumerator.h */,
 				A94EAC0A117B28920018B06F /* VerseEnumerator.mm */,
@@ -1474,6 +1474,14 @@
 				A94EABF4117B28920018B06F /* SwordInstallSourceManager.mm */,
 				A9D4360311C4FE97007AFE83 /* SwordModule+Index.h */,
 				A9D4360411C4FE97007AFE83 /* SwordModule+Index.mm */,
+				8C92C291C40A77060C12A21B /* SwordUtil.m */,
+				8C92C7B2EB245D47FEB5E3B0 /* SwordUtil.h */,
+				8C92C25F57CB01957B086256 /* FilterProviderFactory.mm */,
+				8C92C72ADACB017A434CD268 /* FilterProviderFactory.h */,
+				8C92C0124F354F4CB4F294F9 /* DefaultFilterProvider.mm */,
+				8C92C980D4DE32C7AB93159D /* DefaultFilterProvider.h */,
+				8C92CC111DC521DE0C054C60 /* SwordFilter.mm */,
+				8C92C02A5C86E1C75ED1CEF4 /* SwordFilter.h */,
 			);
 			name = SwordWrapper;
 			sourceTree = "<group>";
@@ -1691,6 +1699,7 @@
 		A954A85413EE98B30094E3FE /* filters */ = {
 			isa = PBXGroup;
 			children = (
+				A9E9C5ED16806A2B00ECEB39 /* teixhtml.cpp */,
 				A954A85513EE98B30094E3FE /* cipherfil.cpp */,
 				A954A85613EE98B30094E3FE /* gbffootnotes.cpp */,
 				A954A85713EE98B30094E3FE /* gbfheadings.cpp */,
@@ -2291,6 +2300,7 @@
 		A9BFB0AC13EDF51100032679 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				A917AF2516B1BE38006367FC /* Tests-Info.plist */,
 				A964658011C663E200640FAC /* SwordManagerTest.h */,
 				A964658111C663E200640FAC /* SwordManagerTest.m */,
 				A918B8E211C6697400024D84 /* SwordModuleTest.h */,
@@ -2299,19 +2309,9 @@
 				A9BDFA7B1207FA2F0067ED5B /* SwordModuleLongRunTest.mm */,
 				A9BDFA761207F9F00067ED5B /* SwordListKeyTest.h */,
 				A9BDFA771207F9F00067ED5B /* SwordListKeyTest.m */,
-				A9BFB0AD13EDF51100032679 /* Supporting Files */,
 			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		A9BFB0AD13EDF51100032679 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				A9BFB0AE13EDF51100032679 /* Tests-Info.plist */,
-				A9BFB0AF13EDF51100032679 /* InfoPlist.strings */,
-				A9BFB0B613EDF51100032679 /* Tests-Prefix.pch */,
-			);
-			name = "Supporting Files";
+			name = Tests;
+			path = test;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2331,13 +2331,10 @@
 				A94EAC17117B28920018B06F /* SwordDictionary.h in Headers */,
 				A94EAC19117B28920018B06F /* SwordInstallSource.h in Headers */,
 				A94EAC1B117B28920018B06F /* SwordInstallSourceManager.h in Headers */,
-				A94EAC1D117B28920018B06F /* SwordKey.h in Headers */,
-				A94EAC1F117B28920018B06F /* SwordListKey.h in Headers */,
 				A94EAC21117B28920018B06F /* SwordManager.h in Headers */,
 				A94EAC25117B28920018B06F /* SwordModule.h in Headers */,
 				A94EAC27117B28920018B06F /* SwordModuleTextEntry.h in Headers */,
 				A94EAC29117B28920018B06F /* SwordModuleTreeEntry.h in Headers */,
-				A94EAC2D117B28920018B06F /* SwordVerseKey.h in Headers */,
 				A94EAC2F117B28920018B06F /* SwordVerseManager.h in Headers */,
 				A94EAC31117B28920018B06F /* VerseEnumerator.h in Headers */,
 				A9A2C17D118D9D3D0002873D /* Notifications.h in Headers */,
@@ -2345,6 +2342,9 @@
 				A9C2857311C4471400803CB5 /* OSXConfiguration.h in Headers */,
 				A9D4360511C4FE97007AFE83 /* SwordModule+Index.h in Headers */,
 				A9EF1416120595650078A27C /* SwordLocaleManager.h in Headers */,
+				A929619D16B1BA240094E5BE /* SwordKey.h in Headers */,
+				A929619F16B1BA240094E5BE /* SwordListKey.h in Headers */,
+				A92961A116B1BA240094E5BE /* SwordVerseKey.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2773,6 +2773,7 @@
 			files = (
 				8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */,
 				A9D4382311C52947007AFE83 /* locales.d in Resources */,
+				A917AF2616B1BE38006367FC /* Tests-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2787,7 +2788,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9BFB0B113EDF51100032679 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2830,14 +2830,11 @@
 				A94EAC0C117B28920018B06F /* SwordBible.mm in Sources */,
 				A94EAC0E117B28920018B06F /* SwordBibleBook.mm in Sources */,
 				A94EAC10117B28920018B06F /* SwordBibleChapter.m in Sources */,
-				A94EAC12117B28920018B06F /* SwordBibleTextEntry.m in Sources */,
 				A94EAC14117B28920018B06F /* SwordBook.mm in Sources */,
 				A94EAC16117B28920018B06F /* SwordCommentary.mm in Sources */,
 				A94EAC18117B28920018B06F /* SwordDictionary.mm in Sources */,
 				A94EAC1A117B28920018B06F /* SwordInstallSource.mm in Sources */,
 				A94EAC1C117B28920018B06F /* SwordInstallSourceManager.mm in Sources */,
-				A94EAC1E117B28920018B06F /* SwordKey.mm in Sources */,
-				A94EAC20117B28920018B06F /* SwordListKey.mm in Sources */,
 				A94EAC22117B28920018B06F /* SwordManager.mm in Sources */,
 				A94EAC26117B28920018B06F /* SwordModule.mm in Sources */,
 				A94EAC28117B28920018B06F /* SwordModuleTextEntry.m in Sources */,
@@ -2849,6 +2846,14 @@
 				A9C2858311C44A0A00803CB5 /* Configuration.m in Sources */,
 				A9D4360611C4FE97007AFE83 /* SwordModule+Index.mm in Sources */,
 				A9EF1417120595650078A27C /* SwordLocaleManager.mm in Sources */,
+				8C92CE39E231FF9CAAB5308B /* SwordUtil.m in Sources */,
+				8C92CE0B19FBB659FB8F8B71 /* FilterProviderFactory.mm in Sources */,
+				8C92CC7B68FDCDFFFB8B4A31 /* DefaultFilterProvider.mm in Sources */,
+				A9E9C5EE16806A2B00ECEB39 /* teixhtml.cpp in Sources */,
+				8C92C31DC92DF0671FCEB5B3 /* SwordFilter.mm in Sources */,
+				A929619C16B1BA240094E5BE /* SwordBibleTextEntry.m in Sources */,
+				A929619E16B1BA240094E5BE /* SwordKey.mm in Sources */,
+				A92961A016B1BA240094E5BE /* SwordListKey.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2856,6 +2861,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A967FB5616806B16004ED73C /* teixhtml.cpp in Sources */,
 				A954ACCA13EEA5340094E3FE /* ftplib.c in Sources */,
 				A954ACCB13EEA5340094E3FE /* ftpparse.c in Sources */,
 				A954ACCD13EEA5340094E3FE /* adler32.c in Sources */,
@@ -3452,16 +3458,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				089C1667FE841158C02AAC07 /* English */,
-				A95043E315BC87F600D89B38 /* cs */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		A9BFB0AF13EDF51100032679 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9BFB0B013EDF51100032679 /* en */,
-				A950440315BC87F600D89B38 /* cs */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3494,11 +3490,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@rpath";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/build_sword/build/result_inst/lib\"",
-					"\"$(SRCROOT)/build_clucene/build/result_inst/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG";
@@ -3540,11 +3532,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@rpath";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/build_sword/build/result_inst/lib\"",
-					"\"$(SRCROOT)/build_clucene/build/result_inst/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = "-DRELEASE";
 				OTHER_LDFLAGS = (
@@ -3794,669 +3782,6 @@
 			};
 			name = Release;
 		};
-		A9ADDA2815E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = "";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = macosx10.7;
-			};
-			name = AppStore;
-		};
-		A9ADDA2915E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
-				);
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_GC = required;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ObjCSword_Prefix.pch;
-				GCC_VERSION = "";
-				HEADER_SEARCH_PATHS = "../../include/**";
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "@rpath";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/build_sword/build/result_inst/lib\"",
-					"\"$(SRCROOT)/build_clucene/build/result_inst/lib\"",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = "-DRELEASE";
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = ObjCSword;
-				SDKROOT = macosx10.7;
-				VALID_ARCHS = x86_64;
-				WARNING_CFLAGS = "-Wall";
-				WRAPPER_EXTENSION = framework;
-			};
-			name = AppStore;
-		};
-		A9ADDA2A15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_OBJC_GC = required;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
-				INFOPLIST_FILE = "Tests-Info copy.plist";
-				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Cocoa,
-					"-framework",
-					SenTestingKit,
-				);
-				PRODUCT_NAME = Tests;
-				SDKROOT = macosx10.7;
-				WRAPPER_EXTENSION = octest;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA2B15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_OBJC_GC = required;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "Tests/Tests-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
-				WRAPPER_EXTENSION = octest;
-			};
-			name = AppStore;
-		};
-		A9ADDA2C15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../include/**",
-					"$(SRCROOT)/dependencies/clucene/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = "@rpath";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-DUSELUCENE",
-					"-D_ICU_",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../include/**/** $(SRCROOT)/dependencies/clucene/** $(SRCROOT)/dependencies/icu/include/**";
-				VALID_ARCHS = x86_64;
-			};
-			name = AppStore;
-		};
-		A9ADDA2D15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = imp2gbs;
-				SDKROOT = macosx10.7;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA2E15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = imp2ld;
-				SDKROOT = macosx10.7;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA2F15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = imp2vs;
-				SDKROOT = macosx10.7;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA3015E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = installmgr;
-				SDKROOT = macosx10.7;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA3115E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = mod2imp;
-				SDKROOT = macosx10.7;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA3215E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = mod2osis;
-				SDKROOT = macosx10.7;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA3315E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = mod2vpl;
-				SDKROOT = macosx10.7;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA3415E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = mod2zmod;
-				SDKROOT = macosx10.7;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
-				ZERO_LINK = NO;
-			};
-			name = AppStore;
-		};
-		A9ADDA3515E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = AppStore;
-		};
-		A9ADDA3615E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = step2vpl;
-			};
-			name = AppStore;
-		};
-		A9ADDA3715E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = stepdump;
-			};
-			name = AppStore;
-		};
-		A9ADDA3815E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = tei2mod;
-			};
-			name = AppStore;
-		};
-		A9ADDA3915E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = vpl2mod;
-			};
-			name = AppStore;
-		};
-		A9ADDA3A15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = vs2osisref;
-			};
-			name = AppStore;
-		};
-		A9ADDA3B15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = vs2osisreftxt;
-			};
-			name = AppStore;
-		};
-		A9ADDA3C15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../include/**",
-					"$(SRCROOT)/dependencies/icu/include/**",
-				);
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../Frameworks/ObjCSword.framework/Versions/A/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OTHER_CFLAGS = (
-					"-DCURLAVAILABLE",
-					"-Dunix",
-					"-D__unix__",
-					"-D_ICU_",
-				);
-				OTHER_LDFLAGS = (
-					"-lcurl",
-					"-lz",
-					"-licucore",
-				);
-				PRODUCT_NAME = xml2gbs;
-			};
-			name = AppStore;
-		};
-		A9ADDA3D15E2D73E00675628 /* AppStore */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = AppStore;
-		};
 		A9BDFA691207F9870067ED5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4471,7 +3796,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
-				INFOPLIST_FILE = "Tests-Info copy.plist";
+				INFOPLIST_FILE = "test/Tests-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
@@ -4483,6 +3808,7 @@
 				);
 				PRODUCT_NAME = Tests;
 				SDKROOT = macosx10.7;
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -4499,7 +3825,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
-				INFOPLIST_FILE = "Tests-Info copy.plist";
+				INFOPLIST_FILE = "test/Tests-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -4510,6 +3836,7 @@
 				);
 				PRODUCT_NAME = Tests;
 				SDKROOT = macosx10.7;
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;
 			};
@@ -4526,7 +3853,6 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -4535,10 +3861,11 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				INFOPLIST_FILE = "test/Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx10.7;
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
@@ -4554,14 +3881,14 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				INFOPLIST_FILE = "test/Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx10.7;
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
@@ -5519,7 +4846,6 @@
 			buildConfigurations = (
 				1DEB91AE08733DA50010E9CD /* Debug */,
 				1DEB91AF08733DA50010E9CD /* Release */,
-				A9ADDA2915E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5529,7 +4855,6 @@
 			buildConfigurations = (
 				1DEB91B208733DA50010E9CD /* Debug */,
 				1DEB91B308733DA50010E9CD /* Release */,
-				A9ADDA2815E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5539,7 +4864,6 @@
 			buildConfigurations = (
 				A954ABC513EE9AB00094E3FE /* Debug */,
 				A954ABC613EE9AB00094E3FE /* Release */,
-				A9ADDA2C15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5549,7 +4873,6 @@
 			buildConfigurations = (
 				A975EEDE11C792BA007C1532 /* Debug */,
 				A975EEDF11C792BA007C1532 /* Release */,
-				A9ADDA3215E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5559,7 +4882,6 @@
 			buildConfigurations = (
 				A9A7EEBC14D5D61700B76B6A /* Debug */,
 				A9A7EEBD14D5D61700B76B6A /* Release */,
-				A9ADDA3515E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5569,7 +4891,6 @@
 			buildConfigurations = (
 				A9BDFA691207F9870067ED5B /* Debug */,
 				A9BDFA6A1207F9870067ED5B /* Release */,
-				A9ADDA2A15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5579,7 +4900,6 @@
 			buildConfigurations = (
 				A9BFB0B813EDF51100032679 /* Debug */,
 				A9BFB0B913EDF51100032679 /* Release */,
-				A9ADDA2B15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5589,7 +4909,6 @@
 			buildConfigurations = (
 				A9D2714C14D717D800DA8926 /* Debug */,
 				A9D2714D14D717D800DA8926 /* Release */,
-				A9ADDA2D15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5599,7 +4918,6 @@
 			buildConfigurations = (
 				A9D2715914D717FD00DA8926 /* Debug */,
 				A9D2715A14D717FD00DA8926 /* Release */,
-				A9ADDA2E15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5609,7 +4927,6 @@
 			buildConfigurations = (
 				A9D2716614D7181200DA8926 /* Debug */,
 				A9D2716714D7181200DA8926 /* Release */,
-				A9ADDA2F15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5619,7 +4936,6 @@
 			buildConfigurations = (
 				A9D2717314D7182300DA8926 /* Debug */,
 				A9D2717414D7182300DA8926 /* Release */,
-				A9ADDA3015E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5629,7 +4945,6 @@
 			buildConfigurations = (
 				A9D2718014D7183B00DA8926 /* Debug */,
 				A9D2718114D7183B00DA8926 /* Release */,
-				A9ADDA3115E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5639,7 +4954,6 @@
 			buildConfigurations = (
 				A9D2718D14D7185800DA8926 /* Debug */,
 				A9D2718E14D7185800DA8926 /* Release */,
-				A9ADDA3315E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5649,7 +4963,6 @@
 			buildConfigurations = (
 				A9D2719A14D7186A00DA8926 /* Debug */,
 				A9D2719B14D7186A00DA8926 /* Release */,
-				A9ADDA3415E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5659,7 +4972,6 @@
 			buildConfigurations = (
 				A9D271A714D7187E00DA8926 /* Debug */,
 				A9D271A814D7187E00DA8926 /* Release */,
-				A9ADDA3615E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5669,7 +4981,6 @@
 			buildConfigurations = (
 				A9D271B414D7189300DA8926 /* Debug */,
 				A9D271B514D7189300DA8926 /* Release */,
-				A9ADDA3715E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5679,7 +4990,6 @@
 			buildConfigurations = (
 				A9D271C114D718A400DA8926 /* Debug */,
 				A9D271C214D718A400DA8926 /* Release */,
-				A9ADDA3815E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5689,7 +4999,6 @@
 			buildConfigurations = (
 				A9D271CE14D718B800DA8926 /* Debug */,
 				A9D271CF14D718B800DA8926 /* Release */,
-				A9ADDA3915E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5699,7 +5008,6 @@
 			buildConfigurations = (
 				A9D271DB14D718C800DA8926 /* Debug */,
 				A9D271DC14D718C800DA8926 /* Release */,
-				A9ADDA3A15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5709,7 +5017,6 @@
 			buildConfigurations = (
 				A9D271E814D718DF00DA8926 /* Debug */,
 				A9D271E914D718DF00DA8926 /* Release */,
-				A9ADDA3B15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5719,7 +5026,6 @@
 			buildConfigurations = (
 				A9D271F514D718F500DA8926 /* Debug */,
 				A9D271F614D718F500DA8926 /* Release */,
-				A9ADDA3C15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5729,7 +5035,6 @@
 			buildConfigurations = (
 				A9D271FC14D7193300DA8926 /* Debug */,
 				A9D271FD14D7193300DA8926 /* Release */,
-				A9ADDA3D15E2D73E00675628 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

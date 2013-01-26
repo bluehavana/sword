@@ -39,14 +39,14 @@ int main(int argc, char **argv) {
 	SWModule *b = manager.getModule(bookName);
 	if (!b) return -1;
 	SWModule &book = *b;
-	book.processEntryAttributes(false);
+	book.setProcessEntryAttributes(false);
 	VerseKey *vk = SWDYNAMIC_CAST(VerseKey, book.getKey());
-	for (book = TOP; !book.Error() && !book.getRawEntryBuf().size(); book++);
+	for (book = TOP; !book.popError() && !book.getRawEntryBuf().size(); book++);
 	if (!book.getRawEntryBuf().size()) return -2; 	// empty module
-	for (;!book.Error(); book++) {
+	for (;!book.popError(); book++) {
 		cout << "$$$";
 		if (vk) cout << vk->getOSISRef();
 		else    cout << book.getKeyText();
-		cout << "\n" << book.RenderText() << "\n\n";
+		cout << "\n" << book.renderText() << "\n\n";
 	}
 }

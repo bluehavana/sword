@@ -98,13 +98,13 @@ void SearchThread::search()  {
 		return;
 	}
 
-	ListKey scopeList = VerseKey().ParseVerseList("Luke;John;Revelation","", true);
+	ListKey scopeList = VerseKey().parseVerseList("Luke;John;Revelation","", true);
 	for (int i=0; i < scopeList.Count(); ++i) {
 		std::cout << (const char*)*scopeList.GetElement(i) << std::endl;
 	}
 	SWKey* scope = &scopeList;
 
-	searchResult = module->Search(searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
+	searchResult = module->search(searchedText, -2, REG_ICASE, scope, 0, &percentUpdate);
 
 	if (!scope)
 		std::cout << "bad scope!" << std::endl;
@@ -125,8 +125,8 @@ int main(int argc, char **argv) {
 	it = manager.Modules.find(argv[1]);
 	if (it == manager.Modules.end()) {
 		fprintf(stderr, "Could not find module [%s].  Available modules:\n",  argv[1]);
-		for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
-			fprintf(stderr, "[%s]\t - %s\n", (*it).second->Name(), (*it).second->Description());
+		for (it = manager.Modules.begin(); it != manager.Modules.end(); ++it) {
+			fprintf(stderr, "[%s]\t - %s\n", (*it).second->getName(), (*it).second->getDescription());
 		}
 		exit(-1);
 	}

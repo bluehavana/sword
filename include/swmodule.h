@@ -30,6 +30,9 @@
 
 #include <swcacher.h>
 #include <swsearchable.h>
+#ifndef	_WIN32_WCE
+#include <iostream>
+#endif
 
 #include <list>
 
@@ -43,7 +46,7 @@ class SWFilter;
 #define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
 #define SWMODULE_OPERATORS \
-	operator const char *() { return RenderText(); } \
+	operator const char *() { return renderText(); } \
 	operator SWKey &() { return *getKey(); } \
 	operator SWKey *() { return getKey(); } \
 	SWModule &operator <<(const char *inbuf) { setEntry(inbuf); return *this; } \
@@ -86,6 +89,16 @@ typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList
 
 class SWDLLEXPORT SWModule : public SWCacher, public SWSearchable {
 
+class StdOutDisplay : public SWDisplay {
+     char display(SWModule &imodule)
+     {
+     #ifndef	_WIN32_WCE
+          std::cout << (const char *)imodule;
+     #endif
+          return 0;
+     }
+};
+
 protected:
 
 	ConfigEntMap ownConfig;
@@ -93,7 +106,7 @@ protected:
 	mutable AttributeTypeList entryAttributes;
 	mutable bool procEntAttr;
 
-	char error;
+	mutable char error;
 	bool skipConsecutiveLinks;
 
 	/** the current key */
@@ -112,8 +125,8 @@ protected:
 	/** this module's display object */
 	SWDisplay *disp;
 
-	static SWDisplay rawdisp;
-	SWBuf entryBuf;
+	static StdOutDisplay rawdisp;
+	mutable SWBuf entryBuf;
 
 	/** filters to be executed to remove all markup (for searches) */
 	FilterList *stripFilters;
@@ -130,7 +143,7 @@ protected:
 	/** filters to be executed to decode text for display */
 	FilterList *encodingFilters;
 
-	int entrySize;
+	mutable int entrySize;
 	mutable long entryIndex;	 // internal common storage for index
 
 	static void prepText(SWBuf &buf);
@@ -165,7 +178,8 @@ public:
 	 *
 	 * @return error status
 	 */
-	virtual char Error();
+	virtual char popError();
+	SWDEPRECATED virtual char Error() { return popError(); }
 
 	/**
 	 * @return  True if this module is encoded in Unicode, otherwise returns false.
@@ -201,15 +215,15 @@ public:
 	/**
 	 * @deprecated Use setKey() instead.
 	 */
-	char SetKey(const SWKey *ikey) { return setKey(ikey); }
+	SWDEPRECATED char SetKey(const SWKey *ikey) { return setKey(ikey); }
 	/**
 	 * @deprecated Use setKey() instead.
 	 */
-	char SetKey(const SWKey &ikey) { return setKey(ikey); }
+	SWDEPRECATED char SetKey(const SWKey &ikey) { return setKey(ikey); }
 	/**
 	 * @deprecated Use setKey() instead.
 	 */
-	char Key(const SWKey & ikey) { return setKey(ikey); }
+	SWDEPRECATED char Key(const SWKey & ikey) { return setKey(ikey); }
 
 	/** Gets the current module key
 	 * @return the current key of this module
@@ -218,7 +232,7 @@ public:
 	/**
 	 * @deprecated Use getKey() instead.
 	 */
-	SWKey &Key() const { return *getKey(); }
+	SWDEPRECATED SWKey &Key() const { return *getKey(); }
 
 	/**
 	 * Sets/gets module KeyText
@@ -226,10 +240,7 @@ public:
 	 * @param ikeytext Value which to set keytext; [0]-only get
 	 * @return pointer to keytext
 	 */
-	virtual const char *KeyText(const char *ikeytext = 0) {
-		if (ikeytext) setKey(ikeytext);
-		return *getKey();
-	}
+	SWDEPRECATED const char *KeyText(const char *ikeytext = 0) { if (ikeytext) setKey(ikeytext); return *getKey(); }
 
 	/**
 	 * gets the key text for the module.
@@ -244,15 +255,16 @@ public:
 	virtual long getIndex() const { return entryIndex; }
 	virtual void setIndex(long iindex) { entryIndex = iindex; }
 	// deprecated, use getIndex()
-	long Index() const { return getIndex(); }
+	SWDEPRECATED long Index() const { return getIndex(); }
 	// deprecated, use setIndex(...)
-	long Index(long iindex) { setIndex(iindex); return getIndex(); }
+	SWDEPRECATED long Index(long iindex) { setIndex(iindex); return getIndex(); }
 
 	/** Calls this module's display object and passes itself
 	 *
 	 * @return error status
 	 */
-	virtual char Display();
+	virtual char display();
+	SWDEPRECATED char Display() { return display(); }
 
 	/** Gets display driver
 	 *
@@ -269,84 +281,82 @@ public:
 	/**
 	 * @deprecated Use get/setDisplay() instead.
 	 */
-	SWDisplay *Disp(SWDisplay * idisp = 0) {
-		if (idisp)
-			setDisplay(idisp);
-		return getDisplay();
-	}
+	SWDEPRECATED SWDisplay *Disp(SWDisplay * idisp = 0) { if (idisp)	setDisplay(idisp); return getDisplay();	}
 
 	/** Gets module name
 	 *
 	 * @return pointer to modname
 	 */
-	char *Name() const { return getName(); }
-	virtual char *getName() const;
+	const char *getName() const;
+	SWDEPRECATED const char *Name() const { return getName(); }
 
 	/** Sets module name
 	 *
 	 * @param imodname Value which to set modname; [0]-only get
 	 * @return pointer to modname
 	 */
-	char *Name(const char *imodname) { setName(imodname); return getName(); }
-	virtual void setName(const char *imodname);
+	SWDEPRECATED const char *Name(const char *imodname) { stdstr(&modname, imodname); return getName(); }
 
 	/** Gets module description
 	 *
 	 * @return pointer to moddesc
 	 */
-	char *Description() const { return getDescription(); }
-	virtual char *getDescription() const;
+	const char *getDescription() const;
+	SWDEPRECATED const char *Description() const { return getDescription(); }
 
 	/** Sets module description
 	 *
 	 * @param imoddesc Value which to set moddesc; [0]-only get
 	 * @return pointer to moddesc
 	 */
-	char *Description(const char *imoddesc) { setDescription(imoddesc); return getDescription(); }
-	virtual void setDescription(const char *imoddesc);
+	SWDEPRECATED const char *Description(const char *imoddesc) { stdstr(&moddesc, imoddesc); return getDescription(); }
 
 	/** Gets module type
 	 *
 	 * @return pointer to modtype
 	 */
-	char *Type() const { return getType(); }
-	virtual char *getType() const;
+	const char *getType() const;
+	SWDEPRECATED const char *Type() const { return getType(); }
 
 	/** Sets module type
 	 *
 	 * @param imodtype Value which to set modtype; [0]-only get
 	 * @return pointer to modtype
 	 */
-	char *Type(const char *imodtype) { setType(imodtype); return getType(); }
-	virtual void setType(const char *imodtype);
+	SWDEPRECATED const char *Type(const char *imodtype) { setType(imodtype); return getType(); }
+	void setType(const char *imodtype) { stdstr(&modtype, imodtype); }
 
 	/** Sets/gets module direction
 	 *
 	 * @param newdir Value which to set direction; [-1]-only get
 	 * @return new direction
 	 */
-	virtual char Direction(signed char newdir = -1);
+	virtual char getDirection() const;
+	SWDEPRECATED char Direction(signed char newdir = -1) { char retVal = getDirection(); if (newdir != -1) return direction = newdir; return retVal; }
 
 	/** Sets/gets module encoding
 	 *
 	 * @param enc Value which to set encoding; [-1]-only get
 	 * @return Encoding
 	 */
-	virtual char Encoding(signed char enc = -1);
+	char getEncoding() const { return encoding; }
+	SWDEPRECATED char Encoding(signed char enc = -1) { char retVal = getEncoding(); if (enc != -1) encoding = enc; return retVal; }
 
 	/** Sets/gets module markup
 	 *
-	 * @param markup Vvalue which to set markup; [-1]-only get
+	 * @param markup Value which to set markup; [-1]-only get
 	 * @return Markup
 	 */
-	virtual char Markup(signed char markup = -1);
+	char getMarkup() const { return markup; }
+	SWDEPRECATED char Markup(signed char imarkup = -1) { char retVal = getMarkup(); if (imarkup != -1) markup = imarkup; return retVal; }
 
 	/** Sets/gets module language
 	 *
 	 * @param imodlang Value which to set modlang; [0]-only get
 	 * @return pointer to modlang
 	 */
-	virtual char *Lang(const char *imodlang = 0);
+	const char *getLanguage() const { return modlang; }
+	SWDEPRECATED const char *Lang(char *imodlang = 0) { if (imodlang != 0) stdstr(&modlang, imodlang); return getLanguage(); }
 
 
 	// search interface -------------------------------------------------
@@ -376,36 +386,32 @@ public:
 			void *percentUserData = 0);
 
 	// for backward compat-- deprecated
-	virtual ListKey &Search(const char *istr, int searchType = 0, int flags = 0,
-			SWKey * scope = 0,
-			bool * justCheckIfSupported = 0,
-			void (*percent) (char, void *) = &nullPercent,
-			void *percentUserData = 0) {
-		return search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);
-	}
+	SWDEPRECATED ListKey &Search(const char *istr, int searchType = 0, int flags = 0, SWKey * scope = 0, bool * justCheckIfSupported = 0, void (*percent) (char, void *) = &nullPercent, void *percentUserData = 0) {	return search(istr, searchType, flags, scope, justCheckIfSupported, percent, percentUserData);	}
 
 
 	/** Allocates a key of specific type for module
-	 * The different reimplementatiosn of SWModule (e.g. SWText) support SWKey implementations, which support special.
-	 * This functions returns a SWKey object which works with the current implementation of SWModule. For example for the SWText class it returns a VerseKey object.
+	 * The different reimplementations of SWModule (e.g. SWText) support SWKey implementations,
+	 * which support special.  This functions returns a SWKey object which works with the current
+	 * implementation of SWModule. For example for the SWText class it returns a VerseKey object.
 	 * @see VerseKey, ListKey, SWText, SWLD, SWCom
-	 * @return pointer to allocated key
+	 * @return pointer to allocated key. Caller is responsible for deleting the object
 	 */
-	virtual SWKey *CreateKey() const;
+	virtual SWKey *createKey() const;
+	SWDEPRECATED SWKey *CreateKey() const { return createKey(); }
 
 	/** This function is reimplemented by the different kinds
 	 * of module objects
 	 * @return the raw module text of the current entry
 	 */
-	virtual SWBuf &getRawEntryBuf() = 0;
+	virtual SWBuf &getRawEntryBuf() const = 0;
 
-	virtual const char *getRawEntry() { return getRawEntryBuf().c_str(); }
+	const char *getRawEntry() const { return getRawEntryBuf().c_str(); }
 
 	// write interface ----------------------------
 	/** Is the module writable? :)
 	 * @return yes or no
 	 */
-	virtual bool isWritable() { return false; }
+	virtual bool isWritable() const { return false; }
 
 	/** Creates a new, empty module
 	 * @param path path where to create the new module
@@ -448,14 +454,14 @@ public:
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
 	 */
-	virtual void filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *key);
+	virtual void filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *key) const;
 
 	/** FilterBuffer a text buffer
 	 * @param filters the FilterList of filters to iterate
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
 	 */
-	virtual void filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key);
+	virtual void filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key) const;
 
 	/** Adds a RenderFilter to this module's renderFilters queue.
 	 *	Render Filters are called when the module is asked to produce
@@ -463,10 +469,11 @@ public:
 	 * @param newfilter the filter to add
 	 * @return *this
 	 */
-	virtual SWModule &AddRenderFilter(SWFilter *newfilter) {
-		renderFilters->push_back(newfilter);
+	virtual SWModule &addRenderFilter(SWFilter *newFilter) {
+		renderFilters->push_back(newFilter);
 		return *this;
 	}
+	SWDEPRECATED SWModule &AddRenderFilter(SWFilter *newFilter) { return addRenderFilter(newFilter); }
 
 	/** Retrieves a container of render filters associated with this
 	 *	module.
@@ -480,30 +487,32 @@ public:
 	 * @param oldfilter the filter to remove
 	 * @return *this
 	 */
-	virtual SWModule &RemoveRenderFilter(SWFilter *oldfilter) {
-		renderFilters->remove(oldfilter);
+	virtual SWModule &removeRenderFilter(SWFilter *oldFilter) {
+		renderFilters->remove(oldFilter);
 		return *this;
 	}
+	SWDEPRECATED SWModule &RemoveRenderFilter(SWFilter *oldFilter) {	return removeRenderFilter(oldFilter); }
 
 	/** Replaces a RenderFilter in this module's renderfilters queue
 	 * @param oldfilter the filter to remove
 	 * @param newfilter the filter to add in its place
 	 * @return *this
 	 */
-	virtual SWModule &ReplaceRenderFilter(SWFilter *oldfilter, SWFilter *newfilter) {
+	virtual SWModule &replaceRenderFilter(SWFilter *oldFilter, SWFilter *newFilter) {
 		FilterList::iterator iter;
 		for (iter = renderFilters->begin(); iter != renderFilters->end(); iter++) {
-			if (*iter == oldfilter)
-				*iter = newfilter;
+			if (*iter == oldFilter)
+				*iter = newFilter;
 		}
 		return *this;
 	}
+	SWDEPRECATED SWModule &ReplaceRenderFilter(SWFilter *oldFilter, SWFilter *newFilter) { return replaceRenderFilter(oldFilter, newFilter); }
 
 	/** RenderFilter run a buf through this module's Render Filters
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
 	 */
-	virtual void renderFilter(SWBuf &buf, const SWKey *key) {
+	virtual void renderFilter(SWBuf &buf, const SWKey *key) const {
 		filterBuffer(renderFilters, buf, key);
 	}
 
@@ -514,39 +523,42 @@ public:
 	 * @param newfilter the filter to add
 	 * @return *this
 	 */
-	virtual SWModule &AddEncodingFilter(SWFilter *newfilter) {
-		encodingFilters->push_back(newfilter);
+	virtual SWModule &addEncodingFilter(SWFilter *newFilter) {
+		encodingFilters->push_back(newFilter);
 		return *this;
 	}
+	SWDEPRECATED SWModule &AddEncodingFilter(SWFilter *newFilter) { return addEncodingFilter(newFilter); }
 
 	/** Removes an EncodingFilter from this module's encodingFilters queue
 	 * @param oldfilter the filter to remove
 	 * @return *this
 	 */
-	virtual SWModule &RemoveEncodingFilter(SWFilter *oldfilter) {
-		encodingFilters->remove(oldfilter);
+	virtual SWModule &removeEncodingFilter(SWFilter *oldFilter) {
+		encodingFilters->remove(oldFilter);
 		return *this;
 	}
+	SWDEPRECATED SWModule &RemoveEncodingFilter(SWFilter *oldFilter) { return removeEncodingFilter(oldFilter); }
 
 	/** Replaces an EncodingFilter in this module's encodingfilters queue
 	 * @param oldfilter the filter to remove
 	 * @param newfilter the filter to add in its place
 	 * @return *this
 	 */
-	virtual SWModule &ReplaceEncodingFilter(SWFilter *oldfilter, SWFilter *newfilter) {
+	virtual SWModule &replaceEncodingFilter(SWFilter *oldFilter, SWFilter *newFilter) {
 		FilterList::iterator iter;
 		for (iter = encodingFilters->begin(); iter != encodingFilters->end(); iter++) {
-			if (*iter == oldfilter)
-				*iter = newfilter;
+			if (*iter == oldFilter)
+				*iter = newFilter;
 		}
 		return *this;
 	}
+	SWDEPRECATED SWModule &ReplaceEncodingFilter(SWFilter *oldFilter, SWFilter *newFilter) { return replaceEncodingFilter(oldFilter, newFilter); }
 
 	/** encodingFilter run a buf through this module's Encoding Filters
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
 	 */
-	virtual void encodingFilter(SWBuf &buf, const SWKey *key) {
+	virtual void encodingFilter(SWBuf &buf, const SWKey *key) const {
 		filterBuffer(encodingFilters, buf, key);
 	}
 
@@ -556,25 +568,27 @@ public:
 	 * @param newfilter the filter to add
 	 * @return *this
 	 */
-	virtual SWModule &AddStripFilter(SWFilter *newfilter) {
-		stripFilters->push_back(newfilter);
+	virtual SWModule &addStripFilter(SWFilter *newFilter) {
+		stripFilters->push_back(newFilter);
 		return *this;
 	}
+	SWDEPRECATED SWModule &AddStripFilter(SWFilter *newFilter) { return addStripFilter(newFilter);	}
 
 	/** Adds a RawFilter to this module's rawFilters queue
-	 * @param newfilter the filter to add
+	 * @param newFilter the filter to add
 	 * @return *this
 	 */
-	virtual SWModule &AddRawFilter(SWFilter *newfilter) {
+	virtual SWModule &addRawFilter(SWFilter *newfilter) {
 		rawFilters->push_back(newfilter);
 		return *this;
 	}
+	SWDEPRECATED SWModule &AddRawFilter(SWFilter *newFilter) { return addRawFilter(newFilter); }
 
 	/** StripFilter run a buf through this module's Strip Filters
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
 	 */
-	virtual void stripFilter(SWBuf &buf, const SWKey *key) {
+	virtual void stripFilter(SWBuf &buf, const SWKey *key) const {
 		filterBuffer(stripFilters, buf, key);
 	}
 
@@ -583,7 +597,7 @@ public:
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
 	 */
-	virtual void rawFilter(SWBuf &buf, const SWKey *key) {
+	virtual void rawFilter(SWBuf &buf, const SWKey *key) const {
 		filterBuffer(rawFilters, buf, key);
 	}
 
@@ -594,16 +608,17 @@ public:
 	 * @param newfilter the filter to add
 	 * @return *this
 	 */
-	virtual SWModule &AddOptionFilter(SWOptionFilter *newfilter) {
-		optionFilters->push_back(newfilter);
+	virtual SWModule &addOptionFilter(SWOptionFilter *newFilter) {
+		optionFilters->push_back(newFilter);
 		return *this;
 	}
+	SWDEPRECATED SWModule &AddOptionFilter(SWOptionFilter *newFilter) { return addOptionFilter(newFilter); }
 
 	/** OptionFilter a text buffer
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
 	 */
-	virtual void optionFilter(SWBuf &buf, const SWKey *key) {
+	virtual void optionFilter(SWBuf &buf, const SWKey *key) const {
 		filterBuffer(optionFilters, buf, key);
 	}
 
@@ -615,7 +630,8 @@ public:
 	 * @param len max len to process
 	 * @return result buffer
 	 */
-	virtual const char *StripText(const char *buf = 0, int len = -1);
+	virtual const char *stripText(const char *buf = 0, int len = -1);
+	SWDEPRECATED const char *StripText(const char *buf = 0, int len = -1) { return stripText(buf, len); }
 
 	/** Produces renderable text of the current module entry or supplied text
 	 *
@@ -625,7 +641,8 @@ public:
 	 * @param render for internal use
 	 * @return result buffer
 	 */
-	virtual const char *RenderText(const char *buf = 0, int len = -1, bool render = true);
+	virtual const char *renderText(const char *buf = 0, int len = -1, bool render = true);
+	SWDEPRECATED const char *RenderText(const char *buf = 0, int len = -1, bool render = true) { return renderText(buf, len, render); }
 
 	/** Produces any header data which might be useful which associated with the
 	 *	processing done with this filter.  A typical example is a suggested
@@ -637,13 +654,13 @@ public:
 	 * @param tmpKey desired module entry
 	 * @return result buffer
 	 */
-	virtual const char *StripText(const SWKey *tmpKey);
+	virtual const char *stripText(const SWKey *tmpKey);
 
 	/** Produces renderable text of the module entry at the supplied key
 	 * @param tmpKey key to use to grab text
 	 * @return this module's text at specified key location massaged by Render filters
 	 */
-	virtual const char *RenderText(const SWKey *tmpKey);
+	virtual const char *renderText(const SWKey *tmpKey);
 
 	/** Whether or not to only hit one entry when iterating encounters
 	 *	consecutive links when iterating
@@ -654,7 +671,8 @@ public:
 	/** Whether or not to only hit one entry when iterating encounters
 	 *	consecutive links when iterating
 	 */
-	virtual bool getSkipConsecutiveLinks() { return skipConsecutiveLinks; }
+	virtual bool isSkipConsecutiveLinks() { return skipConsecutiveLinks; }
+	SWDEPRECATED bool getSkipConsecutiveLinks() { return isSkipConsecutiveLinks(); }
 	
 	virtual bool isLinked(const SWKey *, const SWKey *) const { return false; }
 	virtual bool hasEntry(const SWKey *) const { return false; }
@@ -672,7 +690,8 @@ public:
 	 * engine processing turns them off (like searching) temporarily for
 	 * optimization.
 	 */
-	virtual void processEntryAttributes(bool val) const { procEntAttr = val; }
+	virtual void setProcessEntryAttributes(bool val) const { procEntAttr = val; }
+	SWDEPRECATED void processEntryAttributes(bool val) const { setProcessEntryAttributes(val); }
 
 	/** Whether or not we're processing Entry Attributes
 	 */

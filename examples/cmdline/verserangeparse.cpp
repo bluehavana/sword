@@ -45,15 +45,15 @@ int main(int argc, char **argv)
 	VerseKey parser;
 	ListKey result;
 
-	result = parser.ParseVerseList(range, parser, true);
+	result = parser.parseVerseList(range, parser, true);
 	// let's iterate the key and display
-	for (result = TOP; !result.Error(); result++) {
+	for (result = TOP; !result.popError(); result++) {
 		cout << result << "\n";
 	}
 	cout << endl;
 
 	// Now if we'd like persist this key for use inside of a book...
-	result.Persist(true);
+	result.setPersist(true);
 	
 	// Let's get a book;
 	SWMgr library(new MarkupFilterMgr(FMT_PLAIN));	// render plain without fancy markup
@@ -63,8 +63,8 @@ int main(int argc, char **argv)
 	book->setKey(result);
 
 	// now let's iterate the book and display
-	for ((*book) = TOP; !book->Error(); (*book)++) {
-		cout << "*** " << book->getKeyText() << ": " << book->RenderText() << "\n";
+	for ((*book) = TOP; !book->popError(); (*book)++) {
+		cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
 	}
 
 	// Since we've told our result key to persist in book, we can reuse our

@@ -1,8 +1,8 @@
 /***************************************************************************
- *					 teirtf.cpp  -  TEI to XHTML filter
+ *					 teixhtml.cpp  -  TEI to XHTML filter
  *							 -------------------
- *	begin				: 2006-07-03
- *	copyright			: 2006 by CrossWire Bible Society
+ *	begin				: 2012-09-23
+ *	copyright			: 2012 by CrossWire Bible Society
  *
  * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
@@ -35,8 +35,8 @@ SWORD_NAMESPACE_START
 TEIXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 	BiblicalText = false;
 	if (module) {
-		version = module->Name();
-		BiblicalText = (!strcmp(module->Type(), "Biblical Texts"));
+		version = module->getName();
+		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}
 }
 

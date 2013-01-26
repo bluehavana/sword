@@ -82,7 +82,7 @@ void assurePath(TreeKeyIdx *treeKey) {
 
 void viewEntryText(RawGenBook *book) {
 	std::cout << "\n";
-	std::cout << book->RenderText();
+	std::cout << book->renderText();
 	std::cout << "\n";
 }
 
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
 
 	TreeKeyIdx *treeKey = new TreeKeyIdx(argv[1]);
 
-	if (treeKey->Error()) {
+	if (treeKey->popError()) {
 		RawGenBook::createModule(argv[1]);
 	}
 	delete treeKey;

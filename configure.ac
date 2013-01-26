@@ -57,6 +57,8 @@ AC_ARG_WITH(conf,
 	AC_HELP_STRING([--with-conf],[install a new sword.conf (default=yes)]),,with_conf=yes)
 AC_ARG_WITH(curl,
 	AC_HELP_STRING([--with-curl],[build install manager support using libcurl (default=yes)]),,with_curl=yes)
+AC_ARG_WITH(curl_sftp,
+	AC_HELP_STRING([--with-curl_sftp],[build install manager support using libcurl+sftp (requires --with-curl, default=yes)]),,with_curl_sftp=yes)
 #AC_ARG_WITH(lucene,
 #	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
 AC_ARG_WITH([internalregex],
@@ -90,14 +92,14 @@ AM_MAINTAINER_MODE
 if test x$enable_debug = xyes; then
   GCJFLAGS="-g -O0"
   if test x$ac_cv_prog_cc_g = xyes; then
-    AM_CFLAGS="-g3 -O0 -Wall -Werror"
+    AM_CFLAGS="-g3 -O0 -Wall -Werror -Woverloaded-virtual"
   else
-    AM_CFLAGS="-O0 -Wall -Werror"
+    AM_CFLAGS="-O0 -Wall -Werror -Woverloaded-virtual"
   fi
   if test x$ac_cv_prog_cxx_g = xyes; then
-    AM_CXXFLAGS="-g3 -O0 -Wall -Werror"
+    AM_CXXFLAGS="-g3 -O0 -Wall -Werror -Woverloaded-virtual"
   else
-    AM_CXXFLAGS="-O0 -Wall -Werror"
+    AM_CXXFLAGS="-O0 -Wall -Werror -Woverloaded-virtual"
   fi
 else
   AM_CFLAGS="-O3"
@@ -209,8 +211,8 @@ fi
 AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
 
 if test x$enable_warnings = xyes; then
-  AM_CFLAGS="$AM_CFLAGS -Werror"
-  AM_CXXFLAGS="$AM_CXXFLAGS -Werror"
+  AM_CFLAGS="$AM_CFLAGS -Werror -Woverloaded-virtual"
+  AM_CXXFLAGS="$AM_CXXFLAGS -Werror -Woverloaded-virtual"
 fi
 
 if test x$enable_profile = xyes; then
@@ -234,6 +236,7 @@ if test x$with_curl = xyes; then
 	echo "*** The curl-config script installed by curl could not be found"
 	echo "*** compiling without libcurl support"
 	with_curl=no
+	with_curl_sftp=no
 	with_internalftplib=yes
     else
 	echo "curl found - remote install options available"
@@ -242,9 +245,18 @@ if test x$with_curl = xyes; then
 	AM_CXXFLAGS="$AM_CXXFLAGS -DCURLAVAILABLE $CURL_AM_CFLAGS"
 	AM_CFLAGS="$AM_CFLAGS -DCURLAVAILABLE $CURL_AM_CFLAGS"
 	LIBS="$LIBS $CURL_LIBS"
+	if test x$with_curl_sftp = xyes; then
+		if test x`$CURL_CONFIG --protocols|grep SFTP|wc -l` = x1; then
+			AM_CXXFLAGS="$AM_CXXFLAGS -DCURLSFTPAVAILABLE"
+			AM_CFLAGS="$AM_CFLAGS -DCURLSFTPAVAILABLE"
+		else
+			with_curl_sftp=no;
+		fi
+	fi
     fi
 else
 	with_curl=no;
+	with_curl_sftp=no;
 	with_internalftplib=yes
 fi
 
@@ -330,6 +342,7 @@ AM_CONDITIONAL(USELUCENE, test "x$with_clucene" != xno)
 AM_CONDITIONAL(SHAREDLIB, test x$enable_shared = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 AM_CONDITIONAL(WITHCURL, test x$with_curl = xyes)
+AM_CONDITIONAL(WITHCURLSFTP, test x$with_curl_sftp = xyes)
 AM_CONDITIONAL(INTERNALFTPLIB, test x$with_internalftplib = xyes)
 AM_CONDITIONAL(USE_INTERNAL_REGEX, test x$with_internalregex = xyes)
 AM_CONDITIONAL(CONFDEF, test x$dir_confdef = xyes)
@@ -357,6 +370,7 @@ echo     "     LIBZ:             $with_zlib"
 echo     "     ICU:              $with_icu"
 echo     "     ICUSWORD:         $with_icusword"
 echo     "     CURL:             $with_curl"
+echo     "     CURL SFTP:        $with_curl_sftp"
 echo     "     INTERNAL FTPLIB:  $with_internalftplib"
 echo     "     INTERNAL REGEX:   $with_internalregex"
 echo     "     CLUCENE:          $with_clucene"

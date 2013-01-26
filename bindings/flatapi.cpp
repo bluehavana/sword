@@ -178,7 +178,7 @@ SWHANDLE SWModule_doSearch(SWHANDLE hmodule, const char *searchString, int type,
 		return -1;
 	
 	results.ClearList();
-	results = module->Search(searchString, type, params, scope, 0, percent, (void *) &percentUserData);
+	results = module->search(searchString, type, params, scope, 0, percent, (void *) &percentUserData);
 	
 	return (SWHANDLE)&results;
 }
@@ -188,7 +188,7 @@ SWHANDLE SWModule_doSearch(SWHANDLE hmodule, const char *searchString, int type,
   */
 char SWModule_error(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (module) ? module->Error() : 0;
+	return (module) ? module->popError() : 0;
 }
 
 
@@ -209,7 +209,7 @@ void SWModule_setKeyText(SWHANDLE hmodule, const char *key) {
   
 const char *SWModule_getKeyText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->KeyText() : 0);
+	return (const char *)((module) ? module->getKeyText() : 0);
 }
   
 
@@ -218,19 +218,19 @@ const char *SWModule_getKeyText(SWHANDLE hmodule) {
   
 const char *SWModule_getName(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->Name() : 0);
+	return (const char *)((module) ? module->getName() : 0);
 }
   
 
 const char *SWModule_getDescription(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->Description() : 0);
+	return (const char *)((module) ? module->getDescription() : 0);
 }
 
 
 const char *SWModule_getType(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->Type() : 0);
+	return (const char *)((module) ? module->getType() : 0);
 }
 
 
@@ -257,19 +257,19 @@ void SWModule_begin(SWHANDLE hmodule) {
   
 const char *SWModule_getStripText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->StripText() : 0);
+	return (const char *)((module) ? module->stripText() : 0);
 }
   
   
 const char *SWModule_getRenderText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->RenderText() : 0);
+	return (const char *)((module) ? module->renderText() : 0);
 }
 
 const char *SWModule_getEntryAttributes(SWHANDLE hmodule, const char *level1, const char *level2, const char *level3) {
 	SWModule *module = (SWModule *)hmodule;
 	static SWBuf retval;	
-	module->RenderText();                 	
+	module->renderText();                 	
 	retval = module->getEntryAttributes()[level1][level2][level3].c_str();
 	return (retval.length()) ? (const char*)retval.c_str() : NULL;
 }
@@ -279,8 +279,8 @@ const char *SWModule_getPreverseHeader(SWHANDLE hmodule, const char *key, int pv
 	static SWBuf preverseHeading;
 	char buf[12];	
 	sprintf(buf, "%i", pvHeading);  
-	module->SetKey(key);	
-	module->RenderText();                 	
+	module->setKey(key);	
+	module->renderText();                 	
 	preverseHeading = module->getEntryAttributes()["Heading"]["Preverse"][buf].c_str();
 	return (preverseHeading.length()) ? (const char*)preverseHeading.c_str() : NULL;
 }
@@ -288,9 +288,9 @@ const char *SWModule_getPreverseHeader(SWHANDLE hmodule, const char *key, int pv
 const char *SWModule_getFootnoteType(SWHANDLE hmodule, const char *key, const char *note) {
 	SWModule *module = (SWModule *)hmodule;
 	static SWBuf type;
-	module->Error();
-	module->SetKey(key);
-	module->RenderText();	
+	module->popError();
+	module->setKey(key);
+	module->renderText();	
 	type = module->getEntryAttributes()["Footnote"][note]["type"].c_str();
 	return (type) ? (const char*)type.c_str() : NULL;
 }
@@ -298,9 +298,9 @@ const char *SWModule_getFootnoteType(SWHANDLE hmodule, const char *key, const ch
 const char *SWModule_getFootnoteBody(SWHANDLE hmodule, const char *key, const char *note) {
 	SWModule *module = (SWModule *)hmodule;
 	static SWBuf body;
-	module->Error();
+	module->popError();
 	module->setKey(key);
-	module->RenderText();
+	module->renderText();
 	body = module->getEntryAttributes()["Footnote"][note]["body"].c_str();
 	SWKey *keybuf = module->getKey();;
 	module->renderFilter(body, keybuf);
@@ -310,9 +310,9 @@ const char *SWModule_getFootnoteBody(SWHANDLE hmodule, const char *key, const ch
 const char *SWModule_getFootnoteRefList(SWHANDLE hmodule, const char *key, const char *note) {
 	SWModule *module = (SWModule *)hmodule;
 	static SWBuf refList;
-	module->Error();
-	module->SetKey(key);
-	module->RenderText();	
+	module->popError();
+	module->setKey(key);
+	module->renderText();	
 	refList = module->getEntryAttributes()["Footnote"][note]["refList"].c_str();
 	return (refList) ? (const char*)refList.c_str() : NULL;
 }
@@ -326,7 +326,7 @@ SWHANDLE listkey_getVerselistIterator(const char *list, const char *key, const c
 	
 	versekey.setText(key);
 	verses.ClearList();
-	verses = versekey.ParseVerseList(list, versekey);
+	verses = versekey.parseVerseList(list, versekey);
 	return (SWHANDLE)&verses;
 }
 
@@ -357,7 +357,7 @@ void listkey_iterator_next(SWHANDLE lki) {
 
 const char *listkey_iterator_val(SWHANDLE lki) {	
 	ListKey *lk = (ListKey*)lki;
-	if(!lk->Error())
+	if(!lk->popError())
 		return (const char *) lk->getText();
 	return NULL;
 }

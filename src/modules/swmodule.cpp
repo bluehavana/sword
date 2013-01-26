@@ -60,7 +60,7 @@ using std::vector;
 
 SWORD_NAMESPACE_START
 
-SWDisplay SWModule::rawdisp;
+SWModule::StdOutDisplay SWModule::rawdisp;
 
 typedef std::list<SWBuf> StringList;
 
@@ -76,7 +76,7 @@ typedef std::list<SWBuf> StringList;
  */
 
 SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, const char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char *imodlang) {
-	key       = CreateKey();
+	key       = createKey();
 	entryBuf  = "";
 	config    = &ownConfig;
 	modname   = 0;
@@ -119,7 +119,7 @@ SWModule::~SWModule()
 		delete [] modlang;
 
 	if (key) {
-		if (!key->Persist())
+		if (!key->isPersist())
 			delete key;
 	}
 
@@ -139,24 +139,24 @@ SWModule::~SWModule()
 
 
 /******************************************************************************
- * SWModule::CreateKey - Allocates a key of specific type for module
+ * SWModule::createKey - Allocates a key of specific type for module
  *
  * RET:	pointer to allocated key
  */
 
-SWKey *SWModule::CreateKey() const
+SWKey *SWModule::createKey() const
 {
 	return new SWKey();
 }
 
 
 /******************************************************************************
- * SWModule::Error - Gets and clears error status
+ * SWModule::popError - Gets and clears error status
  *
  * RET:	error status
  */
 
-char SWModule::Error()
+char SWModule::popError()
 {
 	char retval = error;
 
@@ -174,11 +174,7 @@ char SWModule::Error()
  * RET:	pointer to modname
  */
 
-void SWModule::setName(const char *imodname) {
-	stdstr(&modname, imodname);
-}
-
-char *SWModule::getName() const {
+const char *SWModule::getName() const {
 	return modname;
 }
 
@@ -192,11 +188,7 @@ char *SWModule::getName() const {
  * RET:	pointer to moddesc
  */
 
-void SWModule::setDescription(const char *imoddesc) {
-	stdstr(&moddesc, imoddesc);
-}
-
-char *SWModule::getDescription() const {
+const char *SWModule::getDescription() const {
 	return moddesc;
 }
 
@@ -210,70 +202,20 @@ char *SWModule::getDescription() const {
  * RET:	pointer to modtype
  */
 
-void SWModule::setType(const char *imodtype) {
-	stdstr(&modtype, imodtype);
-}
-
-char *SWModule::getType() const {
+const char *SWModule::getType() const {
 	return modtype;
 }
 
 /******************************************************************************
- * SWModule::Direction - Sets/gets module direction
+ * SWModule::getDirection - Sets/gets module direction
  *
  * ENT:	newdir - value which to set direction
  *		[-1] - only get
  *
  * RET:	char direction
  */
-char SWModule::Direction(signed char newdir) {
-        if (newdir != -1)
-                direction = newdir;
+char SWModule::getDirection() const {
         return direction;
-}
-
-/******************************************************************************
- * SWModule::Encoding - Sets/gets module encoding
- *
- * ENT:	newdir - value which to set direction
- *		[-1] - only get
- *
- * RET:	char encoding
- */
-char SWModule::Encoding(signed char newenc) {
-        if (newenc != -1)
-                encoding = newenc;
-        return encoding;
-}
-
-/******************************************************************************
- * SWModule::Markup - Sets/gets module markup
- *
- * ENT:	newdir - value which to set direction
- *		[-1] - only get
- *
- * RET:	char markup
- */
-char SWModule::Markup(signed char newmark) {
-        if (newmark != -1)
-                markup = newmark;
-        return markup;
-}
-
-
-/******************************************************************************
- * SWModule::Lang - Sets/gets module language
- *
- * ENT:	imodlang - value which to set modlang
- *		[0] - only get
- *
- * RET:	pointer to modname
- */
-
-char *SWModule::Lang(const char *imodlang)
-{
-	if (imodlang) stdstr(&modlang, imodlang);
-	return modlang;
 }
 
 
@@ -294,18 +236,16 @@ void SWModule::setDisplay(SWDisplay *idisp) {
 	disp = idisp;
 }
 
-
 /******************************************************************************
- * SWModule::Display - Calls this modules display object and passes itself
- *
- * RET:	error status
- */
+ *  * SWModule::Display - Calls this modules display object and passes itself
+ *   *
+ *    * RET:   error status
+ *     */
 
-char SWModule::Display() {
-	disp->Display(*this);
-	return 0;
+char SWModule::display() {
+     disp->display(*this);
+     return 0;
 }
-
 
 /******************************************************************************
  * SWModule::getKey - Gets the key from this module that points to the position
@@ -332,12 +272,12 @@ char SWModule::setKey(const SWKey *ikey) {
 	SWKey *oldKey = 0;
 
 	if (key) {
-		if (!key->Persist())	// if we have our own copy
+		if (!key->isPersist())	// if we have our own copy
 			oldKey = key;
 	}
 
-	if (!ikey->Persist()) {		// if we are to keep our own copy
-		 key = CreateKey();
+	if (!ikey->isPersist()) {		// if we are to keep our own copy
+		 key = createKey();
 		*key = *ikey;
 	}
 	else	 key = (SWKey *)ikey;		// if we are to just point to an external key
@@ -359,7 +299,7 @@ char SWModule::setKey(const SWKey *ikey) {
 
 void SWModule::setPosition(SW_POSITION p) {
 	*key = p;
-	char saveError = key->Error();
+	char saveError = key->popError();
 
 	switch (p) {
 	case POS_TOP:
@@ -387,7 +327,7 @@ void SWModule::setPosition(SW_POSITION p) {
 
 void SWModule::increment(int steps) {
 	(*key) += steps;
-	error = key->Error();
+	error = key->popError();
 }
 
 
@@ -401,7 +341,7 @@ void SWModule::increment(int steps) {
 
 void SWModule::decrement(int steps) {
 	(*key) -= steps;
-	error = key->Error();
+	error = key->popError();
 }
 
 
@@ -448,7 +388,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	
 	SWKey *saveKey = 0;
 	SWKey *searchKey = 0;
-	SWKey *resultKey = CreateKey();
+	SWKey *resultKey = createKey();
 	regex_t preg;
 	vector<SWBuf> words;
 	vector<SWBuf> window;
@@ -464,18 +404,18 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
                        || (getConfig().has("GlobalOptionFilter", "UTF8ArabicPoints"))
                        || (strchr(istr, '<')));
 
-	processEntryAttributes(searchType == -3);
+	setProcessEntryAttributes(searchType == -3);
 	
 
-	if (!key->Persist()) {
-		saveKey = CreateKey();
+	if (!key->isPersist()) {
+		saveKey = createKey();
 		*saveKey = *key;
 	}
 	else	saveKey = key;
 
-	searchKey = (scope)?scope->clone():(key->Persist())?key->clone():0;
+	searchKey = (scope)?scope->clone():(key->isPersist())?key->clone():0;
 	if (searchKey) {
-		searchKey->Persist(1);
+		searchKey->setPersist(true);
 		setKey(*searchKey);
 	}
 
@@ -599,7 +539,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	(*percent)(perc, percentUserData);
 
 	
-	while ((searchType != -4) && !Error() && !terminateSearch) {
+	while ((searchType != -4) && !popError() && !terminateSearch) {
 		long mindex = key->getIndex();
 		float per = (float)mindex / highIndex;
 		per *= 93;
@@ -619,7 +559,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
 		}
 		if (searchType >= 0) {
-			if (!regexec(&preg,  StripText(), 0, 0, 0)) {
+			if (!regexec(&preg,  stripText(), 0, 0, 0)) {
 				*resultKey = *getKey();
 				resultKey->clearBound();
 				listKey << *resultKey;
@@ -633,10 +573,10 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 			// phrase
 			case -1:
-				textBuf = StripText();
+				textBuf = stripText();
 				if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
 				sres = strstr(textBuf.c_str(), term.c_str());
-				if (sres) { //it's also in the StripText(), so we have a valid search result item now
+				if (sres) { //it's also in the stripText(), so we have a valid search result item now
 					*resultKey = *getKey();
 					resultKey->clearBound();
 					listKey << *resultKey;
@@ -648,7 +588,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				int loopCount = 0;
 				unsigned int foundWords = 0;
 				do {
-					textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : StripText();
+					textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : stripText();
 					foundWords = 0;
 					
 					for (unsigned int i = 0; i < words.size(); i++) {
@@ -673,7 +613,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 			// entry attributes
 			case -3: {
-				RenderText();	// force parse
+				renderText();	// force parse
 				AttributeTypeList &entryAttribs = getEntryAttributes();
 				AttributeTypeList::iterator i1Start, i1End;
 				AttributeList::iterator i2Start, i2End;
@@ -807,7 +747,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	setKey(*saveKey);
 
-	if (!saveKey->Persist())
+	if (!saveKey->isPersist())
 		delete saveKey;
 
 	if (searchKey)
@@ -815,7 +755,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	delete resultKey;
 
 	listKey = TOP;
-	processEntryAttributes(savePEA);
+	setProcessEntryAttributes(savePEA);
 
 
 	(*percent)(100, percentUserData);
@@ -826,7 +766,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 
 /******************************************************************************
- * SWModule::StripText() 	- calls all stripfilters on current text
+ * SWModule::stripText() 	- calls all stripfilters on current text
  *
  * ENT:	buf	- buf to massage instead of this modules current text
  * 	len	- max len of buf
@@ -834,8 +774,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
  * RET: this module's text at current key location massaged by Strip filters
  */
 
-const char *SWModule::StripText(const char *buf, int len) {
-	return RenderText(buf, len, false);
+const char *SWModule::stripText(const char *buf, int len) {
+	return renderText(buf, len, false);
 }
 
 
@@ -854,20 +794,20 @@ const char *SWModule::getRenderHeader() const {
 
 
 /******************************************************************************
- * SWModule::RenderText 	- calls all renderfilters on current text
+ * SWModule::renderText 	- calls all renderfilters on current text
  *
  * ENT:	buf	- buffer to Render instead of current module position
  *
- * RET: this module's text at current key location massaged by RenderText filters
+ * RET: this module's text at current key location massaged by renderText filters
  */
 
- const char *SWModule::RenderText(const char *buf, int len, bool render) {
+ const char *SWModule::renderText(const char *buf, int len, bool render) {
 	bool savePEA = isProcessEntryAttributes();
 	if (!buf) {
 		entryAttributes.clear();
 	}
 	else {
-		processEntryAttributes(false);
+		setProcessEntryAttributes(false);
 	}
 
 	static SWBuf local;
@@ -896,37 +836,37 @@ const char *SWModule::getRenderHeader() const {
 		tmpbuf = null;
 	}
 
-	processEntryAttributes(savePEA);
+	setProcessEntryAttributes(savePEA);
 
 	return tmpbuf;
 }
 
 
 /******************************************************************************
- * SWModule::RenderText 	- calls all renderfilters on current text
+ * SWModule::renderText 	- calls all renderfilters on current text
  *
  * ENT:	tmpKey	- key to use to grab text
  *
  * RET: this module's text at current key location massaged by RenderFilers
  */
 
- const char *SWModule::RenderText(const SWKey *tmpKey) {
+ const char *SWModule::renderText(const SWKey *tmpKey) {
 	SWKey *saveKey;
 	const char *retVal;
 
-	if (!key->Persist()) {
-		saveKey = CreateKey();
+	if (!key->isPersist()) {
+		saveKey = createKey();
 		*saveKey = *key;
 	}
 	else	saveKey = key;
 
 	setKey(*tmpKey);
 
-	retVal = RenderText();
+	retVal = renderText();
 
 	setKey(*saveKey);
 
-	if (!saveKey->Persist())
+	if (!saveKey->isPersist())
 		delete saveKey;
 
 	return retVal;
@@ -934,30 +874,30 @@ const char *SWModule::getRenderHeader() const {
 
 
 /******************************************************************************
- * SWModule::StripText 	- calls all StripTextFilters on current text
+ * SWModule::stripText 	- calls all StripTextFilters on current text
  *
  * ENT:	tmpKey	- key to use to grab text
  *
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
-const char *SWModule::StripText(const SWKey *tmpKey) {
+const char *SWModule::stripText(const SWKey *tmpKey) {
 	SWKey *saveKey;
 	const char *retVal;
 
-	if (!key->Persist()) {
-		saveKey = CreateKey();
+	if (!key->isPersist()) {
+		saveKey = createKey();
 		*saveKey = *key;
 	}
 	else	saveKey = key;
 
 	setKey(*tmpKey);
 
-	retVal = StripText();
+	retVal = stripText();
 
 	setKey(*saveKey);
 
-	if (!saveKey->Persist())
+	if (!saveKey->isPersist())
 		delete saveKey;
 
 	return retVal;
@@ -1036,15 +976,15 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 	// save key information so as not to disrupt original
 	// module position
-	if (!key->Persist()) {
-		saveKey = CreateKey();
+	if (!key->isPersist()) {
+		saveKey = createKey();
 		*saveKey = *key;
 	}
 	else	saveKey = key;
 
-	searchKey = (key->Persist())?key->clone():0;
+	searchKey = (key->isPersist())?key->clone():0;
 	if (searchKey) {
-		searchKey->Persist(1);
+		searchKey->setPersist(1);
 		setKey(*searchKey);
 	}
 
@@ -1080,7 +1020,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		highIndex = 1;		// avoid division by zero errors.
 
 	bool savePEA = isProcessEntryAttributes();
-	processEntryAttributes(true);
+	setProcessEntryAttributes(true);
 
 	// prox chapter blocks
 	// position module at the beginning
@@ -1092,7 +1032,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	SWBuf strong;
 	SWBuf morph;
 
-	char err = Error();
+	char err = popError();
 	while (!err) {
 		long mindex = key->getIndex();
 
@@ -1111,7 +1051,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		}
 
 		// get "content" field
-		const char *content = StripText();
+		const char *content = stripText();
 
 		bool good = false;
 
@@ -1188,14 +1128,14 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		if (vkcheck) {
 			*chapMax = *vkcheck;
 			// we're the first verse in a chapter
-			if (vkcheck->Verse() == 1) {
+			if (vkcheck->getVerse() == 1) {
 				*chapMax = MAXVERSE;
 				VerseKey saveKey = *vkcheck;
 				while ((!err) && (*vkcheck <= *chapMax)) {
 //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
 //printf("building proxBuf from (%s).\n", (const char *)*key);
 
-					content = StripText();
+					content = stripText();
 					if (content && *content) {
 						// build "strong" field
 						strong = "";
@@ -1245,7 +1185,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 						}
 					}
 					(*this)++;
-					err = Error();
+					err = popError();
 				}
 				err = 0;
 				*vkcheck = saveKey;
@@ -1260,7 +1200,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 //printf("building proxBuf from (%s).\n", (const char *)*key);
 //fflush(stdout);
 
-						content = StripText();
+						content = stripText();
 						if (content && *content) {
 							// build "strong" field
 							strong = "";
@@ -1336,7 +1276,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 		delete doc;
 
 		(*this)++;
-		err = Error();
+		err = popError();
 	}
 
 	// Optimizing automatically happens with the call to addIndexes
@@ -1379,7 +1319,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 	// reposition module back to where it was before we were called
 	setKey(*saveKey);
 
-	if (!saveKey->Persist())
+	if (!saveKey->isPersist())
 		delete saveKey;
 
 	if (searchKey)
@@ -1387,7 +1327,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
         delete chapMax;
 
-	processEntryAttributes(savePEA);
+	setProcessEntryAttributes(savePEA);
 
 	// reset option filters back to original values
 	StringList::iterator origVal = filterSettings.begin();
@@ -1406,7 +1346,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
  * @param buf the buffer to filter
  * @param key key location from where this buffer was extracted
  */
-void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *key) {
+void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *key) const {
 	OptionFilterList::iterator it;
 	for (it = filters->begin(); it != filters->end(); it++) {
 		(*it)->processText(buf, key, this);
@@ -1418,7 +1358,7 @@ void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *
  * @param buf the buffer to filter
  * @param key key location from where this buffer was extracted
  */
-void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key) {
+void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key) const {
 	FilterList::iterator it;
 	for (it = filters->begin(); it != filters->end(); it++) {
 		(*it)->processText(buf, key, this);

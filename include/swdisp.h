@@ -36,7 +36,7 @@ class SWModule;
 class SWDLLEXPORT SWDisplay : public SWObject {
   static SWClass classdef;
 public:
-  SWDisplay () { myclass = &classdef; };
+  SWDisplay() { myclass = &classdef; };
   virtual ~SWDisplay() {};
   
   /** casts a module to a character pointer and displays it to
@@ -46,7 +46,8 @@ public:
   * @param imodule module to display
   * @return error status
   */
-  virtual char Display (SWModule & imodule);
+  virtual char display(SWModule &imodule) = 0;
+  SWDEPRECATED char Display(SWModule &imodule) { return display(imodule); }
 };
 
 SWORD_NAMESPACE_END

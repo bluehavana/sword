@@ -29,6 +29,8 @@ MESSAGE(STATUS "Configuring your system to build libsword.")
 #
 # Our include directory, for our own internally created "FIND_PACKAGE" calls, like CLucene
 SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+# User options
+INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/options.cmake")
 # Source variables
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
 # Our local includes
@@ -164,6 +166,25 @@ IF(WITH_ZLIB)
 	SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${ZLIB_LIBRARY})
 ENDIF(WITH_ZLIB)
 IF(WITH_CURL)
+	FIND_PROGRAM(CURL_CONFIG curl-config
+		DOC "The curl-config executable path, used to determine SFTP support.")
+	# If we can find the config script, we will run it and attempt to parse out the
+	# availability of SFTP support. Otherwise, we will assume the library was built
+	# without it.
+	IF(CURL_CONFIG)
+		EXECUTE_PROCESS(
+			COMMAND ${CURL_CONFIG} --protocols
+			COMMAND grep SFTP
+			COMMAND wc -l
+			OUTPUT_VARIABLE CURL_CONFIG_OUTPUT
+			OUTPUT_STRIP_TRAILING_WHITESPACE)
+		IF(CURL_CONFIG_OUTPUT STREQUAL "1")
+			ADD_DEFINITIONS(-DCURLSFTPAVAILABLE)
+			MESSAGE(STATUS "cURL SFTP Support: Yes")
+		ELSE(CURL_CONFIG_OUTPUT STREQUAL "1")
+			MESSAGE(STATUS "cURL SFTP Support: No")
+		ENDIF(CURL_CONFIG_OUTPUT STREQUAL "1")
+	ENDIF(CURL_CONFIG)
 	INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIRS})
 	SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${CURL_LIBRARY})
 ENDIF(WITH_CURL)
@@ -234,7 +255,7 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 #
 
 IF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
-	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/bindings/swig")
+	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/bindings")
 ENDIF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
 
 ##############################################################################################
