@@ -164,6 +164,7 @@ SET(sword_base_utilfns_SOURCES
 	src/utilfuns/ftpparse.c
 	src/utilfuns/url.cpp
 	src/utilfuns/roman.cpp
+        src/utilfuns/swopen.cpp
 )
 SOURCE_GROUP("src\\utilfns" FILES ${sword_base_utilfns_SOURCES})
 

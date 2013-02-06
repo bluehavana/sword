@@ -33,6 +33,7 @@ extern "C" {
 #include <utilstr.h>
 
 #include <fcntl.h>
+#include <swopen.h>
 
 #include <swmgr.h>
 #include <swmodule.h>

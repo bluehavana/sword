@@ -24,6 +24,7 @@
 #include <curlftpt.h>
 
 #include <fcntl.h>
+#include <swopen.h>
 
 #include <curl/curl.h>
 #include <curl/easy.h>
@@ -57,7 +58,7 @@ int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 	struct FtpFile *out=(struct FtpFile *)stream;
 	if (out && !out->stream && !out->destBuf) {
 		/* open file for writing */
-		out->stream=fopen(out->filename, "wb");
+        out->stream=swfopen(out->filename, "wb");
 		if (!out->stream)
 			return -1; /* failure, can't open file to write */
 	}

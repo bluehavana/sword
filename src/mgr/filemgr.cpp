@@ -22,6 +22,7 @@
 
 #include <filemgr.h>
 #include <utilstr.h>
+#include <swopen.h>
 
 #include <dirent.h>
 #include <fcntl.h>
@@ -225,14 +226,14 @@ int FileMgr::sysOpen(FileDesc *file) {
 				file->next = files;
 				files = file;
 			}
-			if ((!access(file->path, 04)) || ((file->mode & O_CREAT) == O_CREAT)) {	// check for at least file exists / read access before we try to open
+            if ((!swaccess(file->path, 04)) || ((file->mode & O_CREAT) == O_CREAT)) {	// check for at least file exists / read access before we try to open
 				char tries = (((file->mode & O_RDWR) == O_RDWR) && (file->tryDowngrade)) ? 2 : 1;  // try read/write if possible
 				for (int i = 0; i < tries; i++) {
 					if (i > 0) {
 						file->mode = (file->mode & ~O_RDWR);	// remove write access
 						file->mode = (file->mode | O_RDONLY);// add read access
 					}
-					file->fd = ::open(file->path, file->mode|O_BINARY, file->perms);
+                    file->fd = swopen(file->path, file->mode|O_BINARY, file->perms);
 
 					if (file->fd >= 0)
 						break;
@@ -275,7 +276,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		if (i == 9999)
 			return -2;
 
-		int fd = ::open(buf, O_CREAT|O_RDWR, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+        int fd = swopen(buf, O_CREAT|O_RDWR, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 		if (fd < 0)
 			return -3;
 	
@@ -289,7 +290,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		if (size < 1) {
 			// zero out the file
 			::close(file->fd);
-			file->fd = ::open(file->path, O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+            file->fd = swopen(file->path, O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 			::close(file->fd);
 			file->fd = -77;	// force file open by filemgr
 			// copy tmp file back (dumb, but must preserve file permissions)
@@ -327,7 +328,7 @@ signed char FileMgr::existsFile(const char *ipath, const char *ifileName)
 		ch = path + strlen(path);
 		sprintf(ch, "/%s", ifileName);
 	}
-	signed char retVal = !access(path, 04);
+    signed char retVal = !swaccess(path, 04);
 	delete [] path;
 	return retVal;
 }
@@ -349,7 +350,7 @@ signed char FileMgr::existsDir(const char *ipath, const char *idirName)
 		ch = path + strlen(path);
 		sprintf(ch, "/%s", idirName);
 	}
-	signed char retVal = !access(path, 04);
+    signed char retVal = !swaccess(path, 04);
 	delete [] path;
 	return retVal;
 }
@@ -368,17 +369,13 @@ int FileMgr::createParent(const char *pName) {
 	}
 	buf[end] = 0;
 	if (strlen(buf)>0) {
-		if (access(buf, 02)) {  // not exists with write access?
-			if ((retCode = mkdir(buf
-#ifndef WIN32
+        if (swaccess(buf, 02)) {  // not exists with write access?
+            if ((retCode = swmkdir(buf
 					, 0755
-#endif
 					))) {
 				createParent(buf);
-				retCode = mkdir(buf
-#ifndef WIN32
+                retCode = swmkdir(buf
 					, 0755
-#endif
 					);
 			}
 		}
@@ -390,7 +387,7 @@ int FileMgr::createParent(const char *pName) {
 	
 
 int FileMgr::openFileReadOnly(const char *fName) {
-	int fd = ::open(fName, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+    int fd = swopen(fName, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	return fd;
 }
 
@@ -398,10 +395,10 @@ int FileMgr::openFileReadOnly(const char *fName) {
 int FileMgr::createPathAndFile(const char *fName) {
 	int fd;
 	
-	fd = ::open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+    fd = swopen(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	if (fd < 1) {
 		createParent(fName);
-		fd = ::open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+        fd = swopen(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	}
 	return fd;
 }
@@ -411,7 +408,7 @@ int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
 	int sfd, dfd, len;
 	char buf[4096];
 
-	if ((sfd = ::open(sourceFile, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) < 1)
+    if ((sfd = swopen(sourceFile, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) < 1)
 		return -1;
 	if ((dfd = createPathAndFile(targetFile)) < 1)
 		return -1;
@@ -429,7 +426,7 @@ int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
 
 
 int FileMgr::removeFile(const char *fName) {
-	return ::remove(fName);
+    return swremove(fName);
 }
 
 char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
