@@ -226,14 +226,14 @@ int FileMgr::sysOpen(FileDesc *file) {
 				file->next = files;
 				files = file;
 			}
-            if ((!swaccess(file->path, 04)) || ((file->mode & O_CREAT) == O_CREAT)) {	// check for at least file exists / read access before we try to open
+            if ((!sw_access(file->path, 04)) || ((file->mode & O_CREAT) == O_CREAT)) {	// check for at least file exists / read access before we try to open
 				char tries = (((file->mode & O_RDWR) == O_RDWR) && (file->tryDowngrade)) ? 2 : 1;  // try read/write if possible
 				for (int i = 0; i < tries; i++) {
 					if (i > 0) {
 						file->mode = (file->mode & ~O_RDWR);	// remove write access
 						file->mode = (file->mode | O_RDONLY);// add read access
 					}
-                    file->fd = swopen(file->path, file->mode|O_BINARY, file->perms);
+                    file->fd = sw_open(file->path, file->mode|O_BINARY, file->perms);
 
 					if (file->fd >= 0)
 						break;
@@ -276,7 +276,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		if (i == 9999)
 			return -2;
 
-        int fd = swopen(buf, O_CREAT|O_RDWR, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+        int fd = sw_open(buf, O_CREAT|O_RDWR, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 		if (fd < 0)
 			return -3;
 	
@@ -290,7 +290,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 		if (size < 1) {
 			// zero out the file
 			::close(file->fd);
-            file->fd = swopen(file->path, O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+            file->fd = sw_open(file->path, O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 			::close(file->fd);
 			file->fd = -77;	// force file open by filemgr
 			// copy tmp file back (dumb, but must preserve file permissions)
@@ -328,7 +328,7 @@ signed char FileMgr::existsFile(const char *ipath, const char *ifileName)
 		ch = path + strlen(path);
 		sprintf(ch, "/%s", ifileName);
 	}
-    signed char retVal = !swaccess(path, 04);
+    signed char retVal = !sw_access(path, 04);
 	delete [] path;
 	return retVal;
 }
@@ -350,7 +350,7 @@ signed char FileMgr::existsDir(const char *ipath, const char *idirName)
 		ch = path + strlen(path);
 		sprintf(ch, "/%s", idirName);
 	}
-    signed char retVal = !swaccess(path, 04);
+    signed char retVal = !sw_access(path, 04);
 	delete [] path;
 	return retVal;
 }
@@ -369,12 +369,12 @@ int FileMgr::createParent(const char *pName) {
 	}
 	buf[end] = 0;
 	if (strlen(buf)>0) {
-        if (swaccess(buf, 02)) {  // not exists with write access?
-            if ((retCode = swmkdir(buf
+        if (sw_access(buf, 02)) {  // not exists with write access?
+            if ((retCode = sw_mkdir(buf
 					, 0755
 					))) {
 				createParent(buf);
-                retCode = swmkdir(buf
+                retCode = sw_mkdir(buf
 					, 0755
 					);
 			}
@@ -387,7 +387,7 @@ int FileMgr::createParent(const char *pName) {
 	
 
 int FileMgr::openFileReadOnly(const char *fName) {
-    int fd = swopen(fName, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+    int fd = sw_open(fName, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	return fd;
 }
 
@@ -395,10 +395,10 @@ int FileMgr::openFileReadOnly(const char *fName) {
 int FileMgr::createPathAndFile(const char *fName) {
 	int fd;
 	
-    fd = swopen(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+    fd = sw_open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	if (fd < 1) {
 		createParent(fName);
-        fd = swopen(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+        fd = sw_open(fName, O_CREAT|O_WRONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
 	}
 	return fd;
 }
@@ -408,7 +408,7 @@ int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
 	int sfd, dfd, len;
 	char buf[4096];
 
-    if ((sfd = swopen(sourceFile, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) < 1)
+    if ((sfd = sw_open(sourceFile, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH)) < 1)
 		return -1;
 	if ((dfd = createPathAndFile(targetFile)) < 1)
 		return -1;
@@ -426,7 +426,7 @@ int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
 
 
 int FileMgr::removeFile(const char *fName) {
-    return swremove(fName);
+    return sw_remove(fName);
 }
 
 char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
@@ -503,14 +503,14 @@ char FileMgr::isDirectory(const char *path) {
 
 
 int FileMgr::copyDir(const char *srcDir, const char *destDir) {
-	DIR *dir;
-	struct dirent *ent;
-	if ((dir = opendir(srcDir))) {
-		rewinddir(dir);
-		while ((ent = readdir(dir))) {
-			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-				SWBuf srcPath  = (SWBuf)srcDir  + (SWBuf)"/" + ent->d_name;
-				SWBuf destPath = (SWBuf)destDir + (SWBuf)"/" + ent->d_name;
+    SWDir *dir;
+    const char *ent;
+    if ((dir = sw_dir_open(srcDir))) {
+        sw_dir_rewind(dir);
+        while ((ent = sw_dir_read_name(dir))) {
+            if ((strcmp(ent, ".")) && (strcmp(ent, ".."))) {
+                SWBuf srcPath  = (SWBuf)srcDir  + (SWBuf)"/" + ent;
+                SWBuf destPath = (SWBuf)destDir + (SWBuf)"/" + ent;
 				if (!isDirectory(srcPath.c_str())) {
 					copyFile(srcPath.c_str(), destPath.c_str());
 				}
@@ -519,20 +519,20 @@ int FileMgr::copyDir(const char *srcDir, const char *destDir) {
 				}
 			}
 		}
-		closedir(dir);
+        sw_dir_close(dir);
 	}
 	return 0;
 }
 
 
 int FileMgr::removeDir(const char *targetDir) {
-	DIR *dir = opendir(targetDir);
-	struct dirent *ent;
+    SWDir *dir = sw_dir_open(targetDir);
+    const char *ent;
 	if (dir) {
-		rewinddir(dir);
-		while ((ent = readdir(dir))) {
-			if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-				SWBuf targetPath = (SWBuf)targetDir + (SWBuf)"/" + ent->d_name;
+        sw_dir_rewind(dir);
+        while ((ent = sw_dir_read_name(dir))) {
+            if ((strcmp(ent, ".")) && (strcmp(ent, ".."))) {
+                SWBuf targetPath = (SWBuf)targetDir + (SWBuf)"/" + ent;
 				if (!isDirectory(targetPath.c_str())) {
 					FileMgr::removeFile(targetPath.c_str());
 				}
@@ -541,7 +541,7 @@ int FileMgr::removeDir(const char *targetDir) {
 				}
 			}
 		}
-		closedir(dir);
+        sw_dir_close(dir);
 		FileMgr::removeFile(targetDir);
 /*
 		int status = FileMgr::removeFile(targetDir);

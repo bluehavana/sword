@@ -212,7 +212,7 @@ int makedir (char *newdir)
   if (buffer[len-1] == '/') {
     buffer[len-1] = '\0';
   }
-  if (swmkdir(buffer, 0775) == 0)
+  if (sw_mkdir(buffer, 0775) == 0)
     {
       free(buffer);
       return 1;
@@ -227,7 +227,7 @@ int makedir (char *newdir)
 	p++;
       hold = *p;
       *p = 0;
-      if ((swmkdir(buffer, 0775) == -1) && (errno == ENOENT))
+      if ((sw_mkdir(buffer, 0775) == -1) && (errno == ENOENT))
 	{
 	  fprintf(stderr,"%s: couldn't create directory %s\n",prog,buffer);
 	  free(buffer);
@@ -296,13 +296,13 @@ int untar (gzFile in, const char *dest) {
 	  
 			switch (buffer.header.typeflag) {
 			case DIRTYPE:
-                swmkdir(fname, 0);
+                sw_mkdir(fname, 0);
 				break;
 			case REGTYPE:
 			case AREGTYPE:
 				remaining = getoct(buffer.header.size,12);
 				if (remaining) {
-                    outfile = swfopen(fname,"wb");
+                    outfile = sw_fopen(fname,"wb");
 					if (outfile == NULL) {
 						// try creating directory
 						char *p = strrchr(fname, '/');
@@ -310,7 +310,7 @@ int untar (gzFile in, const char *dest) {
 							*p = '\0';
 							makedir(fname);
 							*p = '/';
-                            outfile = swfopen(fname,"wb");
+                            outfile = sw_fopen(fname,"wb");
 						}
 					}
 /*

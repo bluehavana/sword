@@ -23,18 +23,26 @@
 
 #include <stdio.h>
 
+typedef struct _SWDir SWDir;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-int swopen(const char* filename, int flags, int mode);
-int swaccess(const char* filename, int mode);
-int swremove(const char* filename);
-int swmkdir(const char* filename, int mode);
-FILE* swfopen(const char* filename, const char *mode);
+int sw_open(const char* filename, int flags, int mode);
+int sw_access(const char* filename, int mode);
+int sw_remove(const char* filename);
+int sw_mkdir(const char* filename, int mode);
+FILE* sw_fopen(const char* filename, const char *mode);
 
+SWDir* sw_dir_open (const char* path);
+void sw_dir_rewind(SWDir *dir);
+void sw_dir_close(SWDir *dir);
+const char* sw_dir_read_name(SWDir *dir);
+
+const char* sw_getenv(const char* variable);
 #ifdef __cplusplus
 }
 #endif
-// swopendir, swrewinddir, swdirclose, swgetenv, swfopen
+// swgetenv
 #endif // SWOPEN_H
