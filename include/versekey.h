@@ -26,7 +26,7 @@
 #include <swkey.h>
 #include <swmacs.h>
 #include <listkey.h>
-#include <versemgr.h>
+#include <versificationmgr.h>
 
 #include <defs.h>
 
@@ -55,7 +55,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	static int instance;
 	ListKey internalListKey;
 
-	const VerseMgr::System *refSys;
+	const VersificationMgr::System *refSys;
 
 	/** flag for auto normalization
 	*/
@@ -75,15 +75,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	// private with no bounds check
 	void setFromOther(const VerseKey &vk);
 
-	/** Binary search to find the index closest, but less
-	* than the given value.
-	*
-	* @param array long * to array to search
-	* @param size number of elements in the array
-	* @param value value to find
-	* @return the index into the array that is less than but closest to value
-	*/
-	int findindex(long *array, int size, long value);
+	void checkBounds();
 
 	// internal upper/lower bounds optimizations
 	mutable long lowerBound, upperBound;	// if autonorms is on
