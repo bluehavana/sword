@@ -68,7 +68,7 @@ wchar_t* _str_to_utf16(const char *str) {
 char* _utf16_to_utf8(const wchar_t *str) {
     sword::UTF16UTF8 *filter = new sword::UTF16UTF8();
     sword::SWBuf swStr;
-    swStr.setSize(wcslen(str));
+    swStr.setSize(2*wcslen(str));
     wcscpy((wchar_t*)swStr.getRawData(), str);
     filter->processText(swStr, NULL, NULL);
     delete filter;
