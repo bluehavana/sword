@@ -57,23 +57,32 @@ struct _SWDir
 };
 
 wchar_t* _str_to_utf16(const char *str) {
-    sword::UTF8UTF16 *filter = new sword::UTF8UTF16();
+    static sword::UTF8UTF16 filter;
     sword::SWBuf swStr = str;
-    filter->processText(swStr, NULL, NULL);
-    delete filter;
+    size_t wcStrLen;
+    wchar_t *wcStr;
 
-    return (wchar_t*) swStr.getRawData();
+    filter.processText(swStr, NULL, NULL);
+    wcStrLen = wcslen((wchar_t*)swStr.getRawData());
+    wcStr = new wchar_t[wcStrLen + 1];
+    wcscpy(wcStr, (wchar_t*) swStr.getRawData());
+
+    return wcStr;
 }
 
-char* _utf16_to_utf8(const wchar_t *str) {
-    sword::UTF16UTF8 *filter = new sword::UTF16UTF8();
+char* _utf16_to_utf8(const wchar_t *wcStr) {
+    static sword::UTF16UTF8 filter;
     sword::SWBuf swStr;
-    swStr.setSize(2*wcslen(str));
-    wcscpy((wchar_t*)swStr.getRawData(), str);
-    filter->processText(swStr, NULL, NULL);
-    delete filter;
+    size_t wcStrLen = wcslen(wcStr);
+    char*  str;
 
-    return (char*) swStr.getRawData();
+    swStr.setSize(2*wcStrLen+1);
+    wcscpy((wchar_t*)swStr.getRawData(), wcStr);
+    filter.processText(swStr, NULL, NULL);
+    str = new char[swStr.size()];
+    strcpy(str, swStr.getRawData());
+
+    return str;
 }
 
 /**
@@ -109,6 +118,7 @@ sw_open(const char   *filename,
     save_errno = errno;
 
     errno = save_errno;
+    delete wfilename;
     return retval;
 #else
     int fd;
@@ -151,6 +161,7 @@ extern "C" int sw_access(const char *filename, int mode) {
     save_errno = errno;
 
     errno = save_errno;
+    delete wfilename;
     return retval;
 #else
     return access (filename, mode);
@@ -185,6 +196,7 @@ int sw_remove (const char *filename) {
     save_errno = errno;
 
     errno = save_errno;
+    delete wfilename;
     return retval;
 #else
     return remove (filename);
@@ -217,6 +229,7 @@ extern "C" int sw_mkdir(const char *filename, int mode) {
     save_errno = errno;
 
     errno = save_errno;
+    delete wfilename;
     return retval;
 #else
     return mkdir (filename, mode);
@@ -256,6 +269,7 @@ extern "C" FILE* sw_fopen(const char *filename, const char* mode) {
     save_errno = errno;
 
     errno = save_errno;
+    delete wfilename;
     return retval;
   #else
     return fopen (filename, mode);
@@ -284,6 +298,8 @@ sw_dir_open (const char  *path)
   dir = new SWDir;
 
   dir->wdirp = _wopendir (wpath);
+
+  delete wpath;
 
   if (dir->wdirp)
     return dir;
@@ -355,6 +371,8 @@ sw_dir_read_name (SWDir *dir)
     continue;		/* Huh, impossible? Skip it anyway */
 
       strcpy (dir->utf8_buf, utf8_name);
+
+      delete utf8_name;
 
       return dir->utf8_buf;
     }
