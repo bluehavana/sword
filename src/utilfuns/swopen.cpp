@@ -79,7 +79,7 @@ char* _utf16_to_utf8(const wchar_t *wcStr) {
     swStr.setSize(2*wcStrLen+1);
     wcscpy((wchar_t*)swStr.getRawData(), wcStr);
     filter.processText(swStr, NULL, NULL);
-    str = new char[swStr.size()];
+    str = new char[wcStrLen+1];
     strcpy(str, swStr.getRawData());
 
     return str;
