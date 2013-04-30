@@ -58,7 +58,7 @@ int my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
 	struct FtpFile *out=(struct FtpFile *)stream;
 	if (out && !out->stream && !out->destBuf) {
 		/* open file for writing */
-        out->stream=swfopen(out->filename, "wb");
+        out->stream=sw_fopen(out->filename, "wb");
 		if (!out->stream)
 			return -1; /* failure, can't open file to write */
 	}
