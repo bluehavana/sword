@@ -1,12 +1,13 @@
 /*****************************************************************************
- * zstr.h   - code for class 'zStr'- a module that reads compressed text
- *			files.
- *			and provides lookup and parsing functions based on
- *			class StrKey
+ *
+ *  zstr.h -	code for class 'zStr'- a module that reads compressed text
+ *	       	files.
+ *		and provides lookup and parsing functions based on
+ *		class StrKey
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -68,7 +69,7 @@ public:
 	void getText(long index, char **idxbuf, char **buf) const;
 	void setText(const char *ikey, const char *buf, long len = -1);
 	void linkEntry(const char *destkey, const char *srckey);
-	virtual void rawZFilter(SWBuf &buf, char direction = 0) const {}
+	virtual void rawZFilter(SWBuf &buf, char direction = 0) const { (void) buf; (void) direction; }
 	static signed char createModule (const char *path);
 };
 

@@ -1,10 +1,11 @@
 /******************************************************************************
- *  zld.cpp - code for class 'zLD'- a module that reads compressed lexicon and
- *				dictionary files.
+ *
+ *  zld.cpp -	code for class 'zLD'- a module that reads compressed lexicon
+ *		and dictionary files
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -36,7 +37,7 @@ class SWDLLEXPORT zLD : public zStr, public SWLD {
 public:
 
 
-	zLD(const char *ipath, const char *iname = 0, const char *idesc = 0, long blockCount = 200, SWCompress *icomp = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, bool caseSensitive = false);
+	zLD(const char *ipath, const char *iname = 0, const char *idesc = 0, long blockCount = 200, SWCompress *icomp = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, bool caseSensitive = false, bool strongsPadding = true);
 	virtual ~zLD();
 	virtual SWBuf &getRawEntryBuf() const;
 

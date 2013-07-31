@@ -1,8 +1,10 @@
 /******************************************************************************
  *
+ *  osiswebif.h -	Implementation of OSISWEBIF
+ *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -34,7 +36,6 @@ class SWDLLEXPORT OSISWEBIF : public OSISXHTML {
 
 protected:
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
 public:
 	OSISWEBIF();
 	void setJavascript(bool mode) { javascript = mode; }

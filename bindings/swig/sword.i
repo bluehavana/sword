@@ -25,6 +25,9 @@
 %include "defs.i"
 %include "swbuf.i"
 
+%include "multimapwdef.i"
+
+
 /* Now include all the STL templates we are going to use */
 %include "templates.i"
 
@@ -93,7 +96,7 @@
 %include "swlog.i"
 
 #ifndef EXCLUDE_FTP
-%include "ftptrans.i"
+%include "remotetrans.i"
 
 #ifndef EXCLUDE_INSTALLMGR
 %include "installmgr.i"

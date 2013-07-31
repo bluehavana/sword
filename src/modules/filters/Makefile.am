@@ -57,7 +57,9 @@ OSISFIL += $(filtersdir)/osisscripref.cpp
 OSISFIL += $(filtersdir)/osisvariants.cpp
 OSISFIL += $(filtersdir)/osiswordjs.cpp
 OSISFIL += $(filtersdir)/osismorphsegmentation.cpp
-OSISFIL += $(filtersdir)/osisruby.cpp 
+OSISFIL += $(filtersdir)/osisglosses.cpp
+OSISFIL += $(filtersdir)/osisenum.cpp
+OSISFIL += $(filtersdir)/osisxlit.cpp
 
 libsword_la_SOURCES += $(filtersdir)/latin1utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/latin1utf16.cpp
@@ -65,6 +67,8 @@ libsword_la_SOURCES += $(filtersdir)/utf8utf16.cpp
 libsword_la_SOURCES += $(filtersdir)/utf16utf8.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8html.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8latin1.cpp
+libsword_la_SOURCES += $(filtersdir)/unicodertf.cpp
+libsword_la_SOURCES += $(filtersdir)/scsuutf8.cpp
 
 libsword_la_SOURCES += $(filtersdir)/utf8cantillation.cpp
 libsword_la_SOURCES += $(filtersdir)/utf8hebrewpoints.cpp
@@ -74,10 +78,7 @@ libsword_la_SOURCES += $(filtersdir)/utf8greekaccents.cpp
 libsword_la_SOURCES += $(filtersdir)/cipherfil.cpp
 
 PLFIL = $(filtersdir)/rtfhtml.cpp
-PLFIL += $(filtersdir)/plainfootnotes.cpp
-PLFIL += $(filtersdir)/plainhtml.cpp
 PLFIL += $(filtersdir)/greeklexattribs.cpp
-PLFIL += $(filtersdir)/unicodertf.cpp
 PLFIL += $(filtersdir)/papyriplain.cpp
 
 

@@ -1,7 +1,10 @@
-// Compression on variable granularity
-
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  mod2zmod.cpp -	Compression on variable granularity
+ *
+ * $Id$
+ *
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -32,6 +35,7 @@
 #include <unistd.h>
 #endif
 
+#include <swbuf.h>
 #include <ztext.h>
 #include <zld.h>
 #include <zcom.h>

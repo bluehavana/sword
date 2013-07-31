@@ -1,9 +1,11 @@
 /******************************************************************************
- *  rawld.cpp - code for class 'RawLD'- a module that reads raw lexicon and
- *		dictionary files: *.dat *.idx
  *
+ *  rawld4.cpp -	code for class 'RawLD'- a module that reads raw
+ *			lexicon and dictionary files: *.dat *.idx
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -39,7 +41,7 @@ SWORD_NAMESPACE_START
  *		idisp	- Display object to use for displaying
  */
 
-RawLD4::RawLD4(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive) : RawStr4(ipath, -1, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang)
+RawLD4::RawLD4(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : RawStr4(ipath, -1, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang, strongsPadding)
 {
 }
 

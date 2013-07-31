@@ -1,6 +1,7 @@
-INCLUDES = $(SWORD_CFLAGS)
+AM_CPPFLAGS = @SWORD_CFLAGS@
+ACLOCAL_AMFLAGS=$(ACLOCAL_AMFLAGS) -I m4
 lib_LTLIBRARIES = libsword_csharpsword.la
-libsword_csharpsword_la_LIBADD = $(SWORD_LIBS)
+libsword_csharpsword_la_LIBADD = @SWORD_LIBS@
 libsword_csharpsword_la_SOURCES = csharp/Sword.cxx
 
 EXTRA_DIST = *.i
@@ -26,7 +27,7 @@ perl_make: perl_makebuild
 
 perlswig: sword.i
 	mkdir -p perl
-	$(SWIG) -perl -c++ -shadow -o perl/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS) $(top_srcdir)/sword.i
+	$(SWIG) -perl -c++ -shadow -o perl/Sword.cxx -I$(top_srcdir) @SWORD_CFLAGS@ $(top_srcdir)/sword.i
 
 perl_makebuild: $(PERLSWIG)
 	mkdir -p perl
@@ -40,9 +41,9 @@ perl_makebuild: $(PERLSWIG)
 	@echo "WriteMakefile(" >> perl/Makefile.PL
 	@echo "		'NAME'		=> 'Sword'," >> perl/Makefile.PL
 	@echo "		'VERSION'	=> '$(VERSION)'," >> perl/Makefile.PL
-	@echo "		'INC'		=> '$(SWORD_CFLAGS) -I..'," >> perl/Makefile.PL
+	@echo "		'INC'		=> '@SWORD_CFLAGS@ -I..'," >> perl/Makefile.PL
 	@echo "		'DEFINE'	=> '-DSWIG'," >> perl/Makefile.PL
-	@echo "		'LIBS'		=> '$(LIB_SWORD) -lz'," >> perl/Makefile.PL
+	@echo "		'LIBS'		=> '@SWORD_LIBS@'," >> perl/Makefile.PL
 	@echo "		'PREREQ_PM'	=> {}, # e.g., Module::Name => 1.1" >> perl/Makefile.PL
 	@echo "			($$] >= 5.005 ?		## Add these new keywords supported since 5.005" >> perl/Makefile.PL
 	@echo "			(ABSTRACT => 'Sword Project perl bindings', # retrieve abstract from module" >> perl/Makefile.PL
@@ -69,21 +70,35 @@ perl_makebuild: $(PERLSWIG)
 
 tclswig: sword.i
 	mkdir -p tcl
-	$(SWIG) -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS) $(top_srcdir)/sword.i
+	$(SWIG) -tcl -c++ -namespace -pkgversion $(VERSION) -o tcl/Sword.cxx -I$(top_srcdir) @SWORD_CFLAGS@ $(top_srcdir)/sword.i
 
 python_make: python_makebuild
 	cd python && $(PYTHON) setup.py build_ext $(LIB_SWORD)
 
 pythonswig: sword.i
 	mkdir -p python
-	$(SWIG) -python -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS) $(top_srcdir)/sword.i
+	$(SWIG) -python -c++ -shadow -o python/Sword.cxx -I$(top_srcdir) @SWORD_CFLAGS@ $(top_srcdir)/sword.i
 
 python_makebuild: $(PYTHONSWIG)
 	mkdir -p python
 	echo "writing python/setup.py"
 	@echo "#! /usr/bin/python" > python/setup.py
 	@echo "" >> python/setup.py
-	@echo "from distutils.core import setup, Extension" >> python/setup.py
+	@echo "from distutils.core import setup" >> python/setup.py
+	@echo "from distutils.extension import Extension" >> python/setup.py
+	@echo "import commands" >> python/setup.py
+	@echo "" >> python/setup.py
+	@echo "def pkgconfig(*packages, **kw):" >> python/setup.py
+	@echo "	flag_map = {'-I': 'include_dirs', '-L': 'library_dirs', '-l': 'libraries'}" >> python/setup.py
+	@echo "	for token in commands.getoutput(\"pkg-config --libs --cflags %s\" % ' '.join(packages)).split():" >> python/setup.py
+	@echo "		if flag_map.has_key(token[:2]):" >> python/setup.py
+	@echo "			kw.setdefault(flag_map.get(token[:2]), []).append(token[2:])" >> python/setup.py
+	@echo "		else: # throw others to extra_link_args" >> python/setup.py
+	@echo "			kw.setdefault('extra_link_args', []).append(token)" >> python/setup.py
+	@echo "	for k, v in kw.iteritems(): # remove duplicated" >> python/setup.py
+	@echo "		kw[k] = list(set(v))" >> python/setup.py
+	@echo "	return kw" >> python/setup.py
+	@echo "" >> python/setup.py
 	@echo "setup (name = \"sword\"," >> python/setup.py
 	@echo "	version = \"$(VERSION)\"," >> python/setup.py
 	@echo "	maintainer = \"Sword Developers\"," >> python/setup.py
@@ -91,8 +106,7 @@ python_makebuild: $(PYTHONSWIG)
 	@echo "	url = \"http://www.crosswire.org/sword\"," >> python/setup.py
 	@echo "	py_modules = [\"Sword\"]," >> python/setup.py
 	@echo "	include_dirs=['..', '../..']," >> python/setup.py
-	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"]," >> python/setup.py
-	@echo "	libraries=[('sword')], " >> python/setup.py
+	@echo "	ext_modules = [Extension(\"_Sword\", [\"Sword.cxx\"], **pkgconfig('sword')" >> python/setup.py
 	@echo "	)], " >> python/setup.py
 	@echo ")" >> python/setup.py
 
@@ -100,14 +114,14 @@ python_makebuild: $(PYTHONSWIG)
 
 phpswig: sword.i
 	mkdir -p php
-	$(SWIG) -php4 -c++ -phpfull -o php/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS) $(top_srcdir)/sword.i
+	$(SWIG) -php4 -c++ -phpfull -o php/Sword.cxx -I$(top_srcdir) @SWORD_CFLAGS@ $(top_srcdir)/sword.i
 
 
 csharp/Sword.cxx: csharpswig
 
 csharpswig: sword.i
 	        mkdir -p csharp
-		        $(SWIG) -csharp -c++ -nodefaultctor -dllimport libsword_csharpwrap.dll -o csharp/Sword.cxx -I$(top_srcdir) $(SWORD_CFLAGS)  $(top_srcdir)/sword.i
+		        $(SWIG) -csharp -c++ -nodefaultctor -dllimport libsword_csharpwrap.dll -o csharp/Sword.cxx -I$(top_srcdir) @SWORD_CFLAGS@  $(top_srcdir)/sword.i
 
 csharpmake:
 	        mcs -out:csharp/Sword.dll -target:library csharp/*.cs

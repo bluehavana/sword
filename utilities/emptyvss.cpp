@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  emptyvss.cpp -	Utility to list empty verses in a module
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -68,9 +73,9 @@ int main(int argc, char **argv) {
 
 	while (!mod->popError()) {
 	  
-	  if (vkey->getVerse())
-	    if (!strlen ((const char *)(*mod)))
-	      std::cout << *vkey << std::endl;
-	  (*mod)++;
+	if (vkey->getVerse())
+		if (!mod->renderText().length())
+			std::cout << *vkey << std::endl;
+		(*mod)++;
 	}
 }

@@ -1,9 +1,10 @@
- /*****************************************************************************
- * CURLHTTPTransport functions
+/*****************************************************************************
  *
+ *  curlhttpt.cpp -	CURLHTTPTransport
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -110,7 +111,7 @@ static int myhttp_trace(CURL *handle, curl_infotype type, unsigned char *data, s
 	return 0;
 }
 
-CURLHTTPTransport::CURLHTTPTransport(const char *host, StatusReporter *sr) : FTPTransport(host, sr) {
+CURLHTTPTransport::CURLHTTPTransport(const char *host, StatusReporter *sr) : RemoteTransport(host, sr) {
 	session = (CURL *)curl_easy_init();
 }
 
@@ -135,6 +136,7 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
 		if (!passive)
 			curl_easy_setopt(session, CURLOPT_FTPPORT, "-");
 		curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
+		curl_easy_setopt(session, CURLOPT_FAILONERROR, 1);
 		curl_easy_setopt(session, CURLOPT_PROGRESSDATA, statusReporter);
 		curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, my_httpfprogress);
 		curl_easy_setopt(session, CURLOPT_DEBUGFUNCTION, myhttp_trace);
@@ -208,7 +210,7 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 	SWBuf dirBuf;
 	const char *pBuf;
 	char *pBufRes;
-	char possibleName[400];
+	SWBuf possibleName;
 	double fSize;
 	int possibleNameLength = 0;
 	
@@ -217,10 +219,12 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 		while (pBuf != NULL) {
 			pBuf += 9;//move to the start of the actual name.
 			pBufRes = (char *)strchr(pBuf, '\"');//Find the end of the possible file name
+			if (!pBufRes)
+				break;
 			possibleNameLength = pBufRes - pBuf;
-			sprintf(possibleName, "%.*s", possibleNameLength, pBuf);
+			possibleName.setFormatted("%.*s", possibleNameLength, pBuf);
 			if (isalnum(possibleName[0])) {
-				SWLog::getSystemLog()->logDebug("getDirListHTTP: Found a file: %s", possibleName);
+				SWLog::getSystemLog()->logDebug("getDirListHTTP: Found a file: %s", possibleName.c_str());
 				pBuf = pBufRes;
 				pBufRes = (char *)findSizeStart(pBuf);
 				fSize = 0;
@@ -231,13 +235,13 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 						fSize *= 1024;
 					else if (pBufRes[0] == 'M')
 						fSize *= 1048576;
+					pBuf = pBufRes;
 				}
 				struct DirEntry i;
 				i.name = possibleName;
 				i.size = (long unsigned int)fSize;
-				i.isDirectory = (possibleName[possibleNameLength-1] == '/');
+				i.isDirectory = possibleName.endsWith("/");
 				dirList.push_back(i);
-				pBuf = pBufRes;
 			} else {
 				pBuf += possibleNameLength;
 			}

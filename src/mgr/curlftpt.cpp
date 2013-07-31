@@ -1,9 +1,10 @@
- /*****************************************************************************
- * CURLFTPTransport functions
+/*****************************************************************************
  *
+ *  curlftpt.cpp -	CURLFTPTransport
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -18,8 +19,6 @@
  * General Public License for more details.
  *
  */
-
- 
 
 #include <curlftpt.h>
 
@@ -120,7 +119,7 @@ static int my_trace(CURL *handle, curl_infotype type, unsigned char *data, size_
 	return 0;
 }
 
-CURLFTPTransport::CURLFTPTransport(const char *host, StatusReporter *sr) : FTPTransport(host, sr) {
+CURLFTPTransport::CURLFTPTransport(const char *host, StatusReporter *sr) : RemoteTransport(host, sr) {
 	session = (CURL *)curl_easy_init();
 }
 
@@ -158,6 +157,7 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 
 		/* Switch on full protocol/debug output */
 		curl_easy_setopt(session, CURLOPT_VERBOSE, true);
+		curl_easy_setopt(session, CURLOPT_TIMEOUT, 45);
 		
 		/* FTP connection settings */
 

@@ -1,9 +1,10 @@
-// Diatheke 4.2 by Chris Little <chrislit@crosswire.org>
-// Copyright 1999-2009 by CrossWire Bible Society
-// http://www.crosswire.org/sword/diatheke
-
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  corediatheke.cpp -	
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -17,6 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
  *
+ */
+
+/******************************************************************************
+ * Diatheke by Chris Little <chrislit@crosswire.org>
+ * http://www.crosswire.org/sword/diatheke
  */
 
 #include "corediatheke.h"
@@ -105,7 +111,7 @@ void systemquery(const char * key, ostream* output){
 	}
 }
 
-void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed short variants = 0) {
+void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAIN, unsigned char outputencoding = ENC_UTF8, unsigned long optionfilters = 0, unsigned char searchtype = ST_NONE, const char *range = 0, const char *text = 0, const char *locale = 0, const char *ref = 0, ostream* output = &cout, const char *script = 0, signed char variants = 0) {
 	static DiathekeMgr manager(NULL, NULL, false, outputencoding, outputformat,
 		((OP_BIDI & optionfilters) == OP_BIDI),
 		((OP_ARSHAPE & optionfilters) == OP_ARSHAPE));
@@ -197,63 +203,33 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 	else if (!strcmp(target->getType(), "Generic Books"))
 		querytype = QT_LD;
 
-	if (optionfilters & OP_FOOTNOTES)
-		manager.setGlobalOption("Footnotes","On");
-	else
-		manager.setGlobalOption("Footnotes","Off");
-	if (optionfilters & OP_HEADINGS)
-		manager.setGlobalOption("Headings","On");
-	else
-		manager.setGlobalOption("Headings","Off");
-	if (optionfilters & OP_STRONGS)
-		manager.setGlobalOption("Strong's Numbers","On");
-	else
-		manager.setGlobalOption("Strong's Numbers","Off");
-	if (optionfilters & OP_MORPH)
-		manager.setGlobalOption("Morphological Tags","On");
-	else
-		manager.setGlobalOption("Morphological Tags","Off");
-	if (optionfilters & OP_CANTILLATION)
-		manager.setGlobalOption("Hebrew Cantillation","On");
-	else
-		manager.setGlobalOption("Hebrew Cantillation","Off");
-	if (optionfilters & OP_HEBREWPOINTS)
-		manager.setGlobalOption("Hebrew Vowel Points","On");
-	else
-		manager.setGlobalOption("Hebrew Vowel Points","Off");
-	if (optionfilters & OP_GREEKACCENTS)
-		manager.setGlobalOption("Greek Accents","On");
-	else
-		manager.setGlobalOption("Greek Accents","Off");
-	if (optionfilters & OP_LEMMAS)
-		manager.setGlobalOption("Lemmas","On");
-	else
-		manager.setGlobalOption("Lemmas","Off");
-	if (optionfilters & OP_SCRIPREF)
-		manager.setGlobalOption("Cross-references","On");
-	else
-		manager.setGlobalOption("Cross-references","Off");
-	if (optionfilters & OP_RED)
-		manager.setGlobalOption("Words of Christ in Red","On");
-	else
-		manager.setGlobalOption("Words of Christ in Red","Off");
-	if (optionfilters & OP_VARIANTS && variants) {
-			if (variants == -1)
-                manager.setGlobalOption("Variants", "All Readings");
-			else if (variants == 1)
-				manager.setGlobalOption("Variants", "Secondary Readings");
+	manager.setGlobalOption("Footnotes", (optionfilters & OP_FOOTNOTES) ? "On": "Off");
+	manager.setGlobalOption("Headings", (optionfilters & OP_HEADINGS) ? "On": "Off");
+	manager.setGlobalOption("Strong's Numbers", (optionfilters & OP_STRONGS) ? "On": "Off");
+	manager.setGlobalOption("Morphological Tags", (optionfilters & OP_MORPH) ? "On": "Off");
+	manager.setGlobalOption("Hebrew Cantillation", (optionfilters & OP_CANTILLATION) ? "On": "Off");
+	manager.setGlobalOption("Hebrew Vowel Points", (optionfilters & OP_HEBREWPOINTS) ? "On": "Off");
+	manager.setGlobalOption("Greek Accents", (optionfilters & OP_GREEKACCENTS) ? "On": "Off");
+	manager.setGlobalOption("Lemmas", (optionfilters & OP_LEMMAS) ? "On": "Off");
+	manager.setGlobalOption("Cross-references", (optionfilters & OP_SCRIPREF) ? "On": "Off");
+	manager.setGlobalOption("Words of Christ in Red", (optionfilters & OP_REDLETTERWORDS) ? "On": "Off");
+	manager.setGlobalOption("Arabic Vowel Points", (optionfilters & OP_ARABICPOINTS) ? "On": "Off");
+	manager.setGlobalOption("Glosses", (optionfilters & OP_GLOSSES) ? "On": "Off");
+	manager.setGlobalOption("Transliterated Forms", (optionfilters & OP_XLIT) ? "On": "Off");
+	manager.setGlobalOption("Enumerations", (optionfilters & OP_ENUM) ? "On": "Off");
+
+	manager.setGlobalOption("Transliteration", (optionfilters & OP_TRANSLITERATOR && script) ? script : "Off");
+	
+
+	if ((optionfilters & OP_VARIANTS) && variants) {
+		if (variants == -1)
+			manager.setGlobalOption("Textual Variants", "All Readings");
+		else if (variants == 1)
+			manager.setGlobalOption("Textual Variants", "Secondary Reading");
 	}
 	else
-		manager.setGlobalOption("Variants", "Primary Readings");
+		manager.setGlobalOption("Textual Variants", "Primary Reading");
 
-	if (optionfilters & OP_TRANSLITERATOR && script)
-                manager.setGlobalOption("Transliteration", script);
-	else
-		manager.setGlobalOption("Transliteration", "Off");
-	if (optionfilters & OP_ARABICPOINTS)
-		manager.setGlobalOption("Arabic Vowel Points","On");
-	else
-		manager.setGlobalOption("Arabic Vowel Points","Off");
 
 	if (querytype == QT_SEARCH) {
 
@@ -307,7 +283,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		  *output << " -- ";
 
 		  char *temp = new char[10];
-		  sprintf(temp, "%u", listkey.Count());
+		  sprintf(temp, "%u", listkey.getCount());
 		  *output << temp;
 		  delete [] temp;
 
@@ -327,7 +303,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 
 		target->setKey(ref);
 
-		const char * text = (const char *) *target;
+		SWBuf text = target->renderText();
 
 		if (outputformat == FMT_RTF) {
 			*output << "{\\rtf1\\ansi{\\fonttbl{\\f0\\froman\\fcharset0\\fprq2 Times New Roman;}{\\f1\\fdecor\\fprq2 ";
@@ -337,13 +313,13 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << "Times New Roman";
 			*output << ";}}";
 		}
-		else if (outputformat == FMT_HTML) {
+		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
 			*output << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
 		}
 
-		if (strlen(text)) {
+		if (text.length()) {
 			*output << (char*)target->getKeyText();
-			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+			if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 				*output << ": <font face=\"";
 				*output << font;
 				*output << "\">";
@@ -355,7 +331,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << ": ";
 			}
 			*output << text;
-			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+			if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 				*output << "</font>";
 			}
 			else if (outputformat == FMT_RTF) {
@@ -394,18 +370,18 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << "Times New Roman";
 			*output << ";}{\\f7\\froman\\fcharset2\\fprq2 Symbol;}}";
 		}
-		else if (outputformat == FMT_HTML) {
+		else if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML) {
 			*output << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">";
 		}
 
-		for (i = 0; i < listkey.Count() && maxverses; i++) {
-			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+		for (i = 0; i < listkey.getCount() && maxverses; i++) {
+			VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.getElement(i));
 			if (element && element->isBoundSet()) {
 			  target->setKey(element->getLowerBound());
 				*parser = element->getUpperBound();
 				while (maxverses && *target->getKey() <= *parser) {
 					*output << (char*)target->getKeyText();
-					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+					if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 						*output << ": <font face=\"";
 						*output << font;
 						*output << "\">";
@@ -416,15 +392,15 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					else {
 						*output << ": ";
 					}
-					*output << (const char*)*target;
-					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+					*output << target->renderText();
+					if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 						*output << "</font>";
 					}
 					else if (outputformat == FMT_RTF) {
 						*output << "}";
 					}
 
-					if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
+					if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 						*output << "<br />";
 					else if (outputformat == FMT_OSIS)
 						*output << "<milestone type=\"line\"/>";
@@ -442,9 +418,9 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				}
 			}
 			else {
-				target->setKey(*listkey.GetElement(i));
+				target->setKey(*listkey.getElement(i));
 				*output << (char*)target->getKeyText();
-				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+				if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 					*output << ": <font face=\"";
 					*output << font;
 					*output << "\">";
@@ -455,15 +431,15 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				else {
 					*output << ": ";
 				}
-				*output << (const char*)*target;
-				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+				*output << target->renderText();
+				if (font && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
 					*output << "</font>";
 				}
 				else if (outputformat == FMT_RTF) {
 					*output << "}";
 				}
 
-				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI))
+				if (inputformat != FMT_THML && (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI))
 					*output << "<br />";
 				else if (outputformat == FMT_OSIS)
 					*output << "<milestone type=\"line\"/>";

@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  installmgr.cpp -	commandline InstallMgr utility
+ *
+ * $Id$
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -21,7 +26,7 @@
 
 #include <swmgr.h>
 #include <installmgr.h>
-#include <ftptrans.h>
+#include <remotetrans.h>
 #include <filemgr.h>
 #include <iostream>
 #include <map>

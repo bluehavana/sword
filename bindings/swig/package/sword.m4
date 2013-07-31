@@ -7,7 +7,7 @@ dnl		Check wheter to use static linking
 dnl		first parameter is the required version
 dnl		second is whether to use static sword library
 dnl ----------------------------------------------------------------------
-AC_DEFUN(SW_CHECK_SWORD,
+AC_DEFUN([SW_CHECK_SWORD],
 [
 dnl AC_MSG_CHECKING([for a Sword installation])
 
@@ -28,7 +28,7 @@ AC_ARG_ENABLE(static-sword,
 dnl try to find Sword library files
 AC_MSG_CHECKING([for Sword library files])
 AC_REQUIRE([AC_FIND_ZLIB])
-ac_sword_library_dirs="$ac_sword_dir/lib /usr/lib /usr/lib/sword /usr/local/lib /usr/local/lib/sword /usr/local/sword/lib"
+ac_sword_library_dirs="$ac_sword_dir/lib /usr/lib64 /usr/lib /usr/lib/sword /usr/local/lib /usr/local/lib/sword /usr/local/sword/lib"
 
 if test "$ac_static_sword" = "YES"; then
 	SEARCH_LIBS="libsword.a";

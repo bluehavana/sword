@@ -1,10 +1,11 @@
 /******************************************************************************
- *	swordapi.cpp	- This file contains an api usable by non-C++
- *					environments
+ *
+ *  flatapi.cpp -	This file contains an api usable by non-C++
+ *			environments
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -177,7 +178,7 @@ SWHANDLE SWModule_doSearch(SWHANDLE hmodule, const char *searchString, int type,
 	if (!module) 	
 		return -1;
 	
-	results.ClearList();
+	results.clear();
 	results = module->search(searchString, type, params, scope, 0, percent, (void *) &percentUserData);
 	
 	return (SWHANDLE)&results;
@@ -263,7 +264,7 @@ const char *SWModule_getStripText(SWHANDLE hmodule) {
   
 const char *SWModule_getRenderText(SWHANDLE hmodule) {
 	SWModule *module = (SWModule *)hmodule;
-	return (const char *)((module) ? module->renderText() : 0);
+	return (const char *)((module) ? module->renderText().c_str() : 0);
 }
 
 const char *SWModule_getEntryAttributes(SWHANDLE hmodule, const char *level1, const char *level2, const char *level3) {
@@ -325,7 +326,7 @@ SWHANDLE listkey_getVerselistIterator(const char *list, const char *key, const c
 	static ListKey verses;
 	
 	versekey.setText(key);
-	verses.ClearList();
+	verses.clear();
 	verses = versekey.parseVerseList(list, versekey);
 	return (SWHANDLE)&verses;
 }

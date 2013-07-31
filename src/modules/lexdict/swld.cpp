@@ -1,9 +1,11 @@
 /******************************************************************************
- *  swld.cpp   - code for base class 'SWLD'.  SWLD is the basis for all
- *		 types of Lexicon and Dictionary modules (hence the 'LD').
  *
+ *  swld.cpp -	code for base class 'SWLD'.  SWLD is the basis for all
+ *		types of Lexicon and Dictionary modules (hence the 'LD').
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -35,7 +37,7 @@ SWORD_NAMESPACE_START
  *	idisp	 - Display object to use for displaying
  */
 
-SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, idisp, (char *)"Lexicons / Dictionaries", enc, dir, mark, ilang)
+SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool strongsPadding) : SWModule(imodname, imoddesc, idisp, (char *)"Lexicons / Dictionaries", enc, dir, mark, ilang), strongsPadding(strongsPadding)
 {
 	delete key;
 	key = createKey();
@@ -100,7 +102,7 @@ bool SWLD::hasEntry(const SWKey *key) const {
 	char *buf = new char [ strlen(key_str) + 6 ];
 	strcpy(buf, key_str);
 
-	strongsPad(buf);
+	if (strongsPadding) strongsPad(buf);
 	
 	bool retVal = !strcmp(buf, getKeyForEntry(getEntryForKey(buf)));
 	delete buf;

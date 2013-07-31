@@ -1,12 +1,11 @@
 /******************************************************************************
  *
- * This example demonstrates how to work with contiguous verse ranges using
- * 	VerseKey
+ *  verseranges.cpp -	This example demonstrates how to work with contiguous
+ *			verse ranges using VerseKey
  *
+ * $Id$
  *
- * $Id: $
- *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -92,10 +91,10 @@ int main(int argc, char **argv) {
 
 
 	// -------------------------
-	// Shorter syntax using the parser and based on book names, and requires intimate knowledge of VerseMgr
+	// Shorter syntax using the parser and based on book names, and requires intimate knowledge of VersificationMgr
 	// You're probably better off using the above code, but this is here for completeness
 	//
-	const VerseMgr::System *refSys = VerseMgr::getSystemVerseMgr()->getVersificationSystem(vk->getVersificationSystem());
+	const VersificationMgr::System *refSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(vk->getVersificationSystem());
 
 
 	// whole Bible

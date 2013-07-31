@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  mgrtest.cpp -	
+ *
+ * $Id$
+ *
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -46,7 +51,7 @@ int main(int argc, char **argv) {
 		std::cout << "Has Feature HebrewDef = " << it->second->getConfig().has("Feature", "HebrewDef") << "\n";
 		if ((!strcmp((*it).second->getType(), "Biblical Texts")) || (!strcmp((*it).second->getType(), "Commentaries"))) {
 			it->second->setKey("James 1:19");
-			std::cout << (const char *) *(*it).second << "\n\n";
+			std::cout << (*it).second->renderText() << "\n\n";
 		}
 	}
 
@@ -55,7 +60,7 @@ int main(int argc, char **argv) {
 	if (mhc) {
 		std::cout << "MHC, Lang = " << mhc->getLanguage() << "\n\n";
 		for (mhc->setKey("Gen 1:1"); *mhc->getKey() < (VerseKey) "Gen 1:10"; (*mhc)++)
-			std::cout << (const char *) *mhc << "\n";
+			std::cout << mhc->renderText() << "\n";
 	}
 
 	if (sysConf)

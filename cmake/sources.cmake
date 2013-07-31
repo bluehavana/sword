@@ -29,8 +29,8 @@ SET(sword_base_mgr_SOURCES
 	src/mgr/encfiltmgr.cpp
 	src/mgr/markupfiltmgr.cpp
 	src/mgr/filemgr.cpp
-	src/mgr/versemgr.cpp
-	src/mgr/ftptrans.cpp
+	src/mgr/versificationmgr.cpp
+	src/mgr/remotetrans.cpp
 	src/mgr/swlocale.cpp
 	src/mgr/localemgr.cpp
 	src/mgr/swcacher.cpp
@@ -101,6 +101,9 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/thmlplain.cpp
 	src/modules/filters/osisosis.cpp
 
+	src/modules/filters/osisenum.cpp 
+	src/modules/filters/osisglosses.cpp 
+	src/modules/filters/osisxlit.cpp 
 	src/modules/filters/osisheadings.cpp
 	src/modules/filters/osisfootnotes.cpp 
 	src/modules/filters/osishtmlhref.cpp
@@ -116,7 +119,6 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/osisvariants.cpp
 	src/modules/filters/osiswordjs.cpp
 	src/modules/filters/osismorphsegmentation.cpp
-	src/modules/filters/osisruby.cpp 
 
 	src/modules/filters/latin1utf8.cpp
 	src/modules/filters/latin1utf16.cpp
@@ -124,6 +126,8 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/utf16utf8.cpp
 	src/modules/filters/utf8html.cpp
 	src/modules/filters/utf8latin1.cpp
+	src/modules/filters/unicodertf.cpp
+	src/modules/filters/scsuutf8.cpp
 
 	src/modules/filters/utf8cantillation.cpp
 	src/modules/filters/utf8hebrewpoints.cpp
@@ -133,10 +137,7 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/cipherfil.cpp
 
 	src/modules/filters/rtfhtml.cpp
-	src/modules/filters/plainfootnotes.cpp
-	src/modules/filters/plainhtml.cpp
 	src/modules/filters/greeklexattribs.cpp
-	src/modules/filters/unicodertf.cpp
 	src/modules/filters/papyriplain.cpp
 
 	src/modules/genbook/swgenbook.cpp
@@ -184,24 +185,26 @@ SET(sword_base_SOURCES
 # Sources relying on ZLib
 SET(sword_zlib_used_SOURCES
 	src/modules/common/zipcomprs.cpp
+	src/modules/common/bz2comprs.cpp
+	src/modules/common/xzcomprs.cpp
 	src/utilfuns/zlib/untgz.c
 )
 SET(sword_zlib_nofound_SOURCES
-	src/utilfuns/zlib/gzio.c
-	src/utilfuns/zlib/zutil.c
-	src/utilfuns/zlib/uncompr.c
-	src/utilfuns/zlib/trees.c
-	src/utilfuns/zlib/maketree.c
-	src/utilfuns/zlib/infutil.c
+	src/utilfuns/zlib/adler32.c
+	src/utilfuns/zlib/compress.c
+	src/utilfuns/zlib/crc32.c
+	src/utilfuns/zlib/deflate.c
+	src/utilfuns/zlib/gzclose.c
+	src/utilfuns/zlib/gzlib.c
+	src/utilfuns/zlib/gzread.c
+	src/utilfuns/zlib/gzwrite.c
+	src/utilfuns/zlib/infback.c
 	src/utilfuns/zlib/inftrees.c
 	src/utilfuns/zlib/inflate.c
 	src/utilfuns/zlib/inffast.c
-	src/utilfuns/zlib/infcodes.c
-	src/utilfuns/zlib/infblock.c
-	src/utilfuns/zlib/deflate.c
-	src/utilfuns/zlib/crc32.c
-	src/utilfuns/zlib/compress.c
-	src/utilfuns/zlib/adler32.c
+	src/utilfuns/zlib/trees.c
+	src/utilfuns/zlib/uncompr.c
+	src/utilfuns/zlib/zutil.c
 )
 
 # Sources relying on cURL
@@ -235,8 +238,6 @@ SET(sword_icu_found_SOURCES
 
 # Headers
 SET(SWORD_INSTALL_HEADERS
-	include/Greek2Greek.h
-	include/GreekChars.h
 	include/canon.h
 	include/canon_abbrevs.h
 	include/cipherfil.h
@@ -248,10 +249,10 @@ SET(SWORD_INSTALL_HEADERS
 	include/entriesblk.h
 	include/femain.h
 	include/filemgr.h
-	include/versemgr.h
+	include/versificationmgr.h
 	include/flatapi.h
 	include/ftpparse.h
-	include/ftptrans.h
+	include/remotetrans.h
 	include/ftplibftpt.h
 	include/ftplib.h
 
@@ -283,6 +284,9 @@ SET(SWORD_INSTALL_HEADERS
 	include/multimapwdef.h
 	include/nullim.h
 
+	include/osisenum.h
+	include/osisglosses.h
+	include/osisxlit.h
 	include/osisheadings.h
 	include/osishtmlhref.h
 	include/osisxhtml.h
@@ -301,8 +305,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/osisvariants.h   
 
 	include/papyriplain.h
-	include/plainfootnotes.h
-	include/plainhtml.h
 	include/rawcom.h
 	include/rawfiles.h
 	include/rawgenbook.h
@@ -316,6 +318,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/roman.h
 	include/rtfhtml.h
 	include/sapphire.h
+	include/scsuutf8.h
 	include/strkey.h
 	include/swbasicfilter.h
 	include/swbuf.h
@@ -409,21 +412,11 @@ SET(SWORD_INSTALL_HEADERS
 	include/canon_luther.h
 	include/canon_null.h
 	include/canon_rahlfs.h
+	include/canon_lxx.h
+	include/canon_orthodox.h
+	include/canon_synodalprot.h
 )
 
 SET(INTERNAL_REGEX_HEADER
 	include/internal/regex/regex.h
-)
-
-SET(translit_SOURCES
-	translit_Any_Latex.txt
-	translit_Any_Latin1.txt
-	translit_BETA_Greek.txt
-	translit_BGreek_Greek.txt
-	translit_CCAT_Hebrew.txt
-	translit_CCAT_Syriac.txt
-	translit_Latin_Coptic.txt
-	translit_Latin_Gothic.txt
-	translit_Latin_Ugaritic.txt
-	translit_swordindex.txt
 )

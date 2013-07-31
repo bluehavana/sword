@@ -5,7 +5,7 @@
 # Version change: Change line 8 only !
 # Change it immediately after a release
 
-AC_INIT(sword, 1.6.2, sword-bugs@crosswire.org, sword, http://crosswire.org/sword)
+AC_INIT(sword, 1.6.901, sword-bugs@crosswire.org, sword, http://crosswire.org/sword)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
 AC_REVISION($Revision: 1.45 $)
@@ -92,9 +92,9 @@ AM_MAINTAINER_MODE
 if test x$enable_debug = xyes; then
   GCJFLAGS="-g -O0"
   if test x$ac_cv_prog_cc_g = xyes; then
-    AM_CFLAGS="-g3 -O0 -Wall -Werror -Woverloaded-virtual"
+    AM_CFLAGS="-g3 -O0 -Wall -Werror"
   else
-    AM_CFLAGS="-O0 -Wall -Werror -Woverloaded-virtual"
+    AM_CFLAGS="-O0 -Wall -Werror"
   fi
   if test x$ac_cv_prog_cxx_g = xyes; then
     AM_CXXFLAGS="-g3 -O0 -Wall -Werror -Woverloaded-virtual"
@@ -105,6 +105,9 @@ else
   AM_CFLAGS="-O3"
   AM_CXXFLAGS="-O3"
 fi
+
+AM_CFLAGS="$AM_CFLAGS -fPIC"
+AM_CXXFLAGS="$AM_CXXFLAGS -fPIC"
 
 # ---------------------------------------------------------------------
 # Check libraries
@@ -171,11 +174,6 @@ ICU_VER=
 ICU_LIBS=
 ICU_IOLIBS=
 if test x$with_icu = xyes; then
-	AC_PATH_PROG([PKGDATA], [pkgdata],[/usr/bin/pkgdata],[$PATH:/usr/sbin:.])
-	AC_PATH_PROG([GENCCODE], [genccode], [/usr/bin/genccode], [$PATH:/usr/sbin:.])
-	AC_PATH_PROG([GENCMN], [gencmn], [/usr/bin/gencmn], [$PATH:/usr/sbin:.])
-	AC_PATH_PROG([GENRB], [genrb], [/usr/bin/genrb], [$PATH:/usr/sbin:.])
-	
 	AC_PATH_PROG(ICU_CONFIG, icu-config, no)
 # The icu-config script was new in icu 2.2
 	if test "$ICU_CONFIG" = "no" ; then
@@ -211,7 +209,7 @@ fi
 AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
 
 if test x$enable_warnings = xyes; then
-  AM_CFLAGS="$AM_CFLAGS -Werror -Woverloaded-virtual"
+  AM_CFLAGS="$AM_CFLAGS -Werror"
   AM_CXXFLAGS="$AM_CXXFLAGS -Werror -Woverloaded-virtual"
 fi
 
@@ -311,9 +309,8 @@ AC_SUBST(ICU_VER)
 AC_SUBST(enable_debug)
 AC_SUBST(enable_profile)
 
-# TODO: WHY ARE WE SUBST CXXFLAGS BUT NOT CFLAGS?  And why, when I uncomment out the cflags subst do we get compile errors?
 AC_SUBST(AM_CXXFLAGS)
-#AC_SUBST(AM_CFLAGS)
+AC_SUBST(AM_CFLAGS)
 
 AC_SUBST(target_cpu)
 AC_SUBST(target_vendor)
@@ -354,7 +351,7 @@ AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 # ---------------------------------------------------------------------
 # Final output
 # ---------------------------------------------------------------------
-AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile utilities/diatheke/Makefile icu/Makefile sword.pc sword.spec)
+AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile utilities/diatheke/Makefile sword.pc sword.spec)
 AC_OUTPUT
 
 echo

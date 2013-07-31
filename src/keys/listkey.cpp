@@ -1,10 +1,12 @@
 /******************************************************************************
- *  listkey.cpp - code for base class 'ListKey'.  ListKey is the basis for all
- *		  types of keys that have lists of specified indexes
- *		  (e.g. a list of verses, place, etc.)
  *
+ *  listkey.cpp -	code for base class 'ListKey'.  ListKey is the basis
+ *			for all types of keys that have lists of specified
+ *			indexes (e.g. a list of verses, place, etc.)
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -40,7 +42,7 @@ SWClass ListKey::classdef(classes);
 
 ListKey::ListKey(const char *ikey): SWKey(ikey) {
 	arraymax = 0;
-	ClearList();
+	clear();
 	init();
 }
 
@@ -74,12 +76,12 @@ SWKey *ListKey::clone() const
 
 ListKey::~ListKey()
 {
-	ClearList();
+	clear();
 }
 
 
 /******************************************************************************
- * ListKey::ClearList	- Clears out elements of list
+ * ListKey::clear	- Clears out elements of list
  */
 
 void ListKey::clear()
@@ -106,7 +108,7 @@ void ListKey::clear()
  */
 
 void ListKey::copyFrom(const ListKey &ikey) {
-	ClearList();
+	clear();
 
 	arraymax = ikey.arraymax;
 	arraypos = ikey.arraypos;
@@ -115,7 +117,7 @@ void ListKey::copyFrom(const ListKey &ikey) {
 	for (int i = 0; i < arraycnt; i++)
 		array[i] = ikey.array[i]->clone();
 
-	SetToElement(0);
+	setToElement(0);
 }
 
 
@@ -129,7 +131,7 @@ void ListKey::add(const SWKey &ikey) {
 		arraymax = arraycnt + 32;
 	}
 	array[arraycnt-1] = ikey.clone();
-	SetToElement(arraycnt-1);
+	setToElement(arraycnt-1);
 }
 
 
@@ -145,10 +147,10 @@ void ListKey::add(const SWKey &ikey) {
 void ListKey::setPosition(SW_POSITION p) {
 	switch (p) {
 	case 1:	// GCC won't compile P_TOP
-		SetToElement(0, p);
+		setToElement(0, p);
 		break;
 	case 2:	// GCC won't compile P_BOTTOM
-		SetToElement(arraycnt-1, p);
+		setToElement(arraycnt-1, p);
 		break;
 	}
 }
@@ -169,7 +171,7 @@ void ListKey::increment(int step) {
 			if (array[arraypos]->isBoundSet())
 				(*(array[arraypos]))++;
 			if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
-				SetToElement(arraypos+1);
+				setToElement(arraypos+1);
 			}
 			else SWKey::setText((const char *)(*array[arraypos]));
 		}
@@ -193,7 +195,7 @@ void ListKey::decrement(int step) {
 			if (array[arraypos]->isBoundSet())
 				(*(array[arraypos]))--;
 			if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
-				SetToElement(arraypos-1, BOTTOM);
+				setToElement(arraypos-1, BOTTOM);
 			}
 			else SWKey::setText((const char *)(*array[arraypos]));
 		}
@@ -203,23 +205,24 @@ void ListKey::decrement(int step) {
 
 
 /******************************************************************************
- * ListKey::Count	- Returns number of elements in list
+ * ListKey::getCount	- Returns number of elements in list
  */
 
-int ListKey::Count() {
+int ListKey::getCount() const {
 	return arraycnt;
 }
 
 
 /******************************************************************************
- * ListKey::SetToElement	- Sets key to element number
+ * ListKey::setToElement	- Sets key to element number
  *
  * ENT:	ielement	- element number to set to
+ * 	pos		- set the subkey element to position (TOP) or BOTTOM
  *
  * RET:	error status
  */
 
-char ListKey::SetToElement(int ielement, SW_POSITION pos) {
+char ListKey::setToElement(int ielement, SW_POSITION pos) {
 	arraypos = ielement;
 	if (arraypos >= arraycnt) {
 		arraypos = (arraycnt>0)?arraycnt - 1:0;
@@ -247,14 +250,14 @@ char ListKey::SetToElement(int ielement, SW_POSITION pos) {
 
 
 /******************************************************************************
- * ListKey::GetElement	- Gets a key element number
+ * ListKey::getElement	- Gets a key element number
  *
  * ENT:	pos	- element number to get (or default current)
  *
  * RET:	Key or null on error
  */
 
-SWKey *ListKey::getElement(int pos) {
+const SWKey *ListKey::getElement(int pos) const {
 	if (pos < 0)
 		pos = arraypos;
 		
@@ -263,20 +266,26 @@ SWKey *ListKey::getElement(int pos) {
 
 	return (error) ? 0:array[pos];
 }
+
+SWKey *ListKey::getElement(int pos) {
+	const ListKey &self = *this;
+	return const_cast<SWKey *>(self.getElement(pos));
+}
+
 	
 
 /******************************************************************************
- * ListKey::Remove	- Removes current element from list
+ * ListKey::remove	- Removes current element from list
  */
 
-void ListKey::Remove() {
+void ListKey::remove() {
 	if ((arraypos > -1) && (arraypos < arraycnt)) {
 		delete array[arraypos];
 		if (arraypos < arraycnt - 1)
 			memmove(&array[arraypos], &array[arraypos+1], (arraycnt - arraypos - 1) * sizeof(SWKey *));
 		arraycnt--;
 		
-		SetToElement((arraypos)?arraypos-1:0);
+		setToElement((arraypos)?arraypos-1:0);
 	}
 }
 

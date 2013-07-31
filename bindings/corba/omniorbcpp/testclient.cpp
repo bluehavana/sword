@@ -1,7 +1,10 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: f; c-basic-offset: 4 -*- */
-
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  testclient.cpp -	
+ *
+ * $Id$
+ *
+ * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -93,6 +96,7 @@ int main (int argc, char *argv[])
 			std::cout << "KeyText: " << module->getKeyText() << "\n";
 			std::cout << "Text: " << module->getRenderText() << "\n";
 		}
+		std::cout << "RenderHeader:\n" << module->getRenderHeader() << "\n";
 /*
 		swordorb::SearchHitList *searchResults;
 		bool lucene = module->hasSearchFramework();

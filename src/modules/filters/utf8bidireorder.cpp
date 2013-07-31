@@ -1,10 +1,12 @@
 /******************************************************************************
  *
- * utf8bidireorder - SWFilter descendant to perform reordering of UTF-8
- *                   text to visual order according to Unicode BiDi
+ *  utf8bidireorder.cpp -	SWFilter descendant to perform reordering of
+ *				UTF-8 text to visual order according to the
+ *				Unicode Bidirectional Algorithm (UBA)
  *
+ * $Id$
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -31,7 +33,7 @@
 
 SWORD_NAMESPACE_START
 
-UTF8BiDiReorder::UTF8BiDiReorder() {
+UTF8BiDiReorder::UTF8BiDiReorder() : err(U_ZERO_ERROR) {
 
         conv = ucnv_open("UTF-8", &err);
 

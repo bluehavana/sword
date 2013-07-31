@@ -1,10 +1,11 @@
 /******************************************************************************
- *  swld.h   - code for base class 'SWLD'.  SWLD is the basis for all
- *				types of Lexicon and Dictionary modules (hence the 'LD').
+ *
+ *  swld.h -	code for base class 'SWLD'.  SWLD is the basis for all
+ *		types of Lexicon and Dictionary modules (hence the 'LD').
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -36,13 +37,14 @@ class SWDLLEXPORT SWLD : public SWModule {
 protected:
 	mutable char *entkeytxt;
 	static void strongsPad(char *buf);
+	bool strongsPadding;
 public:
 	/** Initializes data for instance of SWLD
 	*/
 	SWLD(const char *imodname = 0, const char *imoddesc = 0,
 			SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,
 			SWTextDirection dir = DIRECTION_LTR,
-			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
+			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, bool strongsPadding = true);
 	
 	virtual ~SWLD();
 	virtual SWKey *createKey() const;

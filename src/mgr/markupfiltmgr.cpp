@@ -1,9 +1,12 @@
 /******************************************************************************
- *  swmarkupmgr.cpp   - implementaion of class MarkupFilterMgr, subclass of
- *                        used to transcode all module text to a requested
- *                        markup.
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *  markupfiltmgr.cpp -	implementaion of class MarkupFilterMgr, subclass of
+ *			used to transcode all module text to a requested
+ *			markup
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -27,7 +30,6 @@
 #include <gbfthml.h>
 #include <thmlhtml.h>
 #include <gbfhtml.h>
-#include <plainhtml.h>
 #include <thmlhtmlhref.h>
 #include <gbfhtmlhref.h>
 #include <teihtmlhref.h>
@@ -251,14 +253,14 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromtei = NULL;
                         break;
                 case FMT_HTML:
-                        fromplain = new PLAINHTML();
+                        fromplain = NULL;
                         fromthml = new ThMLHTML();
                         fromgbf = new GBFHTML();
                         fromosis = NULL;
                         fromtei = NULL;
                         break;
                 case FMT_HTMLHREF:
-                        fromplain = new PLAINHTML();
+                        fromplain = NULL;
                         fromthml = new ThMLHTMLHREF();
                         fromgbf = new GBFHTMLHREF();
                         fromosis = new OSISHTMLHREF();
@@ -293,7 +295,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
                         fromtei = NULL;
                         break;
                 case FMT_XHTML:
-                        fromplain = new PLAINHTML();
+                        fromplain = NULL;
                         fromthml = new ThMLXHTML();
                         fromgbf = new GBFXHTML();
                         fromosis = new OSISXHTML();

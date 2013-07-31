@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  swordorb-impl.hpp -	
+ *
+ * $Id$
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -62,6 +67,7 @@ public:
   void begin();
   char* getStripText();
   char* getRenderText();
+  char* getRenderHeader();
   char* getRawEntry();
   void setRawEntry(const char* entryBuffer);
   char* getConfigEntry(const char* key);

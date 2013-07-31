@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  swordorb-impl.cpp -	omniorb bindings
+ *
+ * $Id$
+ *
+ * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -237,7 +242,7 @@ swordorb::StringList* swordorb_SWModule_i::getKeyChildren(){
 
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-		retVal->length(7);
+		retVal->length(8);
 		SWBuf num;
 		num.appendFormatted("%d", vkey->getTestament());
 		(*retVal)[0] = CORBA::string_dup(num.c_str());
@@ -257,6 +262,7 @@ swordorb::StringList* swordorb_SWModule_i::getKeyChildren(){
 		num.appendFormatted("%d", vkey->getVerseMax());
 		(*retVal)[5] = CORBA::string_dup(num.c_str());
 		(*retVal)[6] = CORBA::string_dup(vkey->getBookName());
+		(*retVal)[7] = CORBA::string_dup(vkey->getOSISRef());
 	}
 	else {
 		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
@@ -329,6 +335,10 @@ char* swordorb_SWModule_i::getStripText(){
 
 char* swordorb_SWModule_i::getRenderText(){
 	return CORBA::string_dup(assureValidUTF8((char *)delegate->renderText()));
+}
+
+char* swordorb_SWModule_i::getRenderHeader(){
+	return CORBA::string_dup(assureValidUTF8(((char *)(delegate->getRenderHeader() ? delegate->getRenderHeader():""))));
 }
 
 char* swordorb_SWModule_i::getRawEntry(){

@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  mod2vpl.cpp -	Utility to export a module in VPL format
+ *
+ * $Id$
+ *
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -90,8 +95,8 @@ int main(int argc, char **argv) {
 	(*mod) = TOP;
 
 	while (!mod->popError()) {
-		buffer = new char [ strlen ((const char *)(*mod)) + 1 ];
-		strcpy(buffer, (const char *)(*mod));
+		buffer = new char [ mod->renderText().length() + 1 ];
+		strcpy(buffer, mod->renderText());
 		cleanbuf(buffer);
 		if (vref) {
 			if ((strlen(buffer) > 0) && (vref)) {

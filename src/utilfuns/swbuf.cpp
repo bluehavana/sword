@@ -1,23 +1,24 @@
 /******************************************************************************
-*  swbuf.cpp  - code for SWBuf used as a transport and utility for data buffers
-*
-* $Id$
-*
-* Copyright 2003 CrossWire Bible Society (http://www.crosswire.org)
-*	CrossWire Bible Society
-*	P. O. Box 2528
-*	Tempe, AZ  85280-2528
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of the GNU General Public License as published by the
-* Free Software Foundation version 2.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-*/
+ *
+ *  swbuf.cpp -	used as a transport and utility for data buffers
+ *
+ * $Id$
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
 
 #include <swbuf.h>
 
@@ -97,7 +98,7 @@ SWBuf &SWBuf::setFormatted(const char *format, ...) {
 * SWBuf::append - appends a value to the current value of this SWBuf
 * 
 */
-void SWBuf::append(const char *str, long max) {
+SWBuf &SWBuf::append(const char *str, long max) {
 //	if (!str) //A null string was passed
 //		return;
 	if (max < 0)
@@ -106,6 +107,7 @@ void SWBuf::append(const char *str, long max) {
 	for (;((max)&&(*str));max--)
 		*end++ = *str++;
 	*end = 0;
+	return *this;
 }
 
 /******************************************************************************
@@ -124,7 +126,7 @@ void SWBuf::setSize(unsigned long len) {
 * WARNING: This function can only write at most
 * JUNKBUFSIZE to the string per call.
 */
-void SWBuf::appendFormatted(const char *format, ...) {
+SWBuf &SWBuf::appendFormatted(const char *format, ...) {
 	va_list argptr;
 
 	va_start(argptr, format);
@@ -138,6 +140,7 @@ void SWBuf::appendFormatted(const char *format, ...) {
 	va_start(argptr, format);
 	end += vsprintf(end, format, argptr);
 	va_end(argptr);
+	return *this;
 }
 
 void SWBuf::insert(unsigned long pos, const char* str, unsigned long start, signed long max) {

@@ -1,8 +1,6 @@
 swincludedir = $(top_srcdir)/include
 
-pkginclude_HEADERS =  $(swincludedir)/Greek2Greek.h
-pkginclude_HEADERS += $(swincludedir)/GreekChars.h
-pkginclude_HEADERS += $(swincludedir)/canon.h
+pkginclude_HEADERS =  $(swincludedir)/canon.h
 pkginclude_HEADERS += $(swincludedir)/canon_abbrevs.h
 pkginclude_HEADERS += $(swincludedir)/cipherfil.h
 pkginclude_HEADERS += $(swincludedir)/curlftpt.h
@@ -13,10 +11,10 @@ pkginclude_HEADERS += $(swincludedir)/encfiltmgr.h
 pkginclude_HEADERS += $(swincludedir)/entriesblk.h
 pkginclude_HEADERS += $(swincludedir)/femain.h
 pkginclude_HEADERS += $(swincludedir)/filemgr.h
-pkginclude_HEADERS += $(swincludedir)/versemgr.h
+pkginclude_HEADERS += $(swincludedir)/versificationmgr.h
 pkginclude_HEADERS += $(swincludedir)/flatapi.h
 pkginclude_HEADERS += $(swincludedir)/ftpparse.h
-pkginclude_HEADERS += $(swincludedir)/ftptrans.h
+pkginclude_HEADERS += $(swincludedir)/remotetrans.h
 pkginclude_HEADERS += $(swincludedir)/ftplibftpt.h
 pkginclude_HEADERS += $(swincludedir)/ftplib.h
 
@@ -48,6 +46,8 @@ pkginclude_HEADERS += $(swincludedir)/markupfiltmgr.h
 pkginclude_HEADERS += $(swincludedir)/multimapwdef.h
 pkginclude_HEADERS += $(swincludedir)/nullim.h
 
+pkginclude_HEADERS += $(swincludedir)/osisglosses.h
+pkginclude_HEADERS += $(swincludedir)/osisenum.h
 pkginclude_HEADERS += $(swincludedir)/osisheadings.h
 pkginclude_HEADERS += $(swincludedir)/osishtmlhref.h
 pkginclude_HEADERS += $(swincludedir)/osisxhtml.h
@@ -64,11 +64,11 @@ pkginclude_HEADERS += $(swincludedir)/osisredletterwords.h
 pkginclude_HEADERS += $(swincludedir)/osisscripref.h   
 pkginclude_HEADERS += $(swincludedir)/osiswordjs.h   
 pkginclude_HEADERS += $(swincludedir)/osisvariants.h   
+pkginclude_HEADERS += $(swincludedir)/osisxlit.h   
 
 pkginclude_HEADERS += $(swincludedir)/papyriplain.h
-pkginclude_HEADERS += $(swincludedir)/plainfootnotes.h
-pkginclude_HEADERS += $(swincludedir)/plainhtml.h
 pkginclude_HEADERS += $(swincludedir)/rawcom.h
+pkginclude_HEADERS += $(swincludedir)/rawcom4.h
 pkginclude_HEADERS += $(swincludedir)/rawfiles.h
 pkginclude_HEADERS += $(swincludedir)/rawgenbook.h
 pkginclude_HEADERS += $(swincludedir)/rawld.h
@@ -76,13 +76,16 @@ pkginclude_HEADERS += $(swincludedir)/rawld4.h
 pkginclude_HEADERS += $(swincludedir)/rawstr.h
 pkginclude_HEADERS += $(swincludedir)/rawstr4.h
 pkginclude_HEADERS += $(swincludedir)/rawtext.h
+pkginclude_HEADERS += $(swincludedir)/rawtext4.h
 pkginclude_HEADERS += $(swincludedir)/rawverse.h
+pkginclude_HEADERS += $(swincludedir)/rawverse4.h
 if USE_INTERNAL_REGEX
 pkginclude_HEADERS += $(swincludedir)/internal/regex/regex.h
 endif
 pkginclude_HEADERS += $(swincludedir)/roman.h
 pkginclude_HEADERS += $(swincludedir)/rtfhtml.h
 pkginclude_HEADERS += $(swincludedir)/sapphire.h
+pkginclude_HEADERS += $(swincludedir)/scsuutf8.h
 pkginclude_HEADERS += $(swincludedir)/strkey.h
 pkginclude_HEADERS += $(swincludedir)/swbasicfilter.h
 pkginclude_HEADERS += $(swincludedir)/swbuf.h
@@ -158,7 +161,6 @@ pkginclude_HEADERS += $(swincludedir)/utilxml.h
 pkginclude_HEADERS += $(swincludedir)/versekey.h
 pkginclude_HEADERS += $(swincludedir)/versetreekey.h
 pkginclude_HEADERS += $(swincludedir)/zcom.h
-pkginclude_HEADERS += $(swincludedir)/zconf.h
 pkginclude_HEADERS += $(swincludedir)/zipcomprs.h
 pkginclude_HEADERS += $(swincludedir)/zld.h
 pkginclude_HEADERS += $(swincludedir)/zstr.h
@@ -171,11 +173,15 @@ pkginclude_HEADERS += $(swincludedir)/canon_mt.h
 pkginclude_HEADERS += $(swincludedir)/canon_nrsv.h
 pkginclude_HEADERS += $(swincludedir)/canon_nrsva.h
 pkginclude_HEADERS += $(swincludedir)/canon_synodal.h
+pkginclude_HEADERS += $(swincludedir)/canon_synodalprot.h
 pkginclude_HEADERS += $(swincludedir)/canon_vulg.h
 pkginclude_HEADERS += $(swincludedir)/canon_german.h
 pkginclude_HEADERS += $(swincludedir)/canon_luther.h
 pkginclude_HEADERS += $(swincludedir)/canon_catholic.h
 pkginclude_HEADERS += $(swincludedir)/canon_catholic2.h
 pkginclude_HEADERS += $(swincludedir)/canon_rahlfs.h
+#pkginclude_HEADERS += $(swincludedir)/canon_lxx_nt.h
+pkginclude_HEADERS += $(swincludedir)/canon_lxx.h
+pkginclude_HEADERS += $(swincludedir)/canon_orthodox.h
 pkginclude_HEADERS += $(swincludedir)/canon_null.h
 

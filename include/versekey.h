@@ -1,9 +1,11 @@
 /******************************************************************************
- *	versekey.h - code for class 'versekey'- a standard Biblical verse key
+ *
+ *  versekey.h -	code for class 'VerseKey'- a standard Biblical verse
+ *			key
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ	85280-2528
@@ -26,7 +28,7 @@
 #include <swkey.h>
 #include <swmacs.h>
 #include <listkey.h>
-#include <versemgr.h>
+#include <versificationmgr.h>
 
 #include <defs.h>
 
@@ -55,7 +57,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	static int instance;
 	ListKey internalListKey;
 
-	const VerseMgr::System *refSys;
+	const VersificationMgr::System *refSys;
 
 	/** flag for auto normalization
 	*/
@@ -75,15 +77,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 	// private with no bounds check
 	void setFromOther(const VerseKey &vk);
 
-	/** Binary search to find the index closest, but less
-	* than the given value.
-	*
-	* @param array long * to array to search
-	* @param size number of elements in the array
-	* @param value value to find
-	* @return the index into the array that is less than but closest to value
-	*/
-	int findindex(long *array, int size, long value);
+	void checkBounds();
 
 	// internal upper/lower bounds optimizations
 	mutable long lowerBound, upperBound;	// if autonorms is on
@@ -357,7 +351,7 @@ public:
 	* @return *this
 	*/
 	virtual void normalize(bool autocheck = false);
-	SWDEPRECATED void Normalize(char autocheck = 0) { normalize(autocheck); }
+	SWDEPRECATED void Normalize(char autocheck = 0) { normalize(autocheck!=0); }
 
 	/** Sets flag that tells VerseKey to
 	* automatically normalize itself when modified
@@ -373,7 +367,7 @@ public:
 	/**
 	* @deprecated Use setAutoNormalize() instead.
 	*/
-	SWDEPRECATED char AutoNormalize(char iautonorm) { char retVal = isAutoNormalize()?1:0; setAutoNormalize(iautonorm); return retVal; }	// deprecated
+	SWDEPRECATED char AutoNormalize(char iautonorm) { char retVal = isAutoNormalize()?1:0; setAutoNormalize(iautonorm!=0); return retVal; }	// deprecated
 	/**
 	* @deprecated Use isAutoNormalize() instead.
 	*/
@@ -389,7 +383,7 @@ public:
 	* @return if unchanged -> value of intros,
 	* if changed -> previous value of intros
 	*/
-	SWDEPRECATED char Headings(char iheadings = MAXPOS(char)) { char retVal = isIntros(); if (iheadings != MAXPOS(char)) setIntros(iheadings); return retVal; }
+	SWDEPRECATED char Headings(char iheadings = MAXPOS(char)) { char retVal = isIntros(); if (iheadings != MAXPOS(char)) setIntros(iheadings!=0); return retVal; }
 
 	/** The Intros property determine whether or not to include
 	* chapter/book/testament/module intros

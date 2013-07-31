@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  mod2imp.cpp -	Utility to export a module in IMP format
+ *
+ * $Id$
+ *
+ * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -111,7 +116,7 @@ int main(int argc, char **argv)
 
 	for ((*module) = TOP; !module->popError(); (*module)++) {
 		std::cout << "$$$" << module->getKeyText() << std::endl;
-		std::cout << ((render) ? module->renderText() : (strip) ? module->stripText() : module->getRawEntry()) << "\n";
+		std::cout << ((render) ? module->renderText().c_str() : (strip) ? module->stripText() : module->getRawEntry()) << "\n";
 	}
 
 	cout << endl;

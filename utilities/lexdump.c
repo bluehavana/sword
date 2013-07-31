@@ -1,9 +1,10 @@
 /******************************************************************************
- * This utility outputs a specified ordinal entry from a lex
+ *
+ *  lexdump.c -	This utility outputs a specified ordinal entry from a lex
  *
  * $Id$
  *
- * Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -18,6 +19,10 @@
  * General Public License for more details.
  *
  */
+
+#ifdef _MSC_VER
+	#pragma warning( disable: 4996 )
+#endif
 
 #include <ctype.h>
 #include <stdio.h>

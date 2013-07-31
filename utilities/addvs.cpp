@@ -1,5 +1,11 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  addvs.cpp -	Utility to create/modify a VerseKey module by adding a single
+ *		entry
+ *
+ * $Id$
+ *
+ * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -94,8 +100,8 @@ int main(int argc, char **argv) {
       int i;
       bool havefirst = false;
       VerseKey firstverse;
-      for (i = 0; i < listkey.Count(); i++) {
-	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.GetElement(i));
+      for (i = 0; i < listkey.getCount(); i++) {
+	VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.getElement(i));
 	if (element) {
 	  mod->setKey(element->getLowerBound());
 	  VerseKey finalkey = element->getUpperBound();

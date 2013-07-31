@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  imp2vs.cpp -	Utility to import IMP formatted VerseKey modules
+ *
+ * $Id$
+ *
+ * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -53,7 +58,7 @@ void usage(const char *progName, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
 	fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
 	fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:\n");
-	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
+	VersificationMgr *vmgr = VersificationMgr::getSystemVersificationMgr();
 	StringList av11n = vmgr->getVersificationSystems();
 	for (StringList::iterator loop = av11n.begin(); loop != av11n.end(); loop++) {
 		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
@@ -133,7 +138,7 @@ int main(int argc, char **argv) {
 		else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 	// -----------------------------------------------------
-	const VerseMgr::System *v = VerseMgr::getSystemVerseMgr()->getVersificationSystem(v11n);
+	const VersificationMgr::System *v = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(v11n);
 	if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
 	if (compType == "ZIP") {

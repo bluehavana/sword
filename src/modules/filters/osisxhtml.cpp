@@ -1,10 +1,10 @@
 /******************************************************************************
  *
- * osisxhtml -	Render filter for classed XHTML
- *			of an OSIS module.
+ *  osisxhtml.cpp -	Render filter for classed XHTML of an OSIS module
  *
+ * $Id$
  *
- * Copyright 2011 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -34,22 +34,23 @@
 SWORD_NAMESPACE_START
 
 const char *OSISXHTML::getHeader() const {
-	return "\
-		.divineName {\
-			font-variant: small-caps;\
-		}\
-		.wordsOfJesus {\
-			color: red;\
-		}\
-		.transChangeSupplied {\
-			font-style: italic;\
-		}\
+	const static char *header = "\
+		.divineName { font-variant: small-caps; }\n\
+		.wordsOfJesus { color: red; }\n\
+		.transChangeSupplied { font-style: italic; }\n\
+		.small, .sub, .sup { font-size: .83em }\n\
+		.sub             { vertical-align: sub }\n\
+		.sup             { vertical-align: super }\n\
+		.indent1         { margin-left: 10px }\n\
+		.indent2         { margin-left: 20px }\n\
+		.indent3         { margin-left: 30px }\n\
+		.indent4         { margin-left: 40px }\n\
 	";
+	return header;
 }
 
 
 namespace {
-	typedef std::stack<SWBuf> TagStack;
 
 // though this might be slightly slower, possibly causing an extra bool check, this is a renderFilter
 // so speed isn't the absolute highest priority, and this is a very minor possible hit
@@ -90,6 +91,8 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 	}
 }
 
+
+
 void processMorph(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 	const char * attrib;
 	const char *val;
@@ -118,36 +121,14 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 		//}
 	}
 }
+
+
 }	// end anonymous namespace
 
-
-// TODO: this bridge pattern is to preserve binary compat on 1.6.x
-class OSISXHTML::TagStacks {
-public:
-	TagStack quoteStack;
-	TagStack hiStack;
-};
-
-OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	inXRefNote    = false;
-	suspendLevel = 0;
-	tagStacks = new TagStacks();
-	wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
-	wordsOfChristEnd   = "</span> ";
-	if (module) {
-		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
-		version = module->getName();
-		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
-	}
-	else {
-		osisQToTick = true;	// default
-		version = "";
-	}
+BasicFilterUserData *OSISXHTML::createUserData(const SWModule *module, const SWKey *key) {
+	return new MyUserData(module, key);
 }
 
-OSISXHTML::MyUserData::~MyUserData() {
-	delete tagStacks;
-}
 
 OSISXHTML::OSISXHTML() {
 	setTokenStart("<");
@@ -174,6 +155,39 @@ OSISXHTML::OSISXHTML() {
 	renderNoteNumbers = false;
 }
 
+class OSISXHTML::TagStack : public std::stack<SWBuf> {
+};
+
+OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key), quoteStack(new TagStack()), hiStack(new TagStack()), titleStack(new TagStack()), lineStack(new TagStack()) {
+	inXRefNote    = false;
+	suspendLevel = 0;
+	wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
+	wordsOfChristEnd   = "</span> ";
+	if (module) {
+		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+		version = module->getName();
+		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+	}
+	else {
+		osisQToTick = true;	// default
+		version = "";
+	}
+	consecutiveNewlines = 0;
+}
+
+OSISXHTML::MyUserData::~MyUserData() {
+	delete quoteStack;
+	delete hiStack;
+	delete titleStack;
+	delete lineStack;
+}
+
+void OSISXHTML::MyUserData::outputNewline(SWBuf &buf) {
+	if (++consecutiveNewlines <= 2) {
+		outText("<br />\n", buf, this);
+		supressAdjacentWhitespace = true;
+	}
+}
 bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
 	MyUserData *u = (MyUserData *)userData;
 	SWBuf scratch;
@@ -303,15 +317,13 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <p> paragraph and <lg> linegroup tags
 		else if (!strcmp(tag.getName(), "p") || !strcmp(tag.getName(), "lg")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				outText("<br />", buf, u);
+				u->outputNewline(buf);
 			}
 			else if (tag.isEndTag()) {	// end tag
-				outText("<br />", buf, u);
-				userData->supressAdjacentWhitespace = true;
+				u->outputNewline(buf);
 			}
 			else {					// empty paragraph break marker
-				outText("<br />", buf, u);
-				userData->supressAdjacentWhitespace = true;
+				u->outputNewline(buf);
 			}
 		}
 
@@ -321,12 +333,11 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "paragraph")) {
 			// <div type="paragraph"  sID... />
 			if (tag.getAttribute("sID")) {	// non-empty start tag
-				outText("<br />", buf, u);
+				u->outputNewline(buf);
 			}
 			// <div type="paragraph"  eID... />
 			else if (tag.getAttribute("eID")) {
-				outText("<br />", buf, u);
-				userData->supressAdjacentWhitespace = true;
+				u->outputNewline(buf);
 			}
 		}
 
@@ -384,36 +395,38 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 		// <l> poetry, etc
 		else if (!strcmp(tag.getName(), "l")) {
+			// start line marker
+			if (tag.getAttribute("sID") || (!tag.isEndTag() && !tag.isEmpty())) {
+				// nested lines plus if the line itself has an x-indent type attribute value
+				outText(SWBuf("<span class=\"line indent").appendFormatted("%d\">", u->lineStack->size() + (SWBuf("x-indent") == tag.getAttribute("type")?1:0)).c_str(), buf, u);
+				u->lineStack->push(tag.toString());
+			}
 			// end line marker
-			if (tag.getAttribute("eID")) {
-				outText("<br />", buf, u);
+			else if (tag.getAttribute("eID") || tag.isEndTag()) {
+				outText("</span>", buf, u);
+				u->outputNewline(buf);
+				if (u->lineStack->size()) u->lineStack->pop();
 			}
 			// <l/> without eID or sID
 			// Note: this is improper osis. This should be <lb/>
 			else if (tag.isEmpty() && !tag.getAttribute("sID")) {
-				outText("<br />", buf, u);
-			}
-			// end of the line
-			else if (tag.isEndTag()) {
-				outText("<br />", buf, u);
+				u->outputNewline(buf);
 			}
 		}
 
 		// <lb.../>
 		else if (!strcmp(tag.getName(), "lb")) {
-			outText("<br />", buf, u);
-			userData->supressAdjacentWhitespace = true;
+				u->outputNewline(buf);
 		}
 		// <milestone type="line"/>
 		// <milestone type="x-p"/>
 		// <milestone type="cQuote" marker="x"/>
 		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type"))) {
 			if (!strcmp(tag.getAttribute("type"), "line")) {
-				outText("<br />", buf, u);
+				u->outputNewline(buf);
 				if (tag.getAttribute("subType") && !strcmp(tag.getAttribute("subType"), "x-PM")) {
-					outText("<br />", buf, u);
+					u->outputNewline(buf);
 				}
-				userData->supressAdjacentWhitespace = true;
 			}
 			else if (!strcmp(tag.getAttribute("type"),"x-p"))  {
 				if (tag.getAttribute("marker"))
@@ -439,30 +452,73 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <title>
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "<h3>";
+				VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+				if (vkey && !vkey->getVerse()) {
+					if (!vkey->getChapter()) {
+						if (!vkey->getBook()) {
+							if (!vkey->getTestament()) {
+								buf += "<h1 class=\"moduleHeader\">";
+								tag.setAttribute("pushed", "h1");
+							}
+							else {
+								buf += "<h1 class=\"testamentHeader\">";
+								tag.setAttribute("pushed", "h1");
+							}
+						}
+						else {
+							buf += "<h1 class=\"bookHeader\">";
+							tag.setAttribute("pushed", "h1");
+						}
+					}
+					else {
+						buf += "<h2 class=\"chapterHeader\">";
+						tag.setAttribute("pushed", "h2");
+					}
+				}
+				else {
+					buf += "<h3>";
+					tag.setAttribute("pushed", "h3");
+				}
+				u->titleStack->push(tag.toString());
 			}
 			else if (tag.isEndTag()) {
-				buf += "</h3>";
+				if (!u->titleStack->empty()) {
+					XMLTag tag(u->titleStack->top());
+					if (u->titleStack->size()) u->titleStack->pop();
+					SWBuf pushed = tag.getAttribute("pushed");
+					if (pushed.size()) {
+						buf += (SWBuf)"</" + pushed + ">\n\n";
+					}
+					else {
+						buf += "</h3>\n\n";
+					}
+					++u->consecutiveNewlines;
+					u->supressAdjacentWhitespace = true;
+				}
 			}
 		}
 		
 		// <list>
 		else if (!strcmp(tag.getName(), "list")) {
 			if((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("<ul>", buf, u);
+				outText("<ul>\n", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("</ul>", buf, u);
+				outText("</ul>\n", buf, u);
+				++u->consecutiveNewlines;
+				u->supressAdjacentWhitespace = true;
 			}
 		}
 
 		// <item>
 		else if (!strcmp(tag.getName(), "item")) {
 			if((!tag.isEndTag()) && (!tag.isEmpty())) {
-				outText("<li>", buf, u);
+				outText("\t<li>", buf, u);
 			}
 			else if (tag.isEndTag()) {
-				outText("</li>", buf, u);
+				outText("</li>\n", buf, u);
+				++u->consecutiveNewlines;
+				u->supressAdjacentWhitespace = true;
 			}
 		}
 		// <catchWord> & <rdg> tags (italicize)
@@ -502,23 +558,31 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				else if (type == "ol") {
 					outText("<span style=\"text-decoration:overline\">", buf, u);
 				}
+				else if (type == "super") {
+					outText("<span class=\"sup\">", buf, u);
+				}
+				else if (type == "sub") {
+					outText("<span class=\"sub\">", buf, u);
+				}
 				else {	// all other types
 					outText("<i>", buf, u);
 				}
-				u->tagStacks->hiStack.push(tag.toString());
+				u->hiStack->push(tag.toString());
 			}
 			else if (tag.isEndTag()) {
 				SWBuf type = "";
-				if (!u->tagStacks->hiStack.empty()) {
-					XMLTag tag(u->tagStacks->hiStack.top());
-					u->tagStacks->hiStack.pop();
+				if (!u->hiStack->empty()) {
+					XMLTag tag(u->hiStack->top());
+					if (u->hiStack->size()) u->hiStack->pop();
 					type = tag.getAttribute("type");
 					if (!type.length()) type = tag.getAttribute("rend");
 				}
 				if (type == "bold" || type == "b" || type == "x-b") {
 					outText("</b>", buf, u);
 				}
-				else if (type == "ol") {
+				else if (  	   type == "ol"
+						|| type == "super"
+						|| type == "sub") {
 					outText("</span>", buf, u);
 				}
 				else outText("</i>", buf, u);
@@ -546,7 +610,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("sID"))) {
 				// if <q> then remember it for the </q>
 				if (!tag.isEmpty()) {
-					u->tagStacks->quoteStack.push(tag.toString());
+					u->quoteStack->push(tag.toString());
 				}
 
 				// Do this first so quote marks are included as WoC
@@ -563,9 +627,9 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			// close </q> or <q eID... />
 			else if ((tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("eID"))) {
 				// if it is </q> then pop the stack for the attributes
-				if (tag.isEndTag() && !u->tagStacks->quoteStack.empty()) {
-					XMLTag qTag(u->tagStacks->quoteStack.top());
-					u->tagStacks->quoteStack.pop();
+				if (tag.isEndTag() && !u->quoteStack->empty()) {
+					XMLTag qTag(u->quoteStack->top());
+					if (u->quoteStack->size()) u->quoteStack->pop();
 
 					type    = qTag.getAttribute("type");
 					who     = qTag.getAttribute("who");
@@ -613,34 +677,44 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// image
 		else if (!strcmp(tag.getName(), "figure")) {
 			const char *src = tag.getAttribute("src");
-			if (!src)		// assert we have a src attribute
-				return false;
+			if (src) {		// assert we have a src attribute 
+				SWBuf filepath;
+				if (userData->module) {
+					filepath = userData->module->getConfigEntry("AbsoluteDataPath");
+					if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (src[0] != '/'))
+						filepath += '/';
+				}
+				filepath += src;
 
-			SWBuf filepath;
-			if (userData->module) {
-				filepath = userData->module->getConfigEntry("AbsoluteDataPath");
-				if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (src[0] != '/'))
-					filepath += '/';
+				// images become clickable, if the UI supports showImage.
+				outText("<a href=\"passagestudy.jsp?action=showImage&value=", buf, u);
+				outText(URL::encode(filepath.c_str()).c_str(), buf, u);
+				outText("&module=", buf, u);
+				outText(URL::encode(u->version.c_str()).c_str(), buf, u);
+				outText("\">", buf, u);
+
+				outText("<img src=\"file:", buf, u);
+				outText(filepath, buf, u);
+				outText("\" border=\"0\" />", buf, u);
+
+				outText("</a>", buf, u);
 			}
-			filepath += src;
-
-			// images become clickable, if the UI supports showImage.
-			outText("<a href=\"passagestudy.jsp?action=showImage&value=", buf, u);
-			outText(URL::encode(filepath.c_str()).c_str(), buf, u);
-			outText("&module=", buf, u);
-			outText(URL::encode(u->version.c_str()).c_str(), buf, u);
-			outText("\">", buf, u);
-
-			outText("<img src=\"file:", buf, u);
-			outText(filepath, buf, u);
-			outText("\" border=\"0\" />", buf, u);
-
-			outText("</a>", buf, u);
 		}
 
 		// ok to leave these in
 		else if (!strcmp(tag.getName(), "div")) {
-			buf += tag;
+			SWBuf type = tag.getAttribute("type");
+			if (type == "bookGroup") {
+			}
+			else if (type == "book") {
+			}
+			else if (type == "section") {
+			}
+			else if (type == "majorSection") {
+			}
+			else {
+				buf += tag;
+			}
 		}
 		else if (!strcmp(tag.getName(), "span")) {
 			buf += tag;
@@ -648,11 +722,40 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "br")) {
 			buf += tag;
 		}
-
+		else if (!strcmp(tag.getName(), "table")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<table><tbody>\n";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</tbody></table>\n";
+				++u->consecutiveNewlines;
+				u->supressAdjacentWhitespace = true;
+			}
+			
+		}
+		else if (!strcmp(tag.getName(), "row")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\t<tr>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</tr>\n";
+			}
+			
+		}
+		else if (!strcmp(tag.getName(), "cell")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<td>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</td>";
+			}
+		}
 		else {
-		      return false;  // we still didn't handle token
+			if (!u->supressAdjacentWhitespace) u->consecutiveNewlines = 0;
+			return false;  // we still didn't handle token
 		}
 	}
+	if (!u->supressAdjacentWhitespace) u->consecutiveNewlines = 0;
 	return true;
 }
 

@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  osis2mod.cpp -	Utility to import a module in OSIS format
+ *
+ * $Id$
+ *
+ * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -96,8 +101,8 @@ static bool inCanonicalOSISBook = true; // osisID is for a book that is not in S
 static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
-	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
-	const VerseMgr::System *av11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
+	VersificationMgr *vmgr = VersificationMgr::getSystemVersificationMgr();
+	const VersificationMgr::System *av11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
 	return av11n->getBookNumberByOSISName(buf) >= 0;
 }
 
@@ -538,14 +543,12 @@ void writeEntry(SWBuf &text, bool force = false) {
 	}
 
 	// The following is for initial verse content and for appending interverse content.
-	// Eliminate leading whitespace on the beginning of each verse and
-	// before we append to current content, since we just added one
-	text.trimStart();
 	if (activeVerseText.length()) {
-		activeVerseText += " ";
 		activeVerseText += text;
 	}
 	else {
+		// Eliminate leading whitespace on the beginning of each verse
+		text.trimStart();
 		activeVerseText = text;
 	}
 	// text has been consumed so clear it out.
@@ -790,7 +793,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 				// Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
 				// This should never happen if the references are valid OSIS references
 				ListKey verseKeys = currentVerse.parseVerseList(keyVal, currentVerse, true);
-				int memberKeyCount = verseKeys.Count();
+				int memberKeyCount = verseKeys.getCount();
 				if (memberKeyCount) {
 					currentVerse = verseKeys.getElement(0);
 					// See if this osisID or annotateRef refers to more than one verse.
@@ -1300,7 +1303,7 @@ void usage(const char *app, const char *error = 0) {
 	fprintf(stderr, "\t\t\t\t (2 bytes to store size equal 65535 characters)\n");
 	fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
 	fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:\n");
-	VerseMgr *vmgr = VerseMgr::getSystemVerseMgr();
+	VersificationMgr *vmgr = VersificationMgr::getSystemVersificationMgr();
 	StringList av11n = vmgr->getVersificationSystems();
 	for (StringList::iterator loop = av11n.begin(); loop != av11n.end(); loop++) {
 		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
@@ -1369,6 +1372,12 @@ void processOSIS(istream& infile) {
 		}
 
 		curChar = (unsigned char) possibleChar;
+
+		// All newlines are simply whitespace
+		// Does a SWORD module actually require this?
+		if (curChar == '\n') {
+			curChar = ' ';
+		}
 
 		if (!intoken && curChar == '<') {
 			intoken = true;

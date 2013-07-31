@@ -1,7 +1,10 @@
 /******************************************************************************
- *  diafiltmgr.cpp
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ *  diafiltmgr.cpp -	DiathekeFilterMgr
+ *
+ * $Id$
+ *
+ * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -23,7 +26,6 @@
 #include <gbfthml.h>
 #include <thmlhtml.h>
 #include <gbfhtml.h>
-#include <plainhtml.h>
 #include <thmlhtmlhref.h>
 #include <gbfhtmlhref.h>
 #include <thmlrtf.h>
@@ -200,7 +202,7 @@ void DiathekeFilterMgr::CreateFilters(char markup) {
                         fromosis = NULL;
                         break;
                 case FMT_HTML:
-                        fromplain = new PLAINHTML();
+                        fromplain = NULL;
                         fromthml = new ThMLHTML();
                         fromgbf = new GBFHTML();
                         fromosis = NULL;

@@ -1,5 +1,10 @@
-/*
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+/******************************************************************************
+ *
+ *  webmgr.cpp -	
+ *
+ * $Id$
+ *
+ * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -68,12 +73,12 @@ public:
 	void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
 
 		// ThML word stuff needs to process before strongs strip
-		if (module->Markup() == FMT_THML) {
-			module->AddOptionFilter(thmlWordJS);
+		if (module->getMarkup() == FMT_THML) {
+			module->addOptionFilter(thmlWordJS);
 		}
 
-		if (module->Markup() == FMT_GBF) {
-			module->AddOptionFilter(gbfWordJS);
+		if (module->getMarkup() == FMT_GBF) {
+			module->addOptionFilter(gbfWordJS);
 		}
 
 		// add other module filters
@@ -95,12 +100,12 @@ public:
 		if (module->getConfig().has("GlobalOptionFilter", "ThMLVariants")) {
 			OptionFilterMap::iterator it = optionFilters.find("ThMLVariants");
 			if (it != optionFilters.end()) {
-				module->AddOptionFilter((*it).second);	// add filter to module and option as a valid option
+				module->addOptionFilter((*it).second);	// add filter to module and option as a valid option
 			}
 		}
 
-		if (module->Markup() == FMT_OSIS) {
-			module->AddOptionFilter(osisWordJS);
+		if (module->getMarkup() == FMT_OSIS) {
+			module->addOptionFilter(osisWordJS);
 		}
 	}
 

@@ -1,16 +1,16 @@
 AUTOMAKE_OPTIONS = 1.6
 SUBDIRS = diatheke
-INCLUDES = -I $(top_srcdir)/include
+AM_CPPFLAGS = -I $(top_srcdir)/include
 if USE_INTERNAL_REGEX
-INCLUDES += -I$(top_srcdir)/include/internal/regex
+AM_CPPFLAGS += -I$(top_srcdir)/include/internal/regex
 endif
 LDADD = $(top_builddir)/lib/libsword.la
 noinst_PROGRAMS = cipherraw lexdump \
-stepdump step2vpl gbfidx modwrite addvs emptyvss \
-addgb genbookutil treeidxutil
+	stepdump step2vpl gbfidx modwrite addvs emptyvss \
+	addgb genbookutil treeidxutil addld
 
-bin_PROGRAMS = mod2imp mod2osis osis2mod tei2mod vs2osisref vs2osisreftxt mod2vpl \
-	mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs addld imp2ld
+bin_PROGRAMS = mod2imp mod2osis osis2mod tei2mod vs2osisref vs2osisreftxt \
+	mod2vpl mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs imp2ld
 
 
 if HAVE_LIBZ

@@ -1,10 +1,10 @@
 /******************************************************************************
- *  swmgr.cpp   - implementaion of class SWMgr used to interact with an install
- *				base of sword modules.
+ *
+ *  swmgr.cpp -	used to interact with an install base of sword modules
  *
  * $Id$
  *
- * Copyright 1998 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -53,6 +53,8 @@
 #include <gbfheadings.h>
 #include <gbfredletterwords.h>
 #include <gbfmorph.h>
+#include <osisenum.h>
+#include <osisglosses.h>
 #include <osisheadings.h>
 #include <osisfootnotes.h>
 #include <osisstrongs.h>
@@ -60,8 +62,9 @@
 #include <osislemma.h>
 #include <osisredletterwords.h>
 #include <osismorphsegmentation.h>
-#include <osisruby.h>
 #include <osisscripref.h>
+#include <osisvariants.h>
+#include <osisxlit.h>
 #include <thmlstrongs.h>
 #include <thmlfootnotes.h>
 #include <thmlheadings.h>
@@ -91,6 +94,8 @@
 
 #ifndef EXCLUDEZLIB
 #include "zipcomprs.h"
+#include "bz2comprs.h"
+#include "xzcomprs.h"
 #endif
 
 
@@ -189,8 +194,21 @@ void SWMgr::init() {
 	optionFilters.insert(OptionFilterMap::value_type("OSISMorphSegmentation", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
-	tmpFilter = new OSISRuby();
+	tmpFilter = new OSISGlosses();
+	optionFilters.insert(OptionFilterMap::value_type("OSISGlosses", tmpFilter));
 	optionFilters.insert(OptionFilterMap::value_type("OSISRuby", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISXlit();
+	optionFilters.insert(OptionFilterMap::value_type("OSISXlit", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISEnum();
+	optionFilters.insert(OptionFilterMap::value_type("OSISEnum", tmpFilter));
+	cleanupFilters.push_back(tmpFilter);
+
+	tmpFilter = new OSISVariants();
+	optionFilters.insert(OptionFilterMap::value_type("OSISVariants", tmpFilter));
 	cleanupFilters.push_back(tmpFilter);
 
 	tmpFilter = new ThMLStrongs();
@@ -887,7 +905,9 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 	else
 		markup = FMT_GBF;
 
-	if (!stricmp(encoding.c_str(), "UTF-8")) {
+	if (!stricmp(encoding.c_str(), "SCSU"))
+		enc = ENC_SCSU;
+	else if (!stricmp(encoding.c_str(), "UTF-8")) {
 		enc = ENC_UTF8;
 	}
 	else enc = ENC_LATIN1;
@@ -920,6 +940,12 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 #ifndef EXCLUDEZLIB
 		if (!stricmp(misc1.c_str(), "ZIP"))
 			compress = new ZipCompress();
+		else
+		if (!stricmp(misc1.c_str(), "BZIP2_UNSUPPORTED"))
+			compress = new Bzip2Compress();
+		else
+		if (!stricmp(misc1.c_str(), "XZ_UNSUPPORTED"))
+			compress = new XzCompress();
 		else
 #endif
 		if (!stricmp(misc1.c_str(), "LZSS"))
@@ -965,13 +991,15 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
         int pos = 0;  //used for position of final / in AbsoluteDataPath, but also set to 1 for modules types that need to strip module name
 	if (!stricmp(driver, "RawLD")) {
 		bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
-		newmod = new RawLD(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), caseSensitive);
+		bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
+		newmod = new RawLD(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
                 pos = 1;
         }
 
 	if (!stricmp(driver, "RawLD4")) {
 		bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
-		newmod = new RawLD4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), caseSensitive);
+		bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
+		newmod = new RawLD4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
                 pos = 1;
         }
 
@@ -979,6 +1007,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 		SWCompress *compress = 0;
 		int blockCount;
 		bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
+		bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
 		misc1 = ((entry = section.find("BlockCount")) != section.end()) ? (*entry).second : (SWBuf)"200";
 		blockCount = atoi(misc1.c_str());
 		blockCount = (blockCount) ? blockCount : 200;
@@ -993,7 +1022,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 			compress = new LZSSCompress();
 
 		if (compress) {
-			newmod = new zLD(datapath.c_str(), name, description.c_str(), blockCount, compress, 0, enc, direction, markup, lang.c_str(), caseSensitive);
+			newmod = new zLD(datapath.c_str(), name, description.c_str(), blockCount, compress, 0, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
 		}
 		pos = 1;
 	}

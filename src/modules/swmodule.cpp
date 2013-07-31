@@ -1,10 +1,12 @@
 /******************************************************************************
- *  swmodule.cpp - code for base class 'module'.  Module is the basis for all
- *		   types of modules (e.g. texts, commentaries, maps, lexicons,
- *		   etc.)
  *
+ *  swmodule.cpp -	code for base class 'SWModule'. SWModule is the basis
+ *			for all types of modules (e.g. texts, commentaries,
+ *			maps, lexicons, etc.)
  *
- * Copyright 2009 CrossWire Bible Society (http://www.crosswire.org)
+ * $Id$
+ *
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -365,7 +367,7 @@ void SWModule::decrement(int steps) {
 
 ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
 
-	listKey.ClearList();
+	listKey.clear();
 	SWBuf term = istr;
 	bool includeComponents = false;	// for entryAttrib e.g., /Lemma.1/ 
 
@@ -386,9 +388,11 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		return listKey;
 	}
 	
-	SWKey *saveKey = 0;
+	SWKey *saveKey   = 0;
 	SWKey *searchKey = 0;
 	SWKey *resultKey = createKey();
+	SWKey *lastKey   = createKey();
+	SWBuf lastBuf = "";
 	regex_t preg;
 	vector<SWBuf> words;
 	vector<SWBuf> window;
@@ -469,7 +473,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 					}
 				}
 				listKey << *resultKey;
-				listKey.GetElement()->userData = (__u64)((__u32)(h->score(i)*100));
+				listKey.getElement()->userData = (__u64)((__u32)(h->score(i)*100));
 			}
 			(*percent)(98, percentUserData);
 		}
@@ -559,10 +563,20 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
 		}
 		if (searchType >= 0) {
-			if (!regexec(&preg,  stripText(), 0, 0, 0)) {
+			SWBuf textBuf = stripText();
+			if (!regexec(&preg, textBuf, 0, 0, 0)) {
 				*resultKey = *getKey();
 				resultKey->clearBound();
 				listKey << *resultKey;
+				lastBuf = "";
+			}
+			else if (!regexec(&preg, lastBuf + ' ' + textBuf, 0, 0, 0)) {
+				lastKey->clearBound();
+				listKey << *lastKey;
+				lastBuf = textBuf;
+			}
+			else {
+				lastBuf = textBuf;
 			}
 		}
 
@@ -737,6 +751,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				break;
 			} // end switch
 		}
+		*lastKey = *getKey();
 		(*this)++;
 	}
 	
@@ -753,6 +768,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	if (searchKey)
 		delete searchKey;
 	delete resultKey;
+	delete lastKey;
 
 	listKey = TOP;
 	setProcessEntryAttributes(savePEA);
@@ -801,7 +817,7 @@ const char *SWModule::getRenderHeader() const {
  * RET: this module's text at current key location massaged by renderText filters
  */
 
- const char *SWModule::renderText(const char *buf, int len, bool render) {
+ SWBuf SWModule::renderText(const char *buf, int len, bool render) {
 	bool savePEA = isProcessEntryAttributes();
 	if (!buf) {
 		entryAttributes.clear();
@@ -850,7 +866,7 @@ const char *SWModule::getRenderHeader() const {
  * RET: this module's text at current key location massaged by RenderFilers
  */
 
- const char *SWModule::renderText(const SWKey *tmpKey) {
+SWBuf SWModule::renderText(const SWKey *tmpKey) {
 	SWKey *saveKey;
 	const char *retVal;
 
