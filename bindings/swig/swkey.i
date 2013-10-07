@@ -9,3 +9,7 @@
 %rename (getPosition) sword::SW_POSITION::operator char;
 
 %include "swkey.h"
+
+#ifndef SWIGPERL
+%rename(__str__) sword::SWKey::operator const char *;
+#endif

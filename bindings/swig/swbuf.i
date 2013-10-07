@@ -2,7 +2,7 @@
 #include "swbuf.h"
 %}
 
-%ignore sword::SWBuf::operator const char *;
+%rename(__str__) sword::SWBuf::operator const char *;
 %ignore sword::SWBuf::operator[];
 %ignore sword::SWBuf::operator+;
 %ignore sword::SWBuf::operator==;

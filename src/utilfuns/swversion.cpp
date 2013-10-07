@@ -20,16 +20,17 @@
  *
  */
 
-#include <config.h>
-
 #include <swversion.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+
 SWORD_NAMESPACE_START
 
-SWVersion SWVersion::currentVersion( VERSION );
+
+SWVersion SWVersion::currentVersion( SWORD_VERSION_STR );
+
 
 /******************************************************************************
  * SWVersion c-tor - Constructs a new SWVersion
@@ -102,4 +103,6 @@ const char *SWVersion::getText() const {
 	return buf;
 }
 
+
 SWORD_NAMESPACE_END
+

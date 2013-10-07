@@ -20,8 +20,6 @@
  *
  */
 
-
-
 #ifndef EXCLUDEZLIB
 extern "C" {
 #include <untgz.h>
@@ -53,23 +51,26 @@ extern "C" {
 #endif
 
 #include <iostream>
+
+
+using std::map;
+
+
 SWORD_NAMESPACE_START
 
 namespace {
 
-void removeTrailingSlash(SWBuf &buf) {
-	int len = buf.size();
-	if ((buf[len-1] == '/')
-	 || (buf[len-1] == '\\'))
-		buf.size(len-1);
+	static void removeTrailingSlash(SWBuf &buf) {
+		int len = buf.size();
+		if ((buf[len-1] == '/')
+		 || (buf[len-1] == '\\'))
+			buf.size(len-1);
+	}
+
+	static const char *masterRepoList = "masterRepoList.conf";
+
 }
 
-const char *masterRepoList = "masterRepoList.conf";
-
-};
-
-
-using std::map;
 
 const int InstallMgr::MODSTAT_OLDER            = 0x001;
 const int InstallMgr::MODSTAT_SAMEVERSION      = 0x002;
@@ -77,6 +78,7 @@ const int InstallMgr::MODSTAT_UPDATED          = 0x004;
 const int InstallMgr::MODSTAT_NEW              = 0x008;
 const int InstallMgr::MODSTAT_CIPHERED         = 0x010;
 const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
+
 
 // override this method and provide your own custom RemoteTransport subclass
 // here we try a couple defaults if sword was compiled with support for them.
@@ -89,6 +91,7 @@ RemoteTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter
 #endif
 }
 
+
 RemoteTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporter *statusReporter) {
 #ifdef CURLAVAILABLE
 	return new CURLHTTPTransport(host, statusReporter);
@@ -96,7 +99,6 @@ RemoteTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporte
 	return 0;
 #endif
 }
-
 
 
 InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWBuf p) {
@@ -127,12 +129,14 @@ InstallMgr::~InstallMgr() {
 	clearSources();
 }
 
+
 void InstallMgr::clearSources() {
 	for (InstallSourceMap::iterator it = sources.begin(); it != sources.end(); ++it) {
 		delete it->second;
 	}
 	sources.clear();
 }
+
 
 void InstallMgr::readInstallConf() {
 
@@ -547,6 +551,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 	return 1;
 }
 
+
 int InstallMgr::refreshRemoteSource(InstallSource *is) {
 
 	// assert user disclaimer has been confirmed
@@ -583,6 +588,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 bool InstallMgr::isDefaultModule(const char *modName) {
 	return defaultMods.count(modName);
 }
+
 
 /************************************************************************
  * getModuleStatus - compare the modules of two SWMgrs and return a 

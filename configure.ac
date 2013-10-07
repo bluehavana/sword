@@ -5,7 +5,7 @@
 # Version change: Change line 8 only !
 # Change it immediately after a release
 
-AC_INIT(sword, 1.6.901, sword-bugs@crosswire.org, sword, http://crosswire.org/sword)
+AC_INIT(sword, 1.7.0, sword-bugs@crosswire.org, sword, http://crosswire.org/sword)
 AC_CONFIG_SRCDIR(sword.bmp)
 AC_PREREQ(2.52)
 AC_REVISION($Revision: 1.45 $)
@@ -55,6 +55,8 @@ AC_ARG_WITH(icusword,
 	AC_HELP_STRING([--with-icusword],[use custom SWORD ICU (default=no)]),,with_icusword=no)
 AC_ARG_WITH(conf,
 	AC_HELP_STRING([--with-conf],[install a new sword.conf (default=yes)]),,with_conf=yes)
+AC_ARG_WITH(cxx11regex,
+	AC_HELP_STRING([--with-cxx11regex],[build regex support using c++11 regex (default=no)]),,with_cxx11regex=no)
 AC_ARG_WITH(curl,
 	AC_HELP_STRING([--with-curl],[build install manager support using libcurl (default=yes)]),,with_curl=yes)
 AC_ARG_WITH(curl_sftp,
@@ -258,6 +260,10 @@ else
 	with_internalftplib=yes
 fi
 
+if test x$with_cxx11regex = xyes; then
+	AM_CXXFLAGS="$AM_CXXFLAGS -DUSECXX11REGEX -std=c++11 -ftemplate-depth=100"
+fi
+
 # ---------------------------------------------------------------------
 # Check for clucene for lucene searching support
 # ---------------------------------------------------------------------
@@ -295,6 +301,33 @@ else
   dir_confdef="yes"
 fi
 
+changequote(<<,>>)
+V1=`expr $VERSION : '\([0-9]*\)\.[0-9]*\.*[0-9]*\.*[0-9]*'`
+V2=`expr $VERSION : '[0-9]*\.\([0-9]*\)\.*[0-9]*\.*[0-9]*'`
+V3=`expr $VERSION : '[0-9]*\.[0-9]*\.*\([0-9]*\)\.*[0-9]*'`
+V4=`expr $VERSION : '[0-9]*\.[0-9]*\.*[0-9]*\.*\([0-9]*\)'`
+changequote([,])
+
+SWORD_VERSION_STR=$VERSION
+SWORD_VERSION_MAJOR=$V1
+SWORD_VERSION_MINOR=$V2
+SWORD_VERSION_MICRO=$V3
+if test "$V4" = "" ; then V4=0; fi
+SWORD_VERSION_NANO=$V4
+
+if test "$V2" -le 9 ; then V2=0$V2 ; fi
+if test "$V3" -le 9 ; then V3=00$V3 ; elif test "$V3" -le 99 ; then V3=0$V3 ; fi
+if test "$V4" -le 9 ; then V4=00$V4 ; elif test "$V4" -le 99 ; then V4=0$V4 ; fi
+SWORD_VERSION_NUM=$V1$V2$V3$V4
+
+AC_SUBST(SWORD_VERSION_NUM)
+AC_SUBST(SWORD_VERSION_STR)
+AC_SUBST(SWORD_VERSION_MAJOR)
+AC_SUBST(SWORD_VERSION_MINOR)
+AC_SUBST(SWORD_VERSION_MICRO)
+AC_SUBST(SWORD_VERSION_NANO)
+
+
 
 # ---------------------------------------------------------------------
 # Substitute variables into makefiles
@@ -329,7 +362,6 @@ AC_SUBST(CLUCENE_LIBS)
 # Conditional variables
 # ---------------------------------------------------------------------
 
-# don't #ifdef in .cpp files HAVE_ stuff because non-ac compiles won't be able to switch them since we include config.h
 AM_CONDITIONAL(HAVE_LIBZ, test x$with_zlib = xyes)
 AM_CONDITIONAL(HAVE_ICU, test x$with_icu = xyes)
 AM_CONDITIONAL(HAVE_ICUSWORD, test x$with_icusword = xyes)
@@ -338,6 +370,7 @@ AM_CONDITIONAL(HAVE_VSNPRINTF, test x$have_vsnprintf = xyes)
 AM_CONDITIONAL(USELUCENE, test "x$with_clucene" != xno)
 AM_CONDITIONAL(SHAREDLIB, test x$enable_shared = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
+AM_CONDITIONAL(USECXX11REGEX, test x$with_cxx11regex = xyes)
 AM_CONDITIONAL(WITHCURL, test x$with_curl = xyes)
 AM_CONDITIONAL(WITHCURLSFTP, test x$with_curl_sftp = xyes)
 AM_CONDITIONAL(INTERNALFTPLIB, test x$with_internalftplib = xyes)
@@ -351,7 +384,7 @@ AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 # ---------------------------------------------------------------------
 # Final output
 # ---------------------------------------------------------------------
-AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile utilities/diatheke/Makefile sword.pc sword.spec)
+AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile utilities/diatheke/Makefile sword.pc include/swversion.h sword.spec)
 AC_OUTPUT
 
 echo
@@ -366,6 +399,7 @@ echo     "     BUILD UTILITIES:  $enable_utilities"
 echo     "     LIBZ:             $with_zlib"
 echo     "     ICU:              $with_icu"
 echo     "     ICUSWORD:         $with_icusword"
+echo     "     CXX11REGEX:       $with_cxx11regex"
 echo     "     CURL:             $with_curl"
 echo     "     CURL SFTP:        $with_curl_sftp"
 echo     "     INTERNAL FTPLIB:  $with_internalftplib"

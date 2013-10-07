@@ -111,7 +111,6 @@ pkginclude_HEADERS += $(swincludedir)/swoptfilter.h
 pkginclude_HEADERS += $(swincludedir)/swobject.h
 pkginclude_HEADERS += $(swincludedir)/swsearchable.h
 pkginclude_HEADERS += $(swincludedir)/swtext.h
-pkginclude_HEADERS += $(swincludedir)/swunicod.h
 pkginclude_HEADERS += $(swincludedir)/swversion.h
 pkginclude_HEADERS += $(swincludedir)/sysdata.h
 
@@ -179,8 +178,6 @@ pkginclude_HEADERS += $(swincludedir)/canon_german.h
 pkginclude_HEADERS += $(swincludedir)/canon_luther.h
 pkginclude_HEADERS += $(swincludedir)/canon_catholic.h
 pkginclude_HEADERS += $(swincludedir)/canon_catholic2.h
-pkginclude_HEADERS += $(swincludedir)/canon_rahlfs.h
-#pkginclude_HEADERS += $(swincludedir)/canon_lxx_nt.h
 pkginclude_HEADERS += $(swincludedir)/canon_lxx.h
 pkginclude_HEADERS += $(swincludedir)/canon_orthodox.h
 pkginclude_HEADERS += $(swincludedir)/canon_null.h

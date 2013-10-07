@@ -65,6 +65,7 @@
 #include <osisscripref.h>
 #include <osisvariants.h>
 #include <osisxlit.h>
+#include <osisreferencelinks.h>
 #include <thmlstrongs.h>
 #include <thmlfootnotes.h>
 #include <thmlheadings.h>
@@ -103,7 +104,9 @@
 #include <utf8transliterator.h>
 #endif
 
+
 SWORD_NAMESPACE_START
+
 
 #ifdef _ICU_
 bool SWMgr::isICU = true;
@@ -118,11 +121,13 @@ const char *SWMgr::globalConfPath = GLOBCONFPATH;
 const char *SWMgr::globalConfPath = "/etc/sword.conf:/usr/local/etc/sword.conf";
 #endif
 
+
 const char *SWMgr::MODTYPE_BIBLES = "Biblical Texts";
 const char *SWMgr::MODTYPE_COMMENTARIES = "Commentaries";
 const char *SWMgr::MODTYPE_LEXDICTS = "Lexicons / Dictionaries";
 const char *SWMgr::MODTYPE_GENBOOKS = "Generic Books";
 const char *SWMgr::MODTYPE_DAILYDEVOS = "Daily Devotional";
+
 
 void SWMgr::init() {
 	SWOptionFilter *tmpFilter = 0;
@@ -269,15 +274,19 @@ void SWMgr::init() {
 
 	gbfplain = new GBFPlain();
 	cleanupFilters.push_back(gbfplain);
+	extraFilters.insert(FilterMap::value_type("GBFPlain", gbfplain));
 
 	thmlplain = new ThMLPlain();
 	cleanupFilters.push_back(thmlplain);
+	extraFilters.insert(FilterMap::value_type("ThMLPlain", thmlplain));
 
 	osisplain = new OSISPlain();
 	cleanupFilters.push_back(osisplain);
+	extraFilters.insert(FilterMap::value_type("OSISPlain", osisplain));
 
 	teiplain = new TEIPlain();
 	cleanupFilters.push_back(teiplain);
+	extraFilters.insert(FilterMap::value_type("TEIPlain", teiplain));
 
 	// filters which aren't really used anywhere but which we want available for a "FilterName" -> filter mapping (e.g., filterText)
 	SWFilter *f = new RTFHTML();
@@ -856,6 +865,7 @@ signed char SWMgr::Load() {
 	return ret;
 }
 
+
 SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap &section)
 {
 	SWBuf description, datapath, misc1;
@@ -1065,9 +1075,35 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 
 
 void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
-	for (;start != end; start++) {
+
+	for (;start != end; ++start) {
 		OptionFilterMap::iterator it;
-		it = optionFilters.find((*start).second);
+		SWBuf filterName = start->second;
+
+
+		// special cases for filters with parameters
+
+		if (filterName.startsWith("OSISReferenceLinks")) {
+			SWBuf params = filterName;
+			filterName = params.stripPrefix('|', true);
+			SWBuf optionName = params.stripPrefix('|', true);
+			SWBuf optionTip = params.stripPrefix('|', true);
+			SWBuf optionType = params.stripPrefix('|', true);
+			SWBuf optionSubType = params.stripPrefix('|', true);
+			SWBuf optionDefaultValue = params.stripPrefix('|', true);
+			// we'll key off of type and subtype.
+			filterName = filterName + "." + optionType + "." + optionSubType;
+
+			it = optionFilters.find(filterName);
+			if (it == optionFilters.end()) {
+				SWOptionFilter *tmpFilter = new OSISReferenceLinks(optionName, optionTip, optionType, optionSubType, optionDefaultValue);
+				optionFilters.insert(OptionFilterMap::value_type(filterName, tmpFilter));
+				cleanupFilters.push_back(tmpFilter);
+			}
+		}
+
+
+		it = optionFilters.find(filterName);
 		if (it != optionFilters.end()) {
 			module->addOptionFilter((*it).second);	// add filter to module and option as a valid option
 			StringList::iterator loop;
@@ -1088,7 +1124,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 
 
 char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key, const SWModule *module)
- {
+{
 	char retVal = -1;
 	// why didn't we use find here?
 	for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
@@ -1238,15 +1274,15 @@ void SWMgr::CreateMods(bool multiMod) {
 			if (newmod) {
 				// Filters to add for this module and globally announce as an option to the user
 				// e.g. translit, strongs, redletterwords, etc, so users can turn these on and off globally
-				start = (*it).second.lower_bound("GlobalOptionFilter");
-				end   = (*it).second.upper_bound("GlobalOptionFilter");
+				start = section.lower_bound("GlobalOptionFilter");
+				end   = section.upper_bound("GlobalOptionFilter");
 				AddGlobalOptions(newmod, section, start, end);
 
 				// Only add the option to the module, don't announce it's availability
 				// These are useful for like: filters that parse special entryAttribs in a text
 				// or whatever you might want to happen on entry lookup
-				start = (*it).second.lower_bound("LocalOptionFilter");
-				end   = (*it).second.upper_bound("LocalOptionFilter");
+				start = section.lower_bound("LocalOptionFilter");
+				end   = section.upper_bound("LocalOptionFilter");
 				AddLocalOptions(newmod, section, start, end);
 
 				//STRIP FILTERS
@@ -1256,8 +1292,8 @@ void SWMgr::CreateMods(bool multiMod) {
 
 				// Any special processing for this module when searching:
 				// e.g. for papyri, removed all [](). notation
-				start = (*it).second.lower_bound("LocalStripFilter");
-				end   = (*it).second.upper_bound("LocalStripFilter");
+				start = section.lower_bound("LocalStripFilter");
+				end   = section.upper_bound("LocalStripFilter");
 				AddStripFilters(newmod, section, start, end);
 
 				AddRawFilters(newmod, section);
@@ -1447,4 +1483,6 @@ signed char SWMgr::setCipherKey(const char *modName, const char *key) {
 	return -1;
 }
 
+
 SWORD_NAMESPACE_END
+

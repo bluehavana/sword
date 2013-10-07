@@ -1,10 +1,10 @@
 /******************************************************************************
  *
- *  curlhttpt.h  -	code for CURL impl of HTTP Transport
+ *  bibliotest.cpp -	
  *
  * $Id$
  *
- * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
+ * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528
  *	Tempe, AZ  85280-2528
@@ -20,29 +20,24 @@
  *
  */
 
-#ifndef CURLHTTPT_H
-#define CURLHTTPT_H
-
-#include <defs.h>
-#include <remotetrans.h>
-
-SWORD_NAMESPACE_START
-
-class CURL;
-
-
-class SWDLLEXPORT CURLHTTPTransport : public RemoteTransport {
-	CURL *session;
-
-public:
-	CURLHTTPTransport(const char *host, StatusReporter *statusReporter = 0);
-	~CURLHTTPTransport();
-
-	virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
-	virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
-};
-
-
-SWORD_NAMESPACE_END
-
+#include <swmgr.h>
+#include <swtext.h>
+#include <versekey.h>
+#include <iostream>
+#ifndef NO_SWORD_NAMESPACE
+using namespace sword;
 #endif
+
+int main(int argc, char **argv) {
+	SWMgr mymgr;
+	ModMap::iterator it;
+	if ( argc > 1 ) {
+		SWModule *module = mymgr.Modules[argv[1]];
+		std::cout << module->getBibliography() << "\n";
+		return 0;
+	}
+	else {
+		std::cout << "Usage: bibliography <ModuleName>"<< "\n";
+		return 1;
+	}
+}

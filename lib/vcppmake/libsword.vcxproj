@@ -139,6 +139,7 @@
     <ClCompile Include="..\..\src\modules\filters\osisenum.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisglosses.cpp" />
     <ClCompile Include="..\..\src\modules\filters\osisxlit.cpp" />
+    <ClCompile Include="..\..\src\modules\filters\osisreferencelinks.cpp" />
     <ClCompile Include="..\..\src\modules\filters\scsuutf8.cpp" />
     <ClCompile Include="..\..\src\utilfuns\win32\dirent.cpp" />
     <ClCompile Include="..\..\src\mgr\encfiltmgr.cpp" />
@@ -223,7 +224,6 @@
     <ClCompile Include="..\..\src\modules\filters\swoptfilter.cpp" />
     <ClCompile Include="..\..\src\mgr\swsearchable.cpp" />
     <ClCompile Include="..\..\src\modules\texts\swtext.cpp" />
-    <ClCompile Include="..\..\src\utilfuns\swunicod.cpp" />
     <ClCompile Include="..\..\src\utilfuns\swversion.cpp" />
     <ClCompile Include="..\..\src\modules\filters\teixhtml.cpp" />
     <ClCompile Include="..\..\src\modules\filters\teihtmlhref.cpp" />
@@ -306,12 +306,10 @@
     <ClInclude Include="..\..\include\canon_nrsva.h" />
     <ClInclude Include="..\..\include\canon_null.h" />
     <ClInclude Include="..\..\include\canon_orthodox.h" />
-    <ClInclude Include="..\..\include\canon_rahlfs.h" />
     <ClInclude Include="..\..\include\canon_synodal.h" />
     <ClInclude Include="..\..\include\canon_synodalprot.h" />
     <ClInclude Include="..\..\include\canon_vulg.h" />
     <ClInclude Include="..\..\include\cipherfil.h" />
-    <ClInclude Include="..\..\include\config.h" />
     <ClInclude Include="..\..\include\curlftpt.h" />
     <ClInclude Include="..\..\include\curlhttpt.h" />
     <ClInclude Include="..\..\include\defs.h" />
@@ -365,6 +363,7 @@
     <ClInclude Include="..\..\include\osiswordjs.h" />
     <ClInclude Include="..\..\include\osisxhtml.h" />
     <ClInclude Include="..\..\include\osisxlit.h" />
+    <ClInclude Include="..\..\include\osisreferencelinks.h" />
     <ClInclude Include="..\..\include\papyriplain.h" />
     <ClInclude Include="..\..\include\rawcom.h" />
     <ClInclude Include="..\..\include\rawcom4.h" />
@@ -407,7 +406,6 @@
     <ClInclude Include="..\..\include\swoptfilter.h" />
     <ClInclude Include="..\..\include\swsearchable.h" />
     <ClInclude Include="..\..\include\swtext.h" />
-    <ClInclude Include="..\..\include\swunicod.h" />
     <ClInclude Include="..\..\include\swversion.h" />
     <ClInclude Include="..\..\include\sysdata.h" />
     <ClInclude Include="..\..\include\teixhtml.h" />

@@ -197,6 +197,14 @@ public:
 	virtual const char *getConfigEntry(const char *key) const;
 
 	/**
+	 * Returns bibliographic data for a module in the requested format
+	 *
+	 * @param bibFormat format of the bibliographic data
+	 * @return bibliographic data in the requested format as a string (BibTeX by default)
+	 */
+	virtual SWBuf getBibliography(unsigned char bibFormat = BIB_BIBTEX) const;
+
+	/**
 	 * @return The size of the text entry for the module's current key position.
 	 */
 	virtual int getEntrySize() const { return entrySize; }

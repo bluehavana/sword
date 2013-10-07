@@ -15,7 +15,7 @@
 # A CMake port of the SWORD build system... we hope
 PROJECT(libsword CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
-SET(SWORD_VERSION 1.6.901)
+SET(SWORD_VERSION 1.7.0)
 
 # Make sure it's an out-of-stream build
 IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
@@ -34,7 +34,8 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/options.cmake")
 # Source variables
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
 # Our local includes
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/include")
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For swversion.h
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/include") # For everything else
 
 ###########################################################################################
 # This will look for various libraries that libsword builds against.  There is no REQUIRED

@@ -119,6 +119,7 @@ SET(sword_base_module_SOURCES
 	src/modules/filters/osisvariants.cpp
 	src/modules/filters/osiswordjs.cpp
 	src/modules/filters/osismorphsegmentation.cpp
+	src/modules/filters/osisreferencelinks.cpp
 
 	src/modules/filters/latin1utf8.cpp
 	src/modules/filters/latin1utf16.cpp
@@ -159,7 +160,6 @@ SET(sword_base_utilfns_SOURCES
 	src/utilfuns/swobject.cpp
 	src/utilfuns/utilstr.cpp
 	src/utilfuns/utilxml.cpp
-	src/utilfuns/swunicod.cpp
 	src/utilfuns/swversion.cpp
 	src/utilfuns/swbuf.cpp
 	src/utilfuns/ftpparse.c
@@ -303,6 +303,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/osisscripref.h   
 	include/osiswordjs.h   
 	include/osisvariants.h   
+	include/osisreferencelinks.h   
 
 	include/papyriplain.h
 	include/rawcom.h
@@ -344,8 +345,7 @@ SET(SWORD_INSTALL_HEADERS
 	include/swobject.h
 	include/swsearchable.h
 	include/swtext.h
-	include/swunicod.h
-	include/swversion.h
+    "${CMAKE_CURRENT_BINARY_DIR}/include/swversion.h"
 	include/sysdata.h
 
 	include/thmlfootnotes.h
@@ -411,7 +411,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/canon_german.h
 	include/canon_luther.h
 	include/canon_null.h
-	include/canon_rahlfs.h
 	include/canon_lxx.h
 	include/canon_orthodox.h
 	include/canon_synodalprot.h

@@ -105,6 +105,7 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/modules/filters/osiswordjs.cpp \
 ../../../src/modules/filters/osisxhtml.cpp \
 ../../../src/modules/filters/osisxlit.cpp \
+../../../src/modules/filters/osisreferencelinks.cpp \
 ../../../src/modules/filters/thmlmorph.cpp \
 ../../../src/modules/filters/gbfplain.cpp \
 ../../../src/modules/filters/gbfhtmlhref.cpp \
@@ -165,7 +166,6 @@ LOCAL_SRC_FILES := ../../../src/modules/comments/zcom/zcom.cpp \
 ../../../src/utilfuns/url.cpp \
 ../../../src/utilfuns/swversion.cpp \
 ../../../src/utilfuns/utilxml.cpp \
-../../../src/utilfuns/swunicod.cpp \
 ../../../src/utilfuns/regex.c \
 ../../../src/keys/swkey.cpp \
 ../../../src/keys/versetreekey.cpp \
