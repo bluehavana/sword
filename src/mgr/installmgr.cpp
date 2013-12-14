@@ -31,6 +31,8 @@ extern "C" {
 #include <utilstr.h>
 
 #include <fcntl.h>
+#include <glib.h>
+#include <glib/gstdio.h>
 
 #include <swmgr.h>
 #include <swmodule.h>
@@ -270,20 +272,19 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 		}
 		else {	//remove all files in DataPath directory
 
-			DIR *dir;
-			struct dirent *ent;
+			GDir *dir;
+			const gchar *ent;
 			ConfigEntMap::iterator entry;
 
 			FileMgr::removeDir(modDir.c_str());
 
-			if ((dir = opendir(manager->configPath))) {	// find and remove .conf file
-				rewinddir(dir);
-				while ((ent = readdir(dir))) {
-					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+			if ((dir = g_dir_open(manager->configPath, 0, NULL))) {	// find and remove .conf file
+			        g_dir_rewind(dir);
+				while ((ent =  g_dir_read_name(dir))) {
 						modFile = manager->configPath;
 						removeTrailingSlash(modFile);
 						modFile += "/";
-						modFile += ent->d_name;
+				  modFile += ent;
 						SWConfig *config = new SWConfig(modFile.c_str());
 						if (config->Sections.find(modName) != config->Sections.end()) {
 							delete config;
@@ -291,8 +292,8 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 						}
 						else	delete config;
 					}
-				}
-				closedir(dir);
+				g_dir_close(dir);
+				g_free(dir);
 			}
 		}
 		return 0;
@@ -401,8 +402,8 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 	SWBuf buffer;
 	bool aborted = false;
 	bool cipher = false;
-	DIR *dir;
-	struct dirent *ent;
+	GDir *dir;
+	const gchar *ent;
 	SWBuf modFile;
 
 	SWLog::getSystemLog()->logDebug("***** InstallMgr::installModule\n");
@@ -514,18 +515,18 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 		}
 		if (!aborted) {
 			SWBuf confDir = sourceDir + "mods.d/";
-			if ((dir = opendir(confDir.c_str()))) {	// find and copy .conf file
-				rewinddir(dir);
-				while ((ent = readdir(dir))) {
-					if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+			if ((dir = g_dir_open(confDir.c_str(), 0, NULL))) {	// find and copy .conf file
+				g_dir_rewind(dir);
+				while ((ent = g_dir_read_name(dir))) {
+					if ((strcmp(ent, ".")) && (strcmp(ent, ".."))) {
 						modFile = confDir;
-						modFile += ent->d_name;
+						modFile += ent;
 						SWConfig *config = new SWConfig(modFile.c_str());
 						if (config->Sections.find(modName) != config->Sections.end()) {
 							SWBuf targetFile = destMgr->configPath; //"./mods.d/";
 							removeTrailingSlash(targetFile);
 							targetFile += "/";
-							targetFile += ent->d_name;
+							targetFile += ent;
 							FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
 							if (cipher) {
 								if (getCipherCode(modName, config)) {
@@ -542,7 +543,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 						delete config;
 					}
 				}
-				closedir(dir);
+				g_dir_close(dir);
 			}
 		}
 		return (aborted) ? -1 : 0;

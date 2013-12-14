@@ -5,6 +5,9 @@
  * adaptation to Unix by Jean-loup Gailly <jloup@gzip.org>
  */
 
+#include <glib.h>
+#include <glib/gstdio.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -210,7 +213,7 @@ int makedir (char *newdir)
   if (buffer[len-1] == '/') {
     buffer[len-1] = '\0';
   }
-  if (mkdir(buffer, 0775) == 0)
+  if (g_mkdir(buffer, 0775) == 0)
     {
       free(buffer);
       return 1;
@@ -225,7 +228,7 @@ int makedir (char *newdir)
 	p++;
       hold = *p;
       *p = 0;
-      if ((mkdir(buffer, 0775) == -1) && (errno == ENOENT))
+      if ((g_mkdir(buffer, 0775) == -1) && (errno == ENOENT))
 	{
 	  fprintf(stderr,"%s: couldn't create directory %s\n",prog,buffer);
 	  free(buffer);
@@ -300,15 +303,15 @@ int untar (gzFile in, const char *dest) {
 			case AREGTYPE:
 				remaining = getoct(buffer.header.size,12);
 				if (remaining) {
-					outfile = fopen(fname,"wb");
+					outfile = g_fopen(fname,"wb");
 					if (outfile == NULL) {
 						// try creating directory
 						char *p = strrchr(fname, '/');
 						if (p != NULL) {
 							*p = '\0';
-							makedir(fname);
+							g_mkdir(fname, 0);
 							*p = '/';
-							outfile = fopen(fname,"wb");
+							outfile = g_fopen(fname,"wb");
 						}
 					}
 /*
@@ -353,7 +356,11 @@ int untar (gzFile in, const char *dest) {
 
 					localt = *localtime(&tartime);
 
-					hFile = CreateFile(fname, GENERIC_READ | GENERIC_WRITE,
+					hFile = CreateFileW(g_utf8_to_utf16(fname,
+									    -1,
+									    NULL,
+									    NULL,
+									    NULL), GENERIC_READ | GENERIC_WRITE,
 					0, NULL, OPEN_EXISTING, 0, NULL);
 		  
 					st.wYear = (WORD)localt.tm_year+1900;

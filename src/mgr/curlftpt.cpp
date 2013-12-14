@@ -29,6 +29,8 @@
 
 #include <swlog.h>
 
+#include <glib.h>
+#include <glib/gstdio.h>
 
 SWORD_NAMESPACE_START
 
@@ -58,7 +60,7 @@ namespace {
 		struct FtpFile *out=(struct FtpFile *)stream;
 		if (out && !out->stream && !out->destBuf) {
 			/* open file for writing */
-			out->stream=fopen(out->filename, "wb");
+			out->stream=g_fopen(out->filename, "wb");
 			if (!out->stream)
 				return -1; /* failure, can't open file to write */
 		}
@@ -141,7 +143,6 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 	
 	if (session) {
 
-		struct MyProgressData pd;
 		pd.sr = statusReporter;
 		pd.term = &term;
 
