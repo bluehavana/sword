@@ -143,6 +143,7 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 	
 	if (session) {
 
+		struct MyProgressData pd;
 		pd.sr = statusReporter;
 		pd.term = &term;
 
