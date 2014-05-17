@@ -632,7 +632,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 	static int                genID           = 1;
 
 	// Flag indicating whether we are in "Words of Christ"
-	static bool               inWOC           = false;
+	static int                inWOC           = 0;
 	// Tag for WOC quotes within a verse
 	static XMLTag             wocTag          = "<q who=\"Jesus\" marker=\"\">";
 
@@ -874,7 +874,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					text.append(t);
 				}
 
-				if (inWOC) {
+				int tmpWOC = 0;
+				while (inWOC > tmpWOC++) {
 					text.append(wocTag);
 				}
 				return true;
@@ -894,7 +895,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 
 			if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
-				inWOC = true;
+				inWOC++;
 
 				// Output per verse WOC markup.
 				text.append(wocTag);
@@ -1022,7 +1023,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			}
 
 			// If we are in WOC then we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
-			if (inWOC) {
+			int tmpWOC = 0;
+			while (inWOC > tmpWOC++) {
 				text.append("</q>");
 			}
 
@@ -1073,7 +1075,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 					cout << "DEBUG(QUOTE): " << currentOsisID << ": (" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
 				}
 
-				inWOC = false;
+				inWOC--;
 				const char *sID = topToken.getAttribute("sID");
 				const char *eID = token.getAttribute("eID");
 				if (!sID) {
